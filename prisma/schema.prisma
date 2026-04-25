@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique
+  name             String?
+  isVerified       Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  listings         Listing[]
+  reviews          Review[]
+  posts            Post[]
+  comments         Comment[]
+  marketplaceItems MarketplaceItem[]
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  title       String
+  rent        Float
+  bedrooms    Int
+  address     String
+  description String
+  imageUrl    String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Review {
+  id                String   @id @default(cuid())
+  landlordName      String
+  landlordAddress   String
+  rating            Int      // 1-5
+  depositReturned   Boolean
+  maintenanceRating Int      // 1-5
+  reviewText        String
+  leaseProofUrl     String?
+  solanaHash        String?
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+}
+
+enum PostCategory {
+  ROOMMATE
+  HOUSING
+  GENERAL
+}
+
+model Post {
+  id        String       @id @default(cuid())
+  title     String
+  content   String
+  category  PostCategory
+  upvotes   Int          @default(0)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  comments  Comment[]
+  createdAt DateTime     @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model MarketplaceItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  category    String
+  imageUrl    String?
+  contactInfo String
+  isSold      Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
