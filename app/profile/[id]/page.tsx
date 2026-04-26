@@ -159,7 +159,7 @@ export default async function ProfilePage({
             <StatCard icon={<Home className="h-4 w-4 text-violet-400" />} label="Listings" value={user.listings.length} />
             <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews Written" value={user.reviews.length} />
             <StatCard icon={<MessageSquare className="h-4 w-4 text-pink-400" />} label="Community Posts" value={user.posts.length} />
-            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i) => i.isSold).length} />
+            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i: any) => i.isSold).length} />
           </>
         ) : (
           <>
