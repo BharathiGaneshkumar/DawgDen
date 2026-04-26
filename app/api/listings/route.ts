@@ -8,12 +8,14 @@ export async function GET(req: Request) {
     const minRent = searchParams.get("minRent");
     const maxRent = searchParams.get("maxRent");
     const bedrooms = searchParams.get("bedrooms");
+    const minBedrooms = searchParams.get("minBedrooms");
     const search = searchParams.get("search");
 
     const where: any = {};
     if (minRent) where.rent = { ...where.rent, gte: parseFloat(minRent) };
     if (maxRent) where.rent = { ...where.rent, lte: parseFloat(maxRent) };
     if (bedrooms) where.bedrooms = parseInt(bedrooms);
+    if (minBedrooms) where.bedrooms = { gte: parseInt(minBedrooms) };
     if (search) {
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },

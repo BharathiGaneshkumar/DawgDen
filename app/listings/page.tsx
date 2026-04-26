@@ -1,93 +1,173 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import NewListingModal from "@/components/modals/NewListingModal";
+
+const BEDROOM_FILTERS = ["All", "1 BR", "2 BR", "3+ BR"];
+
+const affordabilityBadge = (rent: number) => {
+  if (rent < 1200) return { label: "✅ Affordable", cls: "bg-emerald-100 border border-emerald-300 text-emerald-800" };
+  if (rent < 2000) return { label: "⚠️ Moderate", cls: "bg-yellow-100 border border-yellow-300 text-yellow-800" };
+  return { label: "❌ Expensive", cls: "bg-red-100 border border-red-300 text-red-800" };
+};
 
 export default function ListingsPage() {
+  const { user } = useUser();
+
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [bedroomFilter, setBedroomFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState<"none" | "lowToHigh" | "highToLow">("none");
+  const [listings, setListings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const initialListings = [
-    { id: 1, title: "Cozy Studio near UWB", rent: 1200, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400" },
-    { id: 2, title: "2BR Apartment - Shared", rent: 1800, bedrooms: 2, address: "Kenmore, WA 98028", affordability: "yellow", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400" },
-    { id: 3, title: "Modern 1BR Mill Creek", rent: 2200, bedrooms: 1, address: "Mill Creek, WA 98012", affordability: "red", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400" },
-    { id: 4, title: "3BR House - Split 3 ways", rent: 2700, bedrooms: 3, address: "Bothell, WA 98021", affordability: "green", image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400" },
-    { id: 5, title: "Luxury 2BR Townhouse", rent: 2500, bedrooms: 2, address: "Woodinville, WA 98072", affordability: "yellow", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400" },
-    { id: 6, title: "Shared Room for Student", rent: 750, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green", image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400" },
-  ];
+  useEffect(() => {
+    const h = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(h);
+  }, [search]);
 
-  const listings = [...initialListings].sort((a, b) => {
+  const fetchListings = async () => {
+    setLoading(true);
+    let url = "/api/listings?";
+    if (bedroomFilter === "1 BR") url += "bedrooms=1&";
+    else if (bedroomFilter === "2 BR") url += "bedrooms=2&";
+    else if (bedroomFilter === "3+ BR") url += "minBedrooms=3&";
+    if (debouncedSearch) url += `search=${encodeURIComponent(debouncedSearch)}&`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setListings(data || []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchListings();
+  }, [debouncedSearch, bedroomFilter]);
+
+  const sorted = [...listings].sort((a, b) => {
     if (sortOrder === "lowToHigh") return a.rent - b.rent;
     if (sortOrder === "highToLow") return b.rent - a.rent;
-    return 0; // "none"
+    return 0;
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      {/* Header */}
-      <div className="mb-10 flex flex-col items-center justify-center text-center gap-4">
+    <div className="mx-auto max-w-7xl px-4 py-12 min-h-[calc(100vh-64px)]">
+      <div className="mb-10 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-primary">🏘️ Listings</h1>
-          <p className="mt-2 text-primary/70">Student-verified housing near UW Bothell</p>
+          <h1 className="text-4xl font-bold text-white">🏘️ Listings</h1>
+          <p className="mt-2 text-gray-400">Student-verified housing near UW Bothell</p>
         </div>
-        <a href="/listings/new" className="rounded-xl bg-primary text-[#c5b4e3] px-6 py-3 font-semibold shadow-md transition-transform hover:-translate-y-0.5">
-          + Post a Listing
-        </a>
+
+        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4 justify-center">
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search listings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+            />
+          </div>
+          {user ? (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full sm:w-auto shrink-0 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:-translate-y-0.5 hover:shadow-violet-500/40"
+            >
+              + Post a Listing
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="w-full sm:w-auto shrink-0 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-gray-300 transition hover:bg-white/10 text-center"
+            >
+              Sign in to list
+            </Link>
+          )}
+        </div>
       </div>
 
-      {/* Filters and Sort */}
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Categories */}
         <div className="flex flex-wrap gap-2">
-          {["All", "1 BR", "2 BR", "3+ BR", "Under $1500", "Pet Friendly"].map((filter) => (
+          {BEDROOM_FILTERS.map((f) => (
             <button
-              key={filter}
-              className="rounded-full border border-primary/20 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary/80 transition hover:bg-primary/10 hover:text-primary"
+              key={f}
+              onClick={() => setBedroomFilter(f)}
+              className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+                bedroomFilter === f
+                  ? "border-violet-500 bg-violet-500/10 text-violet-400"
+                  : "border-white/10 bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300"
+              }`}
             >
-              {filter}
+              {f}
             </button>
           ))}
         </div>
 
-        {/* Sort Dropdown */}
         <div className="shrink-0 flex items-center gap-2">
-          <span className="text-sm font-bold text-primary/70">Sort by:</span>
-          <select 
+          <span className="text-sm font-bold text-gray-400">Sort by:</span>
+          <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as any)}
-            className="rounded-xl border border-primary/20 bg-white/80 px-3 py-2 text-sm font-bold text-primary outline-none focus:border-primary/50 cursor-pointer shadow-sm"
+            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white outline-none focus:border-violet-500 cursor-pointer [&>option]:bg-gray-900"
           >
-            <option value="none">Recommended</option>
+            <option value="none">Newest</option>
             <option value="lowToHigh">Price: Low to High</option>
             <option value="highToLow">Price: High to Low</option>
           </select>
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {listings.map((listing) => (
-          <a key={listing.id} href={`/listings/${listing.id}`}
-            className="group rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:border-primary/20 flex flex-col h-full">
-            <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-pink-200/40 text-5xl overflow-hidden shrink-0">
-              <img src={listing.image} alt={listing.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-            </div>
-            <div>
-              <span className={`rounded-full px-3 py-1 text-xs font-medium ${listing.affordability === "green" ? "bg-emerald-100 border border-emerald-300 text-emerald-800" :
-                listing.affordability === "yellow" ? "bg-yellow-100 border border-yellow-300 text-yellow-800" :
-                  "bg-red-100 border border-red-300 text-red-800"
-                }`}>
-                {listing.affordability === "green" ? "✅ Affordable" : listing.affordability === "yellow" ? "⚠️ Moderate" : "❌ Expensive"}
-              </span>
-            </div>
-            <h2 className="mt-3 text-lg font-bold text-primary">{listing.title}</h2>
-            <p className="mt-1 text-sm text-primary/70 mb-4">📍 {listing.address}</p>
-            <div className="mt-auto flex items-center justify-between border-t border-primary/10 pt-4">
-              <span className="text-2xl font-bold text-primary">${listing.rent.toLocaleString()}<span className="text-sm font-normal text-primary/70">/mo</span></span>
-              <span className="text-sm font-bold text-primary/70 bg-white/80 px-2 py-1 rounded-md border border-primary/10">🛏 {listing.bedrooms} bed</span>
-            </div>
-          </a>
-        ))}
-      </div>
+      {loading ? (
+        <div className="py-20 text-center text-gray-500">Loading...</div>
+      ) : sorted.length === 0 ? (
+        <div className="py-20 text-center text-gray-500">No listings found.</div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {sorted.map((listing) => {
+            const badge = affordabilityBadge(listing.rent);
+            return (
+              <Link
+                key={listing.id}
+                href={`/listings/${listing.id}`}
+                className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:border-violet-500/30 hover:bg-white/10 flex flex-col h-full"
+              >
+                <div className="mb-4 h-40 rounded-xl bg-gray-800 overflow-hidden shrink-0">
+                  {listing.imageUrl ? (
+                    <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-5xl">🏠</div>
+                  )}
+                </div>
+                <div>
+                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.cls}`}>{badge.label}</span>
+                </div>
+                <h2 className="mt-3 text-lg font-bold text-white group-hover:text-violet-300 transition-colors">{listing.title}</h2>
+                <p className="mt-1 text-sm text-gray-400 mb-4">📍 {listing.address}</p>
+                <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-4">
+                  <span className="text-2xl font-bold text-white">${listing.rent.toLocaleString()}<span className="text-sm font-normal text-gray-400">/mo</span></span>
+                  <span className="text-sm font-bold text-gray-400 bg-white/5 px-2 py-1 rounded-md border border-white/10">🛏 {listing.bedrooms} bed</span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+
+      <NewListingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => { fetchListings(); setIsModalOpen(false); }}
+      />
     </div>
   );
 }
