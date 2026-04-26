@@ -36,11 +36,14 @@ export default function MarketplacePage() {
     return () => clearTimeout(handler);
   }, [search]);
 
-  const fetchItems = async () => {
-    setLoading(true);
-    let url = "/api/marketplace?";
-    if (activeCategory !== "All Items") url += `category=${activeCategory}&`;
-    if (debouncedSearch) url += `search=${encodeURIComponent(debouncedSearch)}&`;
+  const initialItems = [
+    { id: 1, title: "IKEA MICKE Desk", price: 45, category: "Furniture", seller: "Alex Chen", condition: "New", image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" },
+    { id: 2, title: "Calc 124/125 Textbook", price: 20, category: "Books", seller: "Sarah J.", condition: "Good", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400" },
+    { id: 3, title: "Dorm Mini Fridge", price: 65, category: "Kitchen", seller: "Mike T.", condition: "Fair", image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400" },
+    { id: 4, title: "27-inch LG Monitor 144Hz", price: 110, category: "Electronics", seller: "Kevin W.", condition: "Good", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400" },
+    { id: 5, title: "Keurig Coffee Maker", price: 15, category: "Kitchen", seller: "Emily R.", condition: "New", image: "https://images.unsplash.com/photo-1608354580875-30bd4168b351?w=400" },
+    { id: 6, title: "Ergonomic Office Chair", price: 30, category: "Furniture", seller: "David L.", condition: "Fair", image: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=400" }
+  ];
 
     try {
       const res = await fetch(url);

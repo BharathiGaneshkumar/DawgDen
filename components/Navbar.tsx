@@ -70,7 +70,7 @@ export default function Navbar() {
           <AuthButton />
           {/* Mobile menu toggle */}
           <button
-            className="rounded-lg p-2 text-gray-400 hover:bg-white/10 hover:text-white md:hidden"
+            className="rounded-lg p-2 text-primary/60 hover:bg-primary/10 hover:text-primary md:hidden"
             onClick={() => setMobileOpen((p) => !p)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -80,7 +80,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-white/10 bg-gray-950/95 px-4 py-3 md:hidden">
+        <div className="border-t border-primary/10 bg-white/90 backdrop-blur-md px-4 py-3 md:hidden">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href || pathname.startsWith(link.href + "/");
@@ -89,10 +89,10 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition ${
+                className={`block rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                   isActive
-                    ? "bg-white/10 text-white"
-                    : "text-gray-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-primary/10 text-primary"
+                    : "text-primary/70 hover:bg-primary/5 hover:text-primary"
                 }`}
               >
                 {link.label}
@@ -102,7 +102,7 @@ export default function Navbar() {
           <Link
             href="/listings/new"
             onClick={() => setMobileOpen(false)}
-            className="mt-2 block rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2.5 text-center text-sm font-semibold text-white"
+            className="mt-2 block rounded-xl bg-primary px-4 py-2.5 text-center text-sm font-bold text-white shadow-md shadow-primary/20"
           >
             List a Place
           </Link>

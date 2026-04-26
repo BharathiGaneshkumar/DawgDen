@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
   if (isProtected) {
     const session = await auth0.getSession(request);
     if (!session) {
-      const loginUrl = new URL("/auth/login", request.url);
+      const loginUrl = new URL("/api/auth/login", request.url);
       loginUrl.searchParams.set("returnTo", path);
       return NextResponse.redirect(loginUrl);
     }
