@@ -1,4 +1,4 @@
-# DawgDen (NestSafe)
+# DawgDen 
 
 **The student housing platform that actually protects you.**
 
