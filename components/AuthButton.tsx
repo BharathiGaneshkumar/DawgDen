@@ -26,7 +26,7 @@ export default function AuthButton() {
     return (
       <a
         href="/api/auth/login"
-        className="rounded-xl border border-primary bg-primary px-5 py-2 text-sm font-bold text-white shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-primary/40"
+        className="rounded-lg bg-primary text-[#c5b4e3] px-4 py-2 text-base font-bold shadow-md shadow-primary/20 transition-all duration-200 hover:bg-primary/90 hover:shadow-primary/40"
       >
         Sign In
       </a>
