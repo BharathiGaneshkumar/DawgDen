@@ -29,11 +29,20 @@ export default async function ProfilePage({
       listings: { orderBy: { createdAt: "desc" } },
       reviews: { orderBy: { createdAt: "desc" } },
       posts: { orderBy: { createdAt: "desc" } },
-      marketplaceItems: { orderBy: { createdAt: "desc" } },
+      marketItems: { orderBy: { createdAt: "desc" } },
     },
   });
 
   if (!user) notFound();
+
+  // If user is a landlord, fetch reviews ABOUT them, since user.reviews are reviews they wrote
+  let landlordReviews: any[] = [];
+  if (user.role === "LANDLORD") {
+    landlordReviews = await prisma.review.findMany({
+      where: { landlordName: user.name ?? "" },
+      orderBy: { createdAt: "desc" },
+    });
+  }
 
   const karma = await calculateKarma(id);
 
@@ -62,8 +71,10 @@ export default async function ProfilePage({
   }
 
   const trustScore =
-    user.reviews.length > 0
-      ? user.reviews.reduce((s, r) => s + r.rating, 0) / user.reviews.length
+    user.role === "LANDLORD"
+      ? landlordReviews.length > 0
+        ? landlordReviews.reduce((s, r) => s + r.rating, 0) / landlordReviews.length
+        : null
       : null;
 
   return (
@@ -159,12 +170,12 @@ export default async function ProfilePage({
             <StatCard icon={<Home className="h-4 w-4 text-violet-400" />} label="Listings" value={user.listings.length} />
             <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews Written" value={user.reviews.length} />
             <StatCard icon={<MessageSquare className="h-4 w-4 text-pink-400" />} label="Community Posts" value={user.posts.length} />
-            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketplaceItems.filter((i) => i.isSold).length} />
+            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i) => i.isSold).length} />
           </>
         ) : (
           <>
             <StatCard icon={<Home className="h-4 w-4 text-violet-400" />} label="Active Listings" value={user.listings.length} />
-            <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews" value={user.reviews.length} />
+            <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews" value={landlordReviews.length} />
             {user.responseRate != null && (
               <StatCard icon={<Zap className="h-4 w-4 text-blue-400" />} label="Response Rate" value={`${user.responseRate}%`} />
             )}
@@ -207,7 +218,7 @@ export default async function ProfilePage({
             upvotes: p.upvotes,
             createdAt: p.createdAt.toISOString(),
           }))}
-          marketplaceItems={user.marketplaceItems.map((m) => ({
+          marketplaceItems={user.marketItems.map((m) => ({
             id: m.id,
             title: m.title,
             price: m.price,
@@ -243,7 +254,7 @@ export default async function ProfilePage({
           <section>
             <h2 className="mb-4 text-lg font-semibold text-foreground">Verified Reviews</h2>
             <LandlordReviewsList
-              reviews={user.reviews.map((r) => ({
+              reviews={landlordReviews.map((r) => ({
                 id: r.id,
                 landlordName: r.landlordName,
                 landlordAddress: r.landlordAddress,

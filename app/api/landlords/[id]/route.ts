@@ -41,9 +41,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     let avgMaintenance = 0;
 
     if (reviews.length > 0) {
-      avgRating = reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+      avgRating = reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length;
       depositReturnRate = (reviews.filter(r => r.depositReturned).length / reviews.length) * 100;
-      avgMaintenance = reviews.reduce((acc, r) => acc + r.maintenanceRating, 0) / reviews.length;
+      avgMaintenance = reviews.reduce((acc: number, r: any) => acc + r.maintenanceRating, 0) / reviews.length;
       
       trustScore = ((avgRating / 5) * 4) + ((depositReturnRate / 100) * 3) + ((avgMaintenance / 5) * 3);
     } else {

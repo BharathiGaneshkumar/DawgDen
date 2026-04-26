@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
 // Allow long execution times since Gemini might take a few seconds
 export const maxDuration = 60; 
 
 export async function POST(req: NextRequest) {
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not configured in .env.local" },
+        { error: "GOOGLE_AI_API_KEY or GEMINI_API_KEY is not configured in .env.local" },
         { status: 500 }
       );
     }
@@ -29,8 +28,8 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Extract text from the PDF
-    const pdfParse = (await import("pdf-parse")) as any;
-    const pdfData = await (pdfParse.default ?? pdfParse)(buffer);
+    const pdfParse = require("pdf-parse");
+    const pdfData = await pdfParse(buffer);
     const text = pdfData.text;
 
     if (!text || text.trim().length === 0) {
