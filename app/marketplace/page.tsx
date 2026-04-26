@@ -7,12 +7,12 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import NewMarketplaceModal from "@/components/modals/NewMarketplaceModal";
 
 const categoryColors: Record<string, string> = {
-  Furniture: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  Electronics: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  Books: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  Appliances: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  Clothing: "bg-pink-500/20 text-pink-400 border-pink-500/30",
-  Other: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+  Furniture: "bg-blue-500/15 border-blue-500/30 text-blue-600",
+  Electronics: "bg-purple-500/15 border-purple-500/30 text-purple-600",
+  Books: "bg-yellow-500/15 border-yellow-500/30 text-yellow-700",
+  Appliances: "bg-orange-500/15 border-orange-500/30 text-orange-600",
+  Clothing: "bg-pink-500/15 border-pink-500/30 text-pink-600",
+  Other: "bg-primary/5 border-primary/10 text-primary/40",
 };
 
 const CATEGORIES = ["All Items", "Furniture", "Electronics", "Appliances", "Books", "Clothing", "Other"];
@@ -178,7 +178,7 @@ export default function MarketplacePage() {
                   <div className="h-6 w-6 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">
                     {(item.user?.name || item.user?.email || "U")[0].toUpperCase()}
                   </div>
-                  <span className="font-bold text-primary/50">{item.user?.name || item.user?.email || "Unknown"}</span>
+                  <span className="font-black text-primary/70">{item.user?.name || item.user?.email || "Unknown"}</span>
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-primary/5 flex items-center justify-between">

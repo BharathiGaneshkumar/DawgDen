@@ -7,10 +7,10 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import NewPostModal from "@/components/modals/NewPostModal";
 
 const categoryColors: Record<string, string> = {
-  "ROOMMATE": "bg-emerald-100 border border-emerald-300 text-emerald-800",
-  "HOUSING": "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  "GENERAL": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "SELLING": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  "ROOMMATE": "bg-emerald-500/15 border-emerald-500/30 text-emerald-600",
+  "HOUSING": "bg-purple-500/15 border-purple-500/30 text-purple-600",
+  "GENERAL": "bg-blue-500/15 border-blue-500/30 text-blue-600",
+  "SELLING": "bg-yellow-500/15 border-yellow-500/30 text-yellow-700",
 };
 
 const FILTERS = ["All Posts", "Top Posts", "ROOMMATE", "HOUSING", "GENERAL", "SELLING"];
@@ -171,7 +171,7 @@ export default function CommunityPage() {
                 <h2 className="text-xl font-bold text-primary group-hover:text-primary transition-colors mb-2 line-clamp-2">
                   {post.title}
                 </h2>
-                <p className="text-sm text-primary/60 font-medium line-clamp-2 leading-relaxed mb-4">
+                <p className="text-base text-primary/80 font-bold line-clamp-2 leading-relaxed mb-4">
                   {post.content}
                 </p>
 
