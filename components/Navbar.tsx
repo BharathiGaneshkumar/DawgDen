@@ -63,7 +63,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/listings/new"
-            className="hidden rounded-lg bg-primary text-[#c5b4e3] px-4 py-2 text-base font-bold text-[#c5b4e3] shadow-md shadow-primary/20 transition-all duration-200 hover:bg-primary/90 hover:shadow-primary/40 sm:block"
+            className="hidden rounded-xl bg-primary px-6 py-2.5 text-base font-bold text-white shadow-lg shadow-primary/20 transition-all duration-200 hover:bg-primary/90 hover:shadow-primary/40 active:scale-95 sm:block"
           >
             List a Place
           </Link>

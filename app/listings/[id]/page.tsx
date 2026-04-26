@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine,
   Star, ChevronLeft, Heart, ExternalLink, Users, Loader2,
-  Dumbbell, BatteryCharging, Mail,
+  Dumbbell, BatteryCharging, Mail, Calendar, Zap,
 } from "lucide-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
@@ -166,323 +166,409 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const encodedAddress = encodeURIComponent(listing.address);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 min-h-screen space-y-8">
-      <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+    <div className="mx-auto max-w-5xl px-4 py-8 min-h-screen space-y-8 relative z-10">
+      <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm font-bold text-primary/60 hover:text-primary transition-colors">
         <ChevronLeft size={16} /> Back to Listings
       </Link>
 
-      {/* Photo */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-gray-900 h-80 flex items-center justify-center">
+      {/* Photo Header */}
+      <div className="overflow-hidden rounded-3xl border border-primary/20 bg-white/40 backdrop-blur-md shadow-xl h-[450px] relative group">
         {listing.imageUrl ? (
-          <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover" />
+          <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         ) : (
-          <div className="flex flex-col items-center gap-2 text-gray-600">
-            <div className="text-7xl">🏠</div>
-            <p className="text-sm">No photos yet</p>
+          <div className="flex flex-col items-center justify-center h-full gap-4 text-primary/20">
+            <div className="text-9xl">🏠</div>
+            <p className="text-lg font-bold">No photos provided</p>
           </div>
         )}
-      </div>
-
-      {/* Header */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white">{listing.title}</h1>
-            <p className="mt-1 text-4xl font-extrabold text-white">
-              ${listing.rent.toLocaleString()}<span className="text-base font-normal text-gray-400">/mo</span>
-            </p>
-            <p className="mt-1 text-sm text-gray-400">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
-          </div>
-          <div className="flex gap-3 flex-wrap">
-            <button
-              onClick={() => setSaved((s) => !s)}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                saved ? "border-pink-500 bg-pink-500/20 text-pink-400" : "border-white/10 bg-white/5 text-gray-400 hover:border-white/30"
-              }`}
-            >
-              <Heart size={15} className={saved ? "fill-pink-400 text-pink-400" : ""} />
-              {saved ? "Saved" : "Save"}
-            </button>
-            {listing.user?.email && (
-              <a
-                href={`mailto:${listing.user.email}`}
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white hover:bg-violet-500 transition shadow-lg shadow-violet-500/20"
-              >
-                <Mail size={14} /> Contact Landlord
-              </a>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 text-sm text-gray-400">
-          <MapPin size={13} className="text-violet-400" />
-          {listing.address}
-        </div>
-        {listing.user && (
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-500">Posted by</span>
-            <span className="font-medium text-gray-200">{listing.user.name || listing.user.email}</span>
-            {listing.user.isVerified && <VerifiedBadge />}
-          </div>
-        )}
-      </div>
-
-      {/* Details Grid */}
-      <div className="grid gap-5 sm:grid-cols-2">
-        {/* Amenities */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
-          <h2 className="mb-3 font-semibold text-white">Amenities</h2>
-          <div className="flex flex-wrap gap-2">
-            {amenityList.map(({ label, icon: Icon, on }) => (
-              <span
-                key={label}
-                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${
-                  on
-                    ? "border-violet-500/40 bg-violet-500/10 text-violet-300"
-                    : "border-white/10 bg-white/3 text-gray-500 line-through"
-                }`}
-              >
-                <Icon size={11} />{label}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Lease Details */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
-          <h2 className="mb-3 font-semibold text-white">Lease Details</h2>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            {[
-              { label: "Lease", value: `${listing.leaseLength} months` },
-              { label: "Deposit", value: listing.deposit ? `$${listing.deposit.toLocaleString()}` : "None" },
-              {
-                label: "Available",
-                value: listing.availableFrom
-                  ? new Date(listing.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-                  : "Now",
-              },
-              {
-                label: "Utilities",
-                value: listing.utilitiesIncluded ? "Included" : "Not included",
-              },
-            ].map(({ label, value }) => (
-              <div key={label} className="rounded-xl bg-white/5 border border-white/10 p-3">
-                <p className="text-xs text-gray-500 mb-1">{label}</p>
-                <p className="font-semibold text-white text-sm">{value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Description */}
-      {listing.description && (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-          <h2 className="font-semibold text-white mb-2">About this place</h2>
-          <p className="text-sm text-gray-300 leading-relaxed">{listing.description}</p>
-        </div>
-      )}
-
-      {/* Map */}
-      <div className="rounded-2xl border border-white/10 overflow-hidden">
-        <div className="px-5 py-3 bg-white/5 border-b border-white/10 flex items-center justify-between">
-          <h2 className="font-semibold text-white text-sm">📍 Location</h2>
-          <a
-            href={`https://www.google.com/maps/dir/University+of+Washington+Bothell,+Bothell+WA/${encodedAddress}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition"
-          >
-            Directions from UWB <ExternalLink size={11} />
-          </a>
-        </div>
-        <iframe
-          title="Location map"
-          width="100%"
-          height="300"
-          loading="lazy"
-          src={`https://maps.google.com/maps?q=${encodedAddress}&output=embed`}
-          className="border-0"
-        />
-      </div>
-
-      {/* Roommate Calculator */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-white">🏠 Roommate Cost Split</h2>
-        <div className="flex gap-3 items-center flex-wrap">
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
-            <Users size={15} className="text-gray-400" />
-            <input
-              type="number"
-              min={1}
-              max={10}
-              value={numPeople}
-              onChange={(e) => setNumPeople(e.target.value)}
-              className="w-16 bg-transparent text-white text-sm font-medium focus:outline-none"
-              placeholder="People"
-            />
-            <span className="text-xs text-gray-500">people sharing</span>
-          </div>
+        <div className="absolute bottom-6 right-6">
           <button
-            onClick={handleCalc}
-            disabled={calcLoading}
-            className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50 transition shadow-md shadow-violet-500/20"
+            onClick={() => setSaved((s) => !s)}
+            className={`flex items-center gap-2 rounded-2xl border px-6 py-3 font-bold transition-all shadow-lg ${
+              saved 
+                ? "border-pink-500 bg-pink-500 text-white shadow-pink-500/20" 
+                : "border-primary/20 bg-white/80 text-primary hover:bg-white shadow-primary/10"
+            }`}
           >
-            {calcLoading ? <Loader2 size={14} className="animate-spin inline" /> : "Calculate Split"}
+            <Heart size={18} className={saved ? "fill-white" : ""} />
+            {saved ? "Saved to Favorites" : "Save Listing"}
           </button>
         </div>
-        {calcResult && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-sm">
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-              <p className="text-xs text-gray-500 mb-1">Rent / person</p>
-              <p className="text-xl font-bold text-white">${calcResult.perPersonRent}<span className="text-xs text-gray-500">/mo</span></p>
-            </div>
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-              <p className="text-xs text-gray-500 mb-1">Total / person</p>
-              <p className="text-xl font-bold text-violet-300">${calcResult.perPerson}<span className="text-xs text-gray-500">/mo</span></p>
-            </div>
-            {calcResult.tip && (
-              <div className="rounded-xl bg-violet-500/5 border border-violet-500/20 p-3 sm:col-span-1 col-span-2 text-left">
-                <p className="text-[10px] text-violet-400 font-medium mb-1">AI Tip</p>
-                <p className="text-xs text-gray-300">{calcResult.tip}</p>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
-      {/* Reviews */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-white">⭐ Reviews</h2>
+      <div className="grid lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:col-span-2 space-y-8">
+          {/* Main Info */}
+          <div className="rounded-3xl border border-primary/10 bg-white/60 backdrop-blur-md p-8 shadow-sm space-y-6">
+            <div className="flex flex-wrap items-start justify-between gap-6">
+              <div className="space-y-1">
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary/60">
+                    {listing.bedrooms} Bedroom · {listing.bathrooms} Bath
+                  </span>
+                  {listing.isVerified && <VerifiedBadge />}
+                </div>
+                <h1 className="text-4xl font-extrabold text-primary leading-tight">{listing.title}</h1>
+                <div className="flex items-center gap-2 text-primary/60 font-medium">
+                  <MapPin size={16} className="text-primary/40" />
+                  {listing.address}
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-5xl font-black text-primary">${listing.rent.toLocaleString()}</p>
+                <p className="text-sm font-bold text-primary/40 uppercase tracking-widest mt-1">per month</p>
+              </div>
+            </div>
+
+            <div className="h-px bg-primary/5" />
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[
+                { label: "Lease", value: `${listing.leaseLength} mo`, icon: Calendar },
+                { label: "Deposit", value: listing.deposit ? `$${listing.deposit}` : "Free", icon: Zap },
+                { label: "Laundry", value: listing.amenities?.includes("laundry") ? "In-Unit" : "Shared", icon: WashingMachine },
+                { label: "Parking", value: listing.amenities?.includes("parking") ? "Available" : "No", icon: Car },
+              ].map(({ label, value, icon: Icon }) => (
+                <div key={label} className="rounded-2xl bg-primary/5 p-4 border border-primary/5">
+                  <div className="flex items-center gap-2 text-primary/40 mb-1">
+                    <Icon size={14} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{label}</span>
+                  </div>
+                  <p className="font-bold text-primary">{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="rounded-3xl border border-primary/10 bg-white/40 p-8 space-y-4">
+            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+              <span className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">📝</span>
+              About this place
+            </h2>
+            <p className="text-primary/80 leading-relaxed font-medium">
+              {listing.description || "No description provided."}
+            </p>
+            
+            <div className="pt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {amenityList.map(({ label, icon: Icon, on }) => (
+                <div key={label} className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl border transition-all ${
+                  on ? "border-primary/20 bg-white/60 text-primary" : "border-primary/5 bg-primary/5 text-primary/20 opacity-50"
+                }`}>
+                  <Icon size={16} />
+                  <span className="text-xs font-bold">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Map Section */}
+          <div className="rounded-3xl border border-primary/10 bg-white/40 overflow-hidden shadow-sm">
+            <div className="p-6 bg-white/20 border-b border-primary/5 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                <MapPin size={20} className="text-primary" />
+                Location
+              </h2>
+              <a
+                href={`https://www.google.com/maps/dir/University+of+Washington+Bothell,+Bothell+WA/${encodedAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-xl bg-primary/10 px-4 py-2 text-xs font-bold text-primary hover:bg-primary/20 transition-all"
+              >
+                Directions from Campus
+              </a>
+            </div>
+            <div className="h-[350px] w-full">
+              <iframe
+                title="Location map"
+                width="100%"
+                height="100%"
+                loading="lazy"
+                src={`https://maps.google.com/maps?q=${encodedAddress}&output=embed`}
+                className="grayscale-[0.5] contrast-[1.1]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-8 sticky top-24">
+          {/* Landlord Profile Card */}
+          <div className="rounded-3xl border border-primary/20 bg-white/80 p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-2xl bg-primary flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-primary/20 overflow-hidden">
+                {listing.user?.avatarUrl ? (
+                  <img src={listing.user.avatarUrl} className="h-full w-full object-cover" />
+                ) : (
+                  (listing.user?.name || listing.user?.email || "?")[0].toUpperCase()
+                )}
+              </div>
+              <div>
+                <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">Posted by</p>
+                <h3 className="text-lg font-black text-primary line-clamp-1">{listing.user?.name || listing.user?.email}</h3>
+                {listing.user?.isVerified && <VerifiedBadge />}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl bg-primary/5 p-3 text-center border border-primary/5">
+                <p className="text-2xl font-black text-primary">{listing.user?.karma || 0}</p>
+                <p className="text-[10px] font-bold text-primary/40 uppercase">Karma Score</p>
+              </div>
+              <div className="rounded-2xl bg-emerald-500/5 p-3 text-center border border-emerald-500/10">
+                <p className="text-2xl font-black text-emerald-600">{listing.user?.responseRate || 100}%</p>
+                <p className="text-[10px] font-bold text-emerald-600/60 uppercase">Response</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                href={`/profile/${listing.userId}`}
+                className="flex items-center justify-center gap-2 w-full rounded-2xl border-2 border-primary/10 bg-white px-5 py-3.5 text-sm font-bold text-primary hover:bg-primary/5 transition-all"
+              >
+                View Full Profile
+              </Link>
+              {listing.user?.email && (
+                <a
+                  href={`mailto:${listing.user.email}`}
+                  className="flex items-center justify-center gap-2 w-full rounded-2xl bg-primary px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-0.5"
+                >
+                  <Mail size={16} /> Send Message
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Roommate Calculator Sidebar */}
+          <div className="rounded-3xl border border-primary/10 bg-white/40 p-6 space-y-6">
+            <h2 className="text-lg font-bold text-primary">💰 Cost Split</h2>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-primary/60 uppercase tracking-widest">Number of people</p>
+                <div className="flex items-center gap-2 rounded-2xl border border-primary/10 bg-white/60 p-1">
+                  {[1, 2, 3, 4].map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setNumPeople(n.toString())}
+                      className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
+                        numPeople === n.toString() ? "bg-primary text-white shadow-md" : "text-primary/40 hover:bg-white/40"
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                  <input
+                    type="number"
+                    min="1"
+                    value={numPeople}
+                    onChange={(e) => setNumPeople(e.target.value)}
+                    className="w-12 bg-transparent text-center text-sm font-bold text-primary focus:outline-none"
+                    placeholder="+"
+                  />
+                </div>
+              </div>
+              
+              <button
+                onClick={handleCalc}
+                disabled={calcLoading}
+                className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-bold text-primary border border-primary/20 shadow-sm hover:shadow-md transition-all active:scale-95"
+              >
+                {calcLoading ? "Calculating..." : "Update Split"}
+              </button>
+
+              {calcResult && (
+                <div className="space-y-3 pt-4 border-t border-primary/5">
+                  <div className="flex justify-between items-end">
+                    <span className="text-sm font-bold text-primary/60">Per Person</span>
+                    <span className="text-3xl font-black text-primary">${calcResult.perPerson}</span>
+                  </div>
+                  {calcResult.tip && (
+                    <div className="rounded-2xl bg-primary/5 p-4 border border-primary/5">
+                      <p className="text-[10px] font-bold text-primary/40 uppercase mb-1">💡 AI Insight</p>
+                      <p className="text-xs text-primary/80 font-medium leading-relaxed">{calcResult.tip}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="rounded-[40px] border border-primary/10 bg-white/60 backdrop-blur-md p-10 shadow-sm space-y-10">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="space-y-1">
+            <h2 className="text-3xl font-extrabold text-primary flex items-center gap-3">
+              ⭐ Reviews
+              <span className="text-lg font-bold text-primary/40">{reviews.length} total</span>
+            </h2>
             {reviews.length > 0 && (
-              <div className="flex items-center gap-2 mt-1">
-                <Stars n={avgRating} />
-                <span className="text-sm text-gray-400">{avgRating.toFixed(1)} · {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+              <div className="flex items-center gap-3">
+                <Stars n={avgRating} size={20} />
+                <span className="text-lg font-black text-primary">{avgRating.toFixed(1)}</span>
               </div>
             )}
           </div>
-          {canReview && (
+          
+          {canReview ? (
             <button
               onClick={() => setShowForm((f) => !f)}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 transition"
+              className="rounded-2xl bg-primary px-8 py-4 font-bold text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-0.5"
             >
-              {showForm ? "Cancel" : "Write a Review"}
+              {showForm ? "Close Form" : "Write a Review"}
             </button>
-          )}
-          {user && !canReview && (
-            <span className="text-xs text-gray-500">Verified students only</span>
-          )}
-          {!user && (
-            <Link href="/auth/login" className="text-sm text-violet-400 hover:underline">Sign in to review</Link>
+          ) : !user ? (
+            <Link href="/auth/login" className="rounded-2xl border-2 border-primary/10 px-8 py-4 font-bold text-primary hover:bg-primary/5 transition-all">
+              Sign in to Review
+            </Link>
+          ) : (
+            <div className="rounded-2xl bg-primary/5 px-6 py-4 text-sm font-bold text-primary/40 border border-primary/5">
+              Verified students only
+            </div>
           )}
         </div>
 
         {showForm && (
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
-            <div>
-              <p className="text-xs text-gray-400 mb-1.5">Overall rating</p>
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <button key={i} onClick={() => setNewRating(i)}>
-                    <Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"} />
-                  </button>
-                ))}
+          <div className="rounded-3xl border border-primary/10 bg-white p-8 shadow-2xl space-y-6 animate-in slide-in-from-top-4 duration-500">
+            <div className="grid sm:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <p className="text-sm font-bold text-primary/60 uppercase tracking-widest">Overall Experience</p>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <button key={i} onClick={() => setNewRating(i)} className="transition-transform active:scale-125">
+                      <Star size={32} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-primary/10"} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <p className="text-sm font-bold text-primary/60 uppercase tracking-widest">Maintenance Speed</p>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <button key={i} onClick={() => setNewMaintenance(i)} className="transition-transform active:scale-125">
+                      <Star size={24} className={i <= newMaintenance ? "text-blue-400 fill-blue-400" : "text-primary/10"} />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-            <div>
-              <p className="text-xs text-gray-400 mb-1.5">Maintenance rating</p>
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <button key={i} onClick={() => setNewMaintenance(i)}>
-                    <Star size={18} className={i <= newMaintenance ? "text-blue-400 fill-blue-400" : "text-gray-600"} />
-                  </button>
-                ))}
-              </div>
+
+            <div className="flex items-center gap-6">
+               <button
+                type="button"
+                onClick={() => setNewDepositReturned((v) => !v)}
+                className={`flex items-center gap-3 rounded-2xl border-2 px-6 py-3 text-sm font-bold transition-all ${
+                  newDepositReturned ? "border-emerald-500 bg-emerald-500/10 text-emerald-600" : "border-primary/5 bg-primary/5 text-primary/40"
+                }`}
+              >
+                <div className={`h-5 w-5 rounded-lg flex items-center justify-center border-2 ${newDepositReturned ? "bg-emerald-500 border-emerald-500" : "border-primary/20"}`}>
+                  {newDepositReturned && <span className="text-[10px] text-white font-black">✓</span>}
+                </div>
+                Deposit Returned
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setNewDepositReturned((v) => !v)}
-              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs transition ${
-                newDepositReturned ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-white/10 bg-white/5 text-gray-400"
-              }`}
-            >
-              {newDepositReturned ? "✓" : "✗"} Deposit returned
-            </button>
+
             <textarea
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
-              placeholder="Share your experience with this landlord…"
-              rows={3}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none resize-none"
+              placeholder="Tell other students what it's like living here..."
+              rows={4}
+              className="w-full rounded-2xl border-2 border-primary/5 bg-primary/5 p-6 text-primary placeholder:text-primary/30 focus:border-primary/20 focus:outline-none focus:ring-0 transition-all text-lg font-medium"
             />
-            {reviewError && <p className="text-xs text-red-400">{reviewError}</p>}
-            <button
-              onClick={submitReview}
-              disabled={!newText.trim() || reviewLoading}
-              className="flex items-center gap-1.5 rounded-xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-40 transition"
-            >
-              {reviewLoading ? <Loader2 size={14} className="animate-spin" /> : null}
-              Submit Review
-            </button>
+            
+            <div className="flex items-center justify-between">
+              {reviewError && <p className="text-sm font-bold text-red-500">{reviewError}</p>}
+              <button
+                onClick={submitReview}
+                disabled={!newText.trim() || reviewLoading}
+                className="ml-auto flex items-center gap-3 rounded-2xl bg-primary px-10 py-5 font-black text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1 disabled:opacity-40"
+              >
+                {reviewLoading ? <Loader2 size={20} className="animate-spin" /> : "Publish Review"}
+              </button>
+            </div>
           </div>
         )}
 
-        {reviews.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-6">No reviews yet — be the first!</p>
-        ) : (
-          <div className="space-y-4">
-            {reviews.map((review: any) => (
-              <div key={review.id} className="space-y-2">
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-white text-sm">
-                      {review.user?.name || review.user?.email || "Anonymous"}
-                    </span>
-                    {review.user?.isVerified && <VerifiedBadge />}
-                    <Stars n={review.rating} size={13} />
-                    <span className="ml-auto text-xs text-gray-500">
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </span>
+        <div className="grid gap-6">
+          {reviews.length === 0 ? (
+            <div className="text-center py-20 rounded-3xl border border-dashed border-primary/10 bg-white/20">
+              <p className="text-primary/40 font-bold text-xl">Be the first to review this place!</p>
+            </div>
+          ) : (
+            reviews.map((review: any) => (
+              <div key={review.id} className="group space-y-4">
+                <div className="rounded-3xl border border-primary/5 bg-white p-8 shadow-sm transition-all hover:shadow-md hover:border-primary/10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="h-12 w-12 rounded-xl bg-primary/5 flex items-center justify-center font-bold text-primary overflow-hidden">
+                      {review.user?.avatarUrl ? (
+                        <img src={review.user.avatarUrl} className="h-full w-full object-cover" />
+                      ) : (
+                        (review.user?.name || "A")[0].toUpperCase()
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-primary">{review.user?.name || "Anonymous Student"}</span>
+                        {review.user?.isVerified && <VerifiedBadge />}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Stars n={review.rating} size={14} />
+                        <span className="text-[10px] font-bold text-primary/30 uppercase tracking-widest">{new Date(review.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-300">{review.reviewText}</p>
-                  <div className="flex gap-3 text-xs text-gray-500">
-                    <span>Maintenance: {review.maintenanceRating}/5</span>
-                    <span className={review.depositReturned ? "text-emerald-400" : "text-red-400"}>
-                      Deposit: {review.depositReturned ? "returned" : "not returned"}
-                    </span>
+
+                  <p className="text-primary/80 text-lg font-medium leading-relaxed mb-6">{review.reviewText}</p>
+                  
+                  <div className="flex flex-wrap gap-4 pt-6 border-t border-primary/5">
+                    <div className="flex items-center gap-2 rounded-xl bg-primary/5 px-4 py-2">
+                      <span className="text-[10px] font-black text-primary/40 uppercase">Maintenance</span>
+                      <Stars n={review.maintenanceRating} size={10} />
+                    </div>
+                    <div className={`flex items-center gap-2 rounded-xl px-4 py-2 ${review.depositReturned ? "bg-emerald-500/5 text-emerald-600" : "bg-red-500/5 text-red-600"}`}>
+                      <span className="text-[10px] font-black uppercase">Deposit</span>
+                      <span className="text-xs font-bold">{review.depositReturned ? "Returned" : "Withheld"}</span>
+                    </div>
                   </div>
                 </div>
 
-                {(review.comments || []).map((c: any, ci: number) => (
-                  <div key={ci} className="ml-6 rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm">
-                    <span className="font-medium text-gray-300">{c.user?.name || "Anonymous"}</span>
-                    <span className="mx-2 text-gray-600">·</span>
-                    <span className="text-gray-400">{c.content}</span>
-                  </div>
-                ))}
+                {/* Comments section */}
+                <div className="pl-10 space-y-4">
+                  {(review.comments || []).map((c: any, ci: number) => (
+                    <div key={ci} className="rounded-2xl bg-white/40 p-5 border border-primary/5 flex gap-4">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary shrink-0 text-xs">
+                        {c.user?.name?.[0].toUpperCase() || "A"}
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-xs font-black text-primary">{c.user?.name || "Student"}</p>
+                        <p className="text-sm font-medium text-primary/70">{c.content}</p>
+                      </div>
+                    </div>
+                  ))}
 
-                {user && (
-                  <div className="ml-6 flex gap-2">
-                    <input
-                      value={commentInputs[review.id] ?? ""}
-                      onChange={(e) => setCommentInputs((p) => ({ ...p, [review.id]: e.target.value }))}
-                      onKeyDown={(e) => e.key === "Enter" && submitComment(review.id)}
-                      placeholder="Add a comment…"
-                      className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none"
-                    />
-                    <button
-                      onClick={() => submitComment(review.id)}
-                      className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 transition"
-                    >
-                      Post
-                    </button>
-                  </div>
-                )}
+                  {user && (
+                    <div className="flex gap-3">
+                      <input
+                        value={commentInputs[review.id] ?? ""}
+                        onChange={(e) => setCommentInputs((p) => ({ ...p, [review.id]: e.target.value }))}
+                        onKeyDown={(e) => e.key === "Enter" && submitComment(review.id)}
+                        placeholder="Add your thoughts..."
+                        className="flex-1 rounded-2xl border border-primary/10 bg-white/60 px-6 py-3.5 text-sm font-medium text-primary placeholder:text-primary/30 focus:border-primary/20 focus:outline-none transition-all shadow-sm"
+                      />
+                      <button
+                        onClick={() => submitComment(review.id)}
+                        className="rounded-2xl bg-primary px-6 py-3.5 text-sm font-black text-white hover:shadow-lg transition-all"
+                      >
+                        Post
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

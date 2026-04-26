@@ -29,7 +29,7 @@ export default async function ProfilePage({
       listings: { orderBy: { createdAt: "desc" } },
       reviews: { orderBy: { createdAt: "desc" } },
       posts: { orderBy: { createdAt: "desc" } },
-      marketplaceItems: { orderBy: { createdAt: "desc" } },
+      marketItems: { orderBy: { createdAt: "desc" } },
     },
   });
 
@@ -159,7 +159,7 @@ export default async function ProfilePage({
             <StatCard icon={<Home className="h-4 w-4 text-violet-400" />} label="Listings" value={user.listings.length} />
             <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews Written" value={user.reviews.length} />
             <StatCard icon={<MessageSquare className="h-4 w-4 text-pink-400" />} label="Community Posts" value={user.posts.length} />
-            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketplaceItems.filter((i) => i.isSold).length} />
+            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i) => i.isSold).length} />
           </>
         ) : (
           <>
@@ -207,7 +207,7 @@ export default async function ProfilePage({
             upvotes: p.upvotes,
             createdAt: p.createdAt.toISOString(),
           }))}
-          marketplaceItems={user.marketplaceItems.map((m) => ({
+          marketItems={user.marketItems.map((m) => ({
             id: m.id,
             title: m.title,
             price: m.price,

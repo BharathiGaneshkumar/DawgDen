@@ -5,85 +5,87 @@ import { GraduationCap, Building2, Shield, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="mx-auto w-full max-w-4xl text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl mb-4">
-          Welcome to <span className="text-primary">DawgDen</span>
-        </h1>
-        <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
-          Choose how you want to use the platform. Are you looking for housing, or are you listing a property?
-        </p>
+        <div className="mb-12 space-y-4">
+          <h1 className="text-5xl font-black tracking-tight text-primary sm:text-6xl">
+            Welcome to <span className="text-white drop-shadow-sm">DawgDen</span>
+          </h1>
+          <p className="text-xl text-primary/60 font-bold max-w-2xl mx-auto">
+            The exclusive housing and community platform for UW Bothell.
+          </p>
+        </div>
 
         <div className="grid gap-8 md:grid-cols-2 max-w-3xl mx-auto">
           {/* Student Card */}
-          <div className="relative group rounded-3xl border border-white/10 bg-slate-900/60 p-8 text-left transition-all hover:-translate-y-1 hover:border-violet-500/50 hover:shadow-2xl hover:shadow-violet-500/20 overflow-hidden">
-            <div className="absolute top-0 right-0 p-6 opacity-10 transition-opacity group-hover:opacity-20">
-              <GraduationCap size={120} />
+          <div className="relative group rounded-[40px] border border-primary/10 bg-white/60 backdrop-blur-md p-10 text-left transition-all duration-500 hover:-translate-y-2 hover:bg-white/80 hover:shadow-2xl hover:shadow-primary/10 overflow-hidden">
+            <div className="absolute -top-10 -right-10 opacity-[0.03] transition-opacity group-hover:opacity-[0.08] text-primary rotate-12">
+              <GraduationCap size={240} />
             </div>
             
             <div className="relative z-10 flex flex-col h-full">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/20 text-violet-400 mb-6 border border-violet-500/30">
-                <GraduationCap size={32} />
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary mb-8 border border-primary/10 shadow-inner transition-transform group-hover:scale-110 duration-500">
+                <GraduationCap size={40} />
               </div>
               
-              <h2 className="text-2xl font-bold text-white mb-3">I'm a Student</h2>
-              <p className="text-gray-400 mb-6 flex-1">
-                Browse student-verified housing, check lease flags with AI, and connect with the UWB community.
+              <h2 className="text-3xl font-black text-primary mb-4">I'm a Student</h2>
+              <p className="text-primary/60 font-bold mb-8 flex-1 leading-relaxed">
+                Find verified housing, browse the marketplace, and connect with fellow Huskies.
               </p>
               
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-2 text-sm text-gray-300">
-                  <Shield size={16} className="text-emerald-400" />
-                  <span>Use your <strong>@uw.edu</strong> email for automatic verification</span>
+              <div className="space-y-4 mb-10">
+                <div className="flex items-center gap-3 text-sm font-bold text-primary/70 bg-primary/5 p-4 rounded-2xl border border-primary/5">
+                  <Shield size={20} className="text-emerald-500 shrink-0" />
+                  <span>Verified via <span className="text-primary">@uw.edu</span> email</span>
                 </div>
               </div>
 
               <a 
                 href="/auth/login?userType=STUDENT"
-                className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                className="mt-auto flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-8 py-5 text-base font-black text-white transition-all hover:shadow-xl hover:shadow-primary/30 active:scale-95"
               >
-                Continue as Student
-                <ArrowRight size={16} />
+                Continue to Student Portal
+                <ArrowRight size={20} />
               </a>
             </div>
           </div>
 
           {/* Landlord Card */}
-          <div className="relative group rounded-3xl border border-white/10 bg-slate-900/60 p-8 text-left transition-all hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 overflow-hidden">
-            <div className="absolute top-0 right-0 p-6 opacity-10 transition-opacity group-hover:opacity-20">
-              <Building2 size={120} />
+          <div className="relative group rounded-[40px] border border-primary/10 bg-white/40 backdrop-blur-md p-10 text-left transition-all duration-500 hover:-translate-y-2 hover:bg-white/60 hover:shadow-2xl hover:shadow-primary/10 overflow-hidden">
+            <div className="absolute -top-10 -right-10 opacity-[0.03] transition-opacity group-hover:opacity-[0.08] text-primary rotate-12">
+              <Building2 size={240} />
             </div>
             
             <div className="relative z-10 flex flex-col h-full">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-400 mb-6 border border-blue-500/30">
-                <Building2 size={32} />
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/80 text-primary/60 mb-8 border border-primary/10 shadow-sm transition-transform group-hover:scale-110 duration-500">
+                <Building2 size={40} />
               </div>
               
-              <h2 className="text-2xl font-bold text-white mb-3">I'm a Landlord</h2>
-              <p className="text-gray-400 mb-6 flex-1">
-                List your properties, reach verified UW Bothell students, and build your Trust Score.
+              <h2 className="text-3xl font-black text-primary/60 mb-4">I'm a Landlord</h2>
+              <p className="text-primary/40 font-bold mb-8 flex-1 leading-relaxed">
+                List properties for free and connect with verified student tenants.
               </p>
               
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-2 text-sm text-gray-300">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500/20 text-[10px] text-blue-400">✓</span>
-                  <span>Free property listings</span>
+              <div className="space-y-4 mb-10">
+                <div className="flex items-center gap-3 text-sm font-bold text-primary/30 border-2 border-dashed border-primary/10 p-4 rounded-2xl">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/5 text-xs text-primary/40">✓</span>
+                  <span>Unlimited Property Listings</span>
                 </div>
               </div>
 
               <a 
                 href="/auth/login?userType=LANDLORD"
-                className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                className="mt-auto flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-primary/10 bg-white/40 px-8 py-5 text-base font-black text-primary transition-all hover:bg-white hover:border-primary/20 active:scale-95"
               >
                 Continue as Landlord
-                <ArrowRight size={16} />
+                <ArrowRight size={20} />
               </a>
             </div>
           </div>
         </div>
         
-        <div className="mt-12 text-sm text-gray-500">
-          By continuing, you agree to our Terms of Service and Privacy Policy.
+        <div className="mt-16 text-xs font-bold uppercase tracking-widest text-primary/30">
+          By continuing, you agree to our <span className="text-primary/50 underline cursor-pointer">Terms</span> & <span className="text-primary/50 underline cursor-pointer">Privacy</span>
         </div>
       </div>
     </div>
