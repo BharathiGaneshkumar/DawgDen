@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine,
   Star, ChevronLeft, Heart, ExternalLink, Users, Loader2,
-  Dumbbell, BatteryCharging, Mail, Calendar, Zap,
+  Dumbbell, BatteryCharging, Mail, Calendar, Zap, Sparkles,
 } from "lucide-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
@@ -49,6 +49,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [summary, setSummary] = useState<string | null>(null);
+  const [summaryLoading, setSummaryLoading] = useState(false);
 
   const [numPeople, setNumPeople] = useState("1");
   const [calcResult, setCalcResult] = useState<any>(null);
@@ -72,8 +74,18 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         fetch(`/api/reviews?listingId=${p.id}`).then((r) => r.json()),
       ]).then(([l, rv]) => {
         setListing(l);
-        setReviews(Array.isArray(rv) ? rv : []);
+        const reviewsData = Array.isArray(rv) ? rv : [];
+        setReviews(reviewsData);
         setLoading(false);
+
+        if (reviewsData.length > 0) {
+          setSummaryLoading(true);
+          fetch(`/api/listings/${p.id}/summary`)
+            .then(res => res.json())
+            .then(data => setSummary(data.summary))
+            .catch(() => setSummary("Failed to load AI summary."))
+            .finally(() => setSummaryLoading(false));
+        }
       }).catch(() => setLoading(false));
     });
   }, [params]);
@@ -487,6 +499,26 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                 {reviewLoading ? <Loader2 size={20} className="animate-spin" /> : "Publish Review"}
               </button>
             </div>
+          </div>
+        )}
+
+        {summaryLoading ? (
+          <div className="rounded-3xl border border-primary/10 bg-white/40 p-6 flex items-center justify-center gap-3 text-primary/60">
+            <Loader2 className="animate-spin" size={20} />
+            <span className="font-bold">Generating AI Summary of Reviews...</span>
+          </div>
+        ) : summary && (
+          <div className="rounded-3xl border border-pink-400/30 bg-gradient-to-r from-pink-500/10 to-violet-500/10 p-8 shadow-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity">
+              <Zap size={64} className="text-pink-500" />
+            </div>
+            <h3 className="text-lg font-bold text-pink-600 mb-2 flex items-center gap-2 relative z-10">
+              <Sparkles size={20} />
+              AI Review Summary
+            </h3>
+            <p className="text-primary/80 font-medium leading-relaxed relative z-10 text-lg">
+              {summary}
+            </p>
           </div>
         )}
 
