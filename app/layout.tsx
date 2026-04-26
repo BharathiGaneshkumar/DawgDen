@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import FallingBlossoms from "@/components/FallingBlossoms";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -24,12 +23,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${quicksand.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body 
         className="min-h-full flex flex-col relative bg-background text-foreground overflow-x-hidden"
         style={{ fontFamily: 'var(--font-quicksand), sans-serif' }}
+        suppressHydrationWarning
       >
-        <FallingBlossoms />
         <img 
           src="/cherry-branch-left.png" 
           alt="Cherry Branch" 

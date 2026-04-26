@@ -21,7 +21,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-1 transition-opacity hover:opacity-90"
+          className="group flex items-center gap-1 transition-opacity hover:opacity-90 -ml-4 md:-ml-6 lg:-ml-8"
         >
           <img 
             src="/logo.png" 

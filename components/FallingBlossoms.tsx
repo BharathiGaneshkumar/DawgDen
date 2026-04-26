@@ -32,7 +32,7 @@ export default function FallingBlossoms() {
       {petals.map((petal) => (
         <div
           key={petal.id}
-          className="absolute top-[-10%] rounded-full bg-pink-300/60 shadow-[0_0_10px_rgba(255,182,193,0.8)]"
+          className="absolute top-[-10%] rounded-full bg-pink-400 shadow-[0_0_12px_rgba(244,114,182,0.9)] opacity-90"
           style={{
             left: petal.left,
             width: `${petal.size}px`,

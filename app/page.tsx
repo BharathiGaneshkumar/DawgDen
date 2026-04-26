@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Shield, Search, FileText, Star, Calculator, ArrowRight, CheckCircle } from "lucide-react";
+import { Heart, Search, FileText, Star, Calculator, ArrowRight, CheckCircle } from "lucide-react";
+import FallingBlossoms from "@/components/FallingBlossoms";
 
 const features = [
   {
@@ -19,7 +20,7 @@ const features = [
   {
     icon: Star,
     title: "Landlord Reviews",
-    description: "Read and write blockchain-verified landlord reviews. Know who you're renting from before you commit.",
+    description: "Read honest, student-written landlord reviews. Know who you're renting from before you commit.",
     color: "from-violet-400 to-indigo-500",
     shadow: "shadow-violet-500/20",
   },
@@ -34,7 +35,7 @@ const features = [
 
 const trustItems = [
   "No hidden fees or subscriptions",
-  "Blockchain-verified reviews",
+  "100% verified student reviews",
   "AI-powered lease analysis",
   "Student-first community",
 ];
@@ -42,6 +43,7 @@ const trustItems = [
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      <FallingBlossoms />
       {/* Hero Section */}
       <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 text-center">
         {/* Gradient orbs */}
@@ -63,8 +65,8 @@ export default function HomePage() {
 
         <div className="relative z-10 flex flex-col items-center">
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-base font-bold text-primary">
-            <Shield className="h-3.5 w-3.5" />
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-white/50 bg-white/40 backdrop-blur-md px-5 py-1.5 text-base font-bold text-primary shadow-sm hover:bg-white/50 transition-colors">
+            <Heart className="h-4 w-4 text-primary fill-primary/20" />
             Built for students, by students
           </div>
 
