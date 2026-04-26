@@ -87,114 +87,140 @@ export default function NewListingModal({ isOpen, onClose, onSuccess }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-gray-950 p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-2xl rounded-[40px] border border-white/40 bg-white/60 backdrop-blur-xl p-8 shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white"
+          className="absolute right-6 top-6 rounded-2xl p-2 text-primary/40 hover:bg-primary/5 hover:text-primary transition-all active:scale-95"
         >
           <X size={20} />
         </button>
 
-        <h2 className="mb-6 text-xl font-bold text-white">Create Listing</h2>
+        <div className="mb-8 flex items-center gap-3">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-400 flex items-center justify-center shadow-lg shadow-pink-500/20">
+            <Home className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-primary leading-tight">Create Listing</h2>
+            <p className="text-sm font-bold text-primary/40 uppercase tracking-widest">Housing Marketplace</p>
+          </div>
+        </div>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">
+          <div className="mb-6 rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-500 border border-red-500/20">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="mb-1 block text-sm font-medium text-gray-300">Title</label>
-              <input required name="title" value={formData.title} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="sm:col-span-2 space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Title</label>
+              <input required name="title" value={formData.title} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="E.g. Cozy Studio near UW Bothell" />
             </div>
             
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Rent ($/mo)</label>
-              <input required type="number" name="rent" value={formData.rent} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Rent ($/mo)</label>
+              <input required type="number" name="rent" value={formData.rent} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="1200" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Address</label>
-              <input required name="address" value={formData.address} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Address</label>
+              <input required name="address" value={formData.address} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="Street address" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Bedrooms</label>
-              <input required type="number" name="bedrooms" value={formData.bedrooms} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Bedrooms</label>
+              <input required type="number" name="bedrooms" value={formData.bedrooms} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="1" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Bathrooms</label>
-              <input required type="number" name="bathrooms" value={formData.bathrooms} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Bathrooms</label>
+              <input required type="number" name="bathrooms" value={formData.bathrooms} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="1" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Lease Length (mo)</label>
-              <input required type="number" name="leaseLength" value={formData.leaseLength} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Lease Length (mo)</label>
+              <input required type="number" name="leaseLength" value={formData.leaseLength} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Security Deposit ($)</label>
-              <input type="number" name="deposit" value={formData.deposit} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Security Deposit ($)</label>
+              <input type="number" name="deposit" value={formData.deposit} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="Optional" />
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Available From</label>
-              <input type="date" name="availableFrom" value={formData.availableFrom} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white [color-scheme:dark]" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Available From</label>
+              <input type="date" name="availableFrom" value={formData.availableFrom} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" />
             </div>
             
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-300">Image URL</label>
-              <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Image URL</label>
+              <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="https://..." />
             </div>
 
-            <div className="col-span-2">
-              <label className="mb-1 block text-sm font-medium text-gray-300">Description</label>
-              <textarea required name="description" rows={3} value={formData.description} onChange={handleChange} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white" />
+            <div className="sm:col-span-2 space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Description</label>
+              <textarea required name="description" rows={3} value={formData.description} onChange={handleChange} className="w-full resize-none rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all" placeholder="Tell us about the space..." />
             </div>
 
-            <div className="col-span-2 space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Amenities</label>
-              <div className="flex flex-wrap gap-4 text-sm text-gray-300">
+            <div className="sm:col-span-2 space-y-4">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Amenities & Utilities</label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {Object.keys(amenities).map((key) => (
-                  <label key={key} className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      checked={amenities[key as keyof typeof amenities]} 
-                      onChange={() => handleAmenityChange(key as keyof typeof amenities)}
-                      className="rounded border-gray-600 bg-gray-800 text-violet-500 focus:ring-violet-500"
-                    />
-                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                  <label key={key} className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative flex items-center justify-center">
+                      <input 
+                        type="checkbox" 
+                        checked={amenities[key as keyof typeof amenities]} 
+                        onChange={() => handleAmenityChange(key as keyof typeof amenities)}
+                        className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-primary/10 bg-white/40 transition-all checked:bg-primary checked:border-primary"
+                      />
+                      <div className="pointer-events-none absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                    </div>
+                    <span className="text-sm font-bold text-primary/60 group-hover:text-primary transition-colors">
+                      {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                    </span>
                   </label>
                 ))}
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative flex items-center justify-center">
+                    <input 
+                      type="checkbox" 
+                      checked={utilitiesIncluded} 
+                      onChange={(e) => setUtilitiesIncluded(e.target.checked)}
+                      className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-primary/10 bg-white/40 transition-all checked:bg-primary checked:border-primary"
+                    />
+                    <div className="pointer-events-none absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                  </div>
+                  <span className="text-sm font-bold text-primary/60 group-hover:text-primary transition-colors">
+                    Utilities Included
+                  </span>
+                </label>
               </div>
-            </div>
-
-            <div className="col-span-2 mt-2">
-              <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-300">
-                <input 
-                  type="checkbox" 
-                  checked={utilitiesIncluded} 
-                  onChange={(e) => setUtilitiesIncluded(e.target.checked)}
-                  className="rounded border-gray-600 bg-gray-800 text-violet-500 focus:ring-violet-500"
-                />
-                Utilities Included in Rent
-              </label>
             </div>
           </div>
 
-          <div className="flex justify-end pt-4">
+          <div className="flex gap-3 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-2xl bg-white/40 px-6 py-4 font-black text-primary/60 transition-all hover:bg-white/60 active:scale-95"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-2.5 font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+              className="flex-[2] flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 font-black text-white shadow-xl shadow-primary/20 transition-all hover:shadow-primary/40 active:scale-95 disabled:opacity-50"
             >
               {loading ? "Posting..." : "Post Listing"}
-              <Home size={16} />
+              {!loading && <Home size={18} />}
             </button>
           </div>
         </form>

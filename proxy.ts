@@ -13,7 +13,7 @@ const PROTECTED_ROUTES = [
 // Only verified students may access these routes; landlords are redirected out
 const STUDENT_ONLY_ROUTES = ["/community/new", "/marketplace/new"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const authResponse = await auth0.middleware(request);
   const path = request.nextUrl.pathname;
 

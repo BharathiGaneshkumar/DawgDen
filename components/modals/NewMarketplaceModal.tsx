@@ -57,38 +57,46 @@ export default function NewMarketplaceModal({ isOpen, onClose, onSuccess }: Prop
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-gray-950 p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-xl rounded-[40px] border border-white/40 bg-white/60 backdrop-blur-xl p-8 shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white"
+          className="absolute right-6 top-6 rounded-2xl p-2 text-primary/40 hover:bg-primary/5 hover:text-primary transition-all active:scale-95"
         >
           <X size={20} />
         </button>
 
-        <h2 className="mb-6 text-xl font-bold text-white">Sell an Item</h2>
+        <div className="mb-8 flex items-center gap-3">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
+            <Tag className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-primary leading-tight">Sell an Item</h2>
+            <p className="text-sm font-bold text-primary/40 uppercase tracking-widest">Student Marketplace</p>
+          </div>
+        </div>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">
+          <div className="mb-6 rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-500 border border-red-500/20">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Title</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Title</label>
               <input
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                 placeholder="Item name"
               />
             </div>
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Price ($)</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Price ($)</label>
               <input
                 required
                 type="number"
@@ -96,67 +104,74 @@ export default function NewMarketplaceModal({ isOpen, onClose, onSuccess }: Prop
                 step="0.01"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Category</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all appearance-none cursor-pointer"
               >
                 {["Furniture", "Electronics", "Appliances", "Books", "Clothing", "Other"].map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </div>
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Contact Info</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Contact Info</label>
               <input
                 required
                 value={contactInfo}
                 onChange={(e) => setContactInfo(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                 placeholder="Phone or Instagram"
               />
             </div>
           </div>
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Image URL (Optional)</label>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Image URL (Optional)</label>
             <input
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+              className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
               placeholder="https://..."
             />
           </div>
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Description</label>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Description</label>
             <textarea
               required
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+              className="w-full resize-none rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-3 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
               placeholder="Details about condition, pickup, etc."
             />
           </div>
 
-          <div className="flex justify-end pt-2">
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-2xl bg-white/40 px-6 py-4 font-black text-primary/60 transition-all hover:bg-white/60 active:scale-95"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-2.5 font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+              className="flex-[2] flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 font-black text-white shadow-xl shadow-primary/20 transition-all hover:shadow-primary/40 active:scale-95 disabled:opacity-50"
             >
               {loading ? "Posting..." : "Post Item"}
-              <Tag size={16} />
+              {!loading && <Tag size={18} />}
             </button>
           </div>
         </form>
