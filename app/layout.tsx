@@ -3,6 +3,7 @@ import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Auth0Provider } from "@auth0/nextjs-auth0/client";
+import VoiceAssistant from "@/components/VoiceAssistant";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -45,6 +46,7 @@ export default function RootLayout({
           <div className="relative z-10 flex min-h-screen flex-col">
             <Navbar />
             <main className="flex-1">{children}</main>
+            <VoiceAssistant />
           </div>
         </Auth0Provider>
       </body>

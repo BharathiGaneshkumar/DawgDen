@@ -25,7 +25,7 @@ export default function AuthButton() {
   if (!user) {
     return (
       <a
-        href="/auth/login"
+        href="/login"
         className="rounded-lg border border-pink-400/30 bg-pink-500/10 px-4 py-2 text-sm font-semibold text-pink-200 transition hover:bg-pink-500/20 hover:text-white"
       >
         Sign In
