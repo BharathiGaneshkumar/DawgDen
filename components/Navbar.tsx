@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Shield } from "lucide-react";
 
 const navLinks = [
   { href: "/listings", label: "Listings" },
@@ -17,18 +16,20 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-gray-950/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 w-full bg-gradient-to-b from-background via-background/90 to-transparent pb-8 pt-2">
+      <div className="mx-auto flex py-2 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2.5 transition-opacity hover:opacity-90"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-90"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/30 transition-shadow group-hover:shadow-violet-500/50">
-            <Shield className="h-5 w-5 text-white" strokeWidth={2.5} />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-white">
-            Nest<span className="text-violet-400">Safe</span>
+          <img 
+            src="/logo.png" 
+            alt="DawgDen Logo" 
+            className="h-24 w-24 md:h-28 md:w-28 object-contain drop-shadow-sm" 
+          />
+          <span className="text-3xl font-extrabold tracking-tight text-primary mt-2">
+            Dawg<span className="text-pink-500">Den</span>
           </span>
         </Link>
 
@@ -37,17 +38,17 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
             return (
-              <Link
+               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                className={`relative rounded-lg px-5 py-3 text-lg font-extrabold transition-all duration-200 ${
                   isActive
-                    ? "text-white"
-                    : "text-gray-400 hover:text-white"
+                    ? "text-primary"
+                    : "text-primary/70 hover:text-primary"
                 }`}
               >
                 {isActive && (
-                  <span className="absolute inset-0 rounded-lg bg-white/10" />
+                  <span className="absolute inset-0 rounded-lg bg-primary/10" />
                 )}
                 <span className="relative">{link.label}</span>
               </Link>
@@ -59,7 +60,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/listings/new"
-            className="hidden rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-violet-500/20 transition-all duration-200 hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-500/40 sm:block"
+            className="hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-base font-bold text-white shadow-md shadow-purple-500/20 transition-all duration-200 hover:from-purple-400 hover:to-pink-400 hover:shadow-purple-500/40 sm:block"
           >
             List a Place
           </Link>
