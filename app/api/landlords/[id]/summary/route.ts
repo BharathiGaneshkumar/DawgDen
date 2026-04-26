@@ -37,7 +37,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     } catch (aiError) {
       console.error("Gemma AI Error:", aiError);
       // Fallback
-      summary = `Based on ${reviews.length} reviews, this landlord has an average rating of ${(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)}/5.`;
+      summary = `Based on ${reviews.length} reviews, this landlord has an average rating of ${(reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length).toFixed(1)}/5.`;
     }
 
     return NextResponse.json({ summary });
