@@ -123,30 +123,33 @@ export default function NewListingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12 min-h-screen">
+    <div className="mx-auto max-w-2xl px-4 py-12 min-h-screen relative z-10">
       {/* Back link */}
-      <button onClick={() => router.back()} className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition">
+      <button 
+        onClick={() => router.back()} 
+        className="mb-8 inline-flex items-center gap-2 rounded-2xl bg-white/40 backdrop-blur-md px-4 py-2 text-sm font-black text-primary/60 hover:bg-white/60 hover:text-primary transition-all active:scale-95 shadow-sm"
+      >
         <ChevronLeft size={16} /> Back
       </button>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">List a Place</h1>
-        <p className="mt-1 text-gray-400 text-sm">Fill in the details so students can find your listing.</p>
+      <div className="mb-10">
+        <h1 className="text-4xl font-black text-primary leading-tight">List a Place</h1>
+        <p className="mt-2 text-lg font-bold text-primary/40 uppercase tracking-widest">Share your space with students</p>
       </div>
 
       {/* Step indicator */}
-      <div className="mb-8 flex items-center gap-2">
+      <div className="mb-10 flex items-center gap-3">
         {STEPS.map((label, i) => {
           const n = i + 1;
           const active = step === n;
           const done = step > n;
           return (
-            <div key={n} className="flex items-center gap-2 flex-1">
-              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold transition ${done ? "bg-emerald-500 text-white" : active ? "bg-violet-600 text-white" : "bg-white/10 text-gray-500"}`}>
-                {done ? <CheckCircle2 size={16} /> : n}
+            <div key={n} className="flex items-center gap-3 flex-1">
+              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-base font-black transition-all shadow-lg ${done ? "bg-emerald-500 text-white shadow-emerald-500/20" : active ? "bg-primary text-white shadow-primary/20" : "bg-white/40 text-primary/30"}`}>
+                {done ? <CheckCircle2 size={20} /> : n}
               </div>
-              <span className={`text-xs font-medium hidden sm:block ${active ? "text-white" : done ? "text-emerald-400" : "text-gray-500"}`}>{label}</span>
-              {i < STEPS.length - 1 && <div className={`flex-1 h-px ${done ? "bg-emerald-500/50" : "bg-white/10"}`} />}
+              <span className={`text-[10px] font-black uppercase tracking-widest hidden sm:block ${active ? "text-primary" : done ? "text-emerald-600" : "text-primary/20"}`}>{label}</span>
+              {i < STEPS.length - 1 && <div className={`flex-1 h-1 rounded-full ${done ? "bg-emerald-500/30" : "bg-primary/5"}`} />}
             </div>
           );
         })}
@@ -154,67 +157,67 @@ export default function NewListingPage() {
 
       {/* ── STEP 1: Basic Info ── */}
       {step === 1 && (
-        <div className="space-y-5">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2"><Home size={18} className="text-violet-400" /> Basic Details</h2>
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="rounded-[40px] border border-white/40 bg-white/60 backdrop-blur-xl p-8 space-y-8 shadow-2xl">
+            <h2 className="text-xl font-black text-primary flex items-center gap-3"><Home size={22} className="text-pink-500" /> Basic Details</h2>
 
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Listing Title *</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Listing Title *</label>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Cozy 2BR near UWB campus"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none transition"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
               />
             </div>
 
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><MapPin size={14} className="text-violet-400" /> Address *</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><MapPin size={14} /> Address *</label>
               <input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="e.g. 18101 Bothell Way NE, Bothell, WA 98011"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none transition"
+                className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><DollarSign size={14} className="text-violet-400" /> Rent / month *</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><DollarSign size={14} /> Rent / month *</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-black opacity-30">$</span>
                   <input
                     type="number"
                     min={0}
                     value={rent}
                     onChange={(e) => setRent(e.target.value)}
                     placeholder="1200"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-8 pr-4 text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none transition"
+                    className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 py-4 pl-10 pr-5 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300">Security Deposit</label>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Security Deposit</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-black opacity-30">$</span>
                   <input
                     type="number"
                     min={0}
                     value={deposit}
                     onChange={(e) => setDeposit(e.target.value)}
                     placeholder="optional"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-8 pr-4 text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none transition"
+                    className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 py-4 pl-10 pr-5 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><Bed size={14} className="text-violet-400" /> Bedrooms *</label>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><Bed size={14} /> Bedrooms *</label>
                 <select
                   value={bedrooms}
                   onChange={(e) => setBedrooms(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-white focus:border-violet-500 focus:outline-none transition cursor-pointer"
+                  className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all appearance-none cursor-pointer"
                 >
                   {["1", "2", "3", "4", "5"].map((n) => (
                     <option key={n} value={n}>{n} bedroom{n !== "1" ? "s" : ""}</option>
@@ -222,12 +225,12 @@ export default function NewListingPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><Bath size={14} className="text-violet-400" /> Bathrooms *</label>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><Bath size={14} /> Bathrooms *</label>
                 <select
                   value={bathrooms}
                   onChange={(e) => setBathrooms(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-white focus:border-violet-500 focus:outline-none transition cursor-pointer"
+                  className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all appearance-none cursor-pointer"
                 >
                   {["1", "1.5", "2", "2.5", "3", "3.5", "4"].map((n) => (
                     <option key={n} value={n}>{n} bathroom{n !== "1" ? "s" : ""}</option>
@@ -235,12 +238,12 @@ export default function NewListingPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><FileText size={14} className="text-violet-400" /> Lease Length</label>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><FileText size={14} /> Lease Length</label>
                 <select
                   value={leaseLength}
                   onChange={(e) => setLeaseLength(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-white focus:border-violet-500 focus:outline-none transition cursor-pointer"
+                  className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all appearance-none cursor-pointer"
                 >
                   {LEASE_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -248,25 +251,25 @@ export default function NewListingPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-300 flex items-center gap-1.5"><Calendar size={14} className="text-violet-400" /> Available From</label>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1 flex items-center gap-2"><Calendar size={14} /> Available From</label>
                 <input
                   type="date"
                   value={availableFrom}
                   onChange={(e) => setAvailableFrom(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-white focus:border-violet-500 focus:outline-none transition [color-scheme:dark]"
+                  className="w-full rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">Description</label>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 placeholder="Describe the place — parking situation, proximity to campus, neighborhood vibe, rules, etc."
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none resize-none transition"
+                className="w-full resize-none rounded-2xl border-2 border-primary/5 bg-white/40 px-5 py-4 text-primary font-bold placeholder:text-primary/20 focus:border-primary/20 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all"
               />
             </div>
           </div>
@@ -274,7 +277,7 @@ export default function NewListingPage() {
           <button
             onClick={() => step1Valid() && setStep(2)}
             disabled={!step1Valid()}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-violet-600 py-3.5 font-semibold text-white hover:bg-violet-500 disabled:opacity-40 transition"
+            className="w-full flex items-center justify-center gap-3 rounded-2xl bg-primary py-5 font-black text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 disabled:opacity-50 transition-all uppercase tracking-widest text-sm"
           >
             Next: Amenities <ChevronRight size={18} />
           </button>
@@ -283,14 +286,14 @@ export default function NewListingPage() {
 
       {/* ── STEP 2: Amenities & Utilities ── */}
       {step === 2 && (
-        <div className="space-y-5">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-6">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2"><Zap size={18} className="text-violet-400" /> Amenities & Utilities</h2>
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="rounded-[40px] border border-white/40 bg-white/60 backdrop-blur-xl p-8 space-y-8 shadow-2xl">
+            <h2 className="text-xl font-black text-primary flex items-center gap-3"><Zap size={22} className="text-yellow-500" /> Amenities & Utilities</h2>
 
             {/* Amenities grid */}
-            <div>
-              <p className="text-sm font-medium text-gray-300 mb-3">What's included?</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="space-y-4">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">What's included?</label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {AMENITIES.map(({ key, label, icon: Icon }) => {
                   const on = amenities.includes(key);
                   return (
@@ -298,13 +301,13 @@ export default function NewListingPage() {
                       key={key}
                       type="button"
                       onClick={() => toggleAmenity(key)}
-                      className={`flex items-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-medium transition ${
+                      className={`group flex items-center gap-3 rounded-2xl border-2 px-4 py-4 text-sm font-black transition-all active:scale-95 shadow-sm ${
                         on
-                          ? "border-violet-500 bg-violet-500/15 text-violet-300"
-                          : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20 hover:text-gray-300"
+                          ? "border-primary bg-primary text-white shadow-primary/20"
+                          : "border-primary/5 bg-white/40 text-primary/40 hover:border-primary/20 hover:text-primary"
                       }`}
                     >
-                      <Icon size={15} className={on ? "text-violet-400" : "text-gray-500"} />
+                      <Icon size={18} className={on ? "text-white" : "text-primary/20 group-hover:text-primary/40"} />
                       {label}
                     </button>
                   );
@@ -313,50 +316,59 @@ export default function NewListingPage() {
             </div>
 
             {/* Utilities toggle */}
-            <div>
+            <div className="space-y-4">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30 ml-1">Utilities</label>
               <button
                 type="button"
                 onClick={() => setUtilitiesIncluded((v) => !v)}
-                className={`w-full flex items-center justify-between rounded-xl border px-5 py-4 transition ${
+                className={`w-full flex items-center justify-between rounded-[28px] border-2 px-6 py-5 transition-all active:scale-[0.98] shadow-sm ${
                   utilitiesIncluded
-                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
-                    : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20"
+                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-700"
+                    : "border-primary/5 bg-white/40 text-primary/40 hover:border-primary/10"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Zap size={16} className={utilitiesIncluded ? "text-emerald-400" : "text-gray-500"} />
+                <div className="flex items-center gap-4">
+                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center transition-colors ${utilitiesIncluded ? "bg-emerald-500 text-white" : "bg-primary/5 text-primary/20"}`}>
+                    <Zap size={20} />
+                  </div>
                   <div className="text-left">
-                    <p className="font-medium text-sm">{utilitiesIncluded ? "Utilities included in rent" : "Utilities NOT included"}</p>
-                    <p className="text-xs mt-0.5 opacity-70">Electricity, water, trash, etc.</p>
+                    <p className="font-black text-base">{utilitiesIncluded ? "Utilities included in rent" : "Utilities NOT included"}</p>
+                    <p className={`text-xs font-bold uppercase tracking-widest ${utilitiesIncluded ? "text-emerald-600/60" : "text-primary/20"}`}>Electricity, water, trash, etc.</p>
                   </div>
                 </div>
-                <div className={`h-6 w-11 rounded-full transition-colors relative ${utilitiesIncluded ? "bg-emerald-500" : "bg-white/20"}`}>
-                  <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${utilitiesIncluded ? "translate-x-5" : "translate-x-0.5"}`} />
+                <div className={`h-8 w-14 rounded-full transition-colors relative shadow-inner ${utilitiesIncluded ? "bg-emerald-500" : "bg-primary/10"}`}>
+                  <div className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow-md transition-transform duration-300 ${utilitiesIncluded ? "translate-x-7" : "translate-x-1"}`} />
                 </div>
               </button>
             </div>
 
             {/* ISP info for the area */}
-            <div>
-              <p className="text-sm font-medium text-gray-300 mb-1">📶 Internet providers near UW Bothell</p>
-              <p className="text-xs text-gray-500 mb-3">For reference — tenants will see this. No action needed unless you want to add this info to your description.</p>
-              <div className="space-y-2">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-primary/30">Local Internet Providers</label>
+                <div className="flex items-center gap-1 text-[10px] font-black text-primary/20 uppercase tracking-widest">
+                  <Wifi size={10} /> AREA INFO
+                </div>
+              </div>
+              <div className="space-y-3">
                 {AREA_ISPS.map((isp) => (
-                  <div key={isp.name} className={`flex items-center justify-between rounded-xl border px-4 py-3 ${isp.recommended ? "border-violet-500/30 bg-violet-500/5" : "border-white/5 bg-white/3"}`}>
-                    <div className="flex items-center gap-3">
-                      <Wifi size={14} className={isp.recommended ? "text-violet-400" : "text-gray-500"} />
+                  <div key={isp.name} className={`group relative flex items-center justify-between rounded-2xl border-2 px-5 py-4 transition-all shadow-sm ${isp.recommended ? "border-primary/20 bg-primary/5" : "border-primary/5 bg-white/40 hover:bg-white/60"}`}>
+                    <div className="flex items-center gap-4">
+                      <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${isp.recommended ? "bg-primary text-white" : "bg-primary/5 text-primary/20"}`}>
+                        <Wifi size={18} />
+                      </div>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-white">{isp.name}</span>
-                          {isp.recommended && <span className="text-[10px] bg-violet-500/20 text-violet-400 px-1.5 py-0.5 rounded-full font-semibold">Best</span>}
-                          <span className="text-xs text-gray-500 bg-white/5 px-1.5 py-0.5 rounded">{isp.type}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-base font-black text-primary">{isp.name}</span>
+                          {isp.recommended && <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-lg font-black uppercase tracking-widest shadow-sm">Best</span>}
+                          <span className="text-[10px] text-primary/40 font-black uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-lg">{isp.type}</span>
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{isp.note}</p>
+                        <p className="text-xs font-bold text-primary/40 mt-0.5">{isp.note}</p>
                       </div>
                     </div>
-                    <div className="text-right shrink-0 ml-3">
-                      <p className="text-xs text-gray-300 font-medium">{isp.maxSpeed}</p>
-                      <p className="text-xs text-gray-500">{isp.avgPrice}</p>
+                    <div className="text-right shrink-0 ml-4">
+                      <p className="text-sm font-black text-primary">{isp.maxSpeed}</p>
+                      <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">{isp.avgPrice}</p>
                     </div>
                   </div>
                 ))}
@@ -364,11 +376,17 @@ export default function NewListingPage() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <button onClick={() => setStep(1)} className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3.5 font-semibold text-gray-300 hover:bg-white/10 transition flex items-center justify-center gap-2">
+          <div className="flex gap-4">
+            <button 
+              onClick={() => setStep(1)} 
+              className="flex-1 rounded-[28px] border-2 border-primary/5 bg-white/40 py-5 font-black text-primary/40 hover:bg-white/60 hover:text-primary transition-all active:scale-95 shadow-sm uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+            >
               <ChevronLeft size={18} /> Back
             </button>
-            <button onClick={() => setStep(3)} className="flex-1 rounded-xl bg-violet-600 py-3.5 font-semibold text-white hover:bg-violet-500 transition flex items-center justify-center gap-2">
+            <button 
+              onClick={() => setStep(3)} 
+              className="flex-1 rounded-[28px] bg-primary py-5 font-black text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+            >
               Next: Photos <ChevronRight size={18} />
             </button>
           </div>
@@ -377,68 +395,93 @@ export default function NewListingPage() {
 
       {/* ── STEP 3: Photos & Submit ── */}
       {step === 3 && (
-        <div className="space-y-5">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2"><UploadCloud size={18} className="text-violet-400" /> Photos</h2>
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="rounded-[40px] border border-white/40 bg-white/60 backdrop-blur-xl p-8 space-y-8 shadow-2xl">
+            <h2 className="text-xl font-black text-primary flex items-center gap-3"><UploadCloud size={22} className="text-pink-500" /> Photos</h2>
 
             <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImagePick} />
 
             {imagePreview ? (
-              <div className="relative rounded-2xl overflow-hidden border border-white/10">
-                <img src={imagePreview} alt="preview" className="w-full h-64 object-cover" />
+              <div className="relative rounded-3xl overflow-hidden border-4 border-white/50 shadow-xl group">
+                <img src={imagePreview} alt="preview" className="w-full h-80 object-cover" />
+                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <button
                   onClick={() => { setImagePreview(""); setImageDataUrl(""); if (fileRef.current) fileRef.current.value = ""; }}
-                  className="absolute top-3 right-3 rounded-full bg-black/70 p-1.5 text-white hover:bg-black transition"
+                  className="absolute top-4 right-4 rounded-2xl bg-white/90 backdrop-blur-md p-3 text-primary shadow-xl hover:scale-110 active:scale-95 transition-all"
                 >
-                  <X size={16} />
+                  <X size={20} />
                 </button>
               </div>
             ) : (
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="w-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/10 bg-white/3 py-14 gap-3 hover:border-violet-500/50 hover:bg-violet-500/5 transition group"
+                className="w-full flex flex-col items-center justify-center rounded-[32px] border-4 border-dashed border-primary/5 bg-white/40 py-20 gap-4 hover:border-primary/20 hover:bg-white/60 transition-all active:scale-[0.98] group"
               >
-                <UploadCloud className="h-10 w-10 text-gray-500 group-hover:text-violet-400 transition" />
+                <div className="h-16 w-16 rounded-3xl bg-primary/5 flex items-center justify-center text-primary/20 group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                  <UploadCloud size={32} />
+                </div>
                 <div className="text-center">
-                  <p className="text-sm font-medium text-gray-300">Upload a photo</p>
-                  <p className="text-xs text-gray-500 mt-1">JPG, PNG, WEBP — pick from your device</p>
+                  <p className="text-lg font-black text-primary">Upload listing photos</p>
+                  <p className="text-xs font-bold text-primary/30 uppercase tracking-widest mt-1">JPG, PNG, WEBP — pick from device</p>
                 </div>
               </button>
             )}
 
-            <p className="text-xs text-gray-500">Photo is optional but listings with photos get significantly more views.</p>
+            <p className="text-xs font-bold text-primary/30 uppercase tracking-widest text-center">✨ Listings with photos get 3x more views</p>
           </div>
 
-          {/* Summary */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-2 text-sm">
-            <p className="font-semibold text-white mb-3">Review your listing</p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-gray-400">
-              <span>Title</span><span className="text-white truncate">{title}</span>
-              <span>Address</span><span className="text-white truncate">{address}</span>
-              <span>Rent</span><span className="text-white">${Number(rent).toLocaleString()}/mo</span>
-              <span>Bedrooms</span><span className="text-white">{bedrooms} bed · {bathrooms} bath</span>
-              <span>Lease</span><span className="text-white">{leaseLength} months</span>
-              {deposit && <><span>Deposit</span><span className="text-white">${Number(deposit).toLocaleString()}</span></>}
-              <span>Amenities</span><span className="text-white">{amenities.length > 0 ? amenities.join(", ") : "None selected"}</span>
-              <span>Utilities</span><span className={utilitiesIncluded ? "text-emerald-400" : "text-gray-300"}>{utilitiesIncluded ? "Included" : "Not included"}</span>
+          {/* Summary Card */}
+          <div className="rounded-[40px] border border-white/40 bg-white/80 backdrop-blur-xl p-8 space-y-6 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+              <CheckCircle2 size={120} className="text-primary" />
+            </div>
+            <h3 className="text-lg font-black text-primary uppercase tracking-widest">Final Review</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Listing Title</p>
+                <p className="text-base font-black text-primary truncate">{title || "Untitled"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Monthly Rent</p>
+                <p className="text-base font-black text-primary">${Number(rent || 0).toLocaleString()}/mo</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Property Address</p>
+                <p className="text-base font-black text-primary truncate">{address || "No address"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Configuration</p>
+                <p className="text-base font-black text-primary">{bedrooms} bed · {bathrooms} bath</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Lease Terms</p>
+                <p className="text-base font-black text-primary">{leaseLength} months · {utilitiesIncluded ? "Utilities Included" : "Utilities Extra"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Amenities</p>
+                <p className="text-base font-black text-primary truncate">{amenities.length > 0 ? amenities.join(", ") : "None listed"}</p>
+              </div>
             </div>
           </div>
 
           {error && (
-            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-400">{error}</div>
+            <div className="rounded-3xl bg-red-500/10 border border-red-500/20 p-5 text-sm font-bold text-red-500 animate-shake">{error}</div>
           )}
 
-          <div className="flex gap-3">
-            <button onClick={() => setStep(2)} className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3.5 font-semibold text-gray-300 hover:bg-white/10 transition flex items-center justify-center gap-2">
+          <div className="flex gap-4">
+            <button 
+              onClick={() => setStep(2)} 
+              className="flex-1 rounded-[28px] border-2 border-primary/5 bg-white/40 py-5 font-black text-primary/40 hover:bg-white/60 hover:text-primary transition-all active:scale-95 shadow-sm uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+            >
               <ChevronLeft size={18} /> Back
             </button>
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="flex-1 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3.5 font-semibold text-white hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 transition flex items-center justify-center gap-2"
+              className="flex-[2] rounded-[28px] bg-primary py-5 font-black text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2"
             >
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Posting…</> : "🏠 Post Listing"}
+              {loading ? <><Loader2 size={20} className="animate-spin" /> POSTING…</> : <>🏠 POST LISTING</>}
             </button>
           </div>
         </div>

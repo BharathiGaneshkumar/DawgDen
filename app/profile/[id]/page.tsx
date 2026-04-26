@@ -63,7 +63,7 @@ export default async function ProfilePage({
 
   const trustScore =
     user.reviews.length > 0
-      ? user.reviews.reduce((s, r) => s + r.rating, 0) / user.reviews.length
+      ? user.reviews.reduce((s: number, r: any) => s + r.rating, 0) / user.reviews.length
       : null;
 
   return (
@@ -159,7 +159,7 @@ export default async function ProfilePage({
             <StatCard icon={<Home className="h-4 w-4 text-violet-400" />} label="Listings" value={user.listings.length} />
             <StatCard icon={<Star className="h-4 w-4 text-yellow-400" />} label="Reviews Written" value={user.reviews.length} />
             <StatCard icon={<MessageSquare className="h-4 w-4 text-pink-400" />} label="Community Posts" value={user.posts.length} />
-            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i) => i.isSold).length} />
+            <StatCard icon={<ShoppingBag className="h-4 w-4 text-emerald-400" />} label="Items Sold" value={user.marketItems.filter((i: any) => i.isSold).length} />
           </>
         ) : (
           <>
@@ -185,14 +185,14 @@ export default async function ProfilePage({
       {/* Content */}
       {isStudent ? (
         <StudentProfileTabs
-          listings={user.listings.map((l) => ({
+          listings={user.listings.map((l: any) => ({
             id: l.id,
             title: l.title,
             rent: l.rent,
             bedrooms: l.bedrooms,
             address: l.address,
           }))}
-          reviews={user.reviews.map((r) => ({
+          reviews={user.reviews.map((r: any) => ({
             id: r.id,
             landlordName: r.landlordName,
             landlordAddress: r.landlordAddress,
@@ -200,14 +200,14 @@ export default async function ProfilePage({
             reviewText: r.reviewText,
             createdAt: r.createdAt.toISOString(),
           }))}
-          posts={user.posts.map((p) => ({
+          posts={user.posts.map((p: any) => ({
             id: p.id,
             title: p.title,
             content: p.content,
             upvotes: p.upvotes,
             createdAt: p.createdAt.toISOString(),
           }))}
-          marketItems={user.marketItems.map((m) => ({
+          marketItems={user.marketItems.map((m: any) => ({
             id: m.id,
             title: m.title,
             price: m.price,
@@ -222,7 +222,7 @@ export default async function ProfilePage({
             <section className="mb-8">
               <h2 className="mb-4 text-lg font-semibold text-foreground">Active Listings</h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                {user.listings.map((l) => (
+                {user.listings.map((l: any) => (
                   <Link
                     key={l.id}
                     href={`/listings/${l.id}`}
@@ -243,7 +243,7 @@ export default async function ProfilePage({
           <section>
             <h2 className="mb-4 text-lg font-semibold text-foreground">Verified Reviews</h2>
             <LandlordReviewsList
-              reviews={user.reviews.map((r) => ({
+              reviews={user.reviews.map((r: any) => ({
                 id: r.id,
                 landlordName: r.landlordName,
                 landlordAddress: r.landlordAddress,

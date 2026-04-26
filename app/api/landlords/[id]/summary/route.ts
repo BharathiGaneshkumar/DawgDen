@@ -9,10 +9,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     
     // Fetch landlord
     const landlord = await prisma.user.findUnique({
-      where: { id, role: "LANDLORD" },
+      where: { id },
     });
 
-    if (!landlord) return NextResponse.json({ error: "Landlord not found" }, { status: 404 });
+    if (!landlord || landlord.role !== "LANDLORD") return NextResponse.json({ error: "Landlord not found" }, { status: 404 });
 
     // Fetch reviews
     const reviews = await prisma.review.findMany({
@@ -23,7 +23,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ summary: "Not enough reviews to generate a summary." });
     }
 
-    const reviewTexts = reviews.map(r => 
+    const reviewTexts = reviews.map((r: any) =>
       `Rating: ${r.rating}/5. Deposit Returned: ${r.depositReturned ? "Yes" : "No"}. Maintenance Rating: ${r.maintenanceRating}/5. Review: "${r.reviewText}"`
     ).join("\n\n");
 
@@ -37,7 +37,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     } catch (aiError) {
       console.error("Gemma AI Error:", aiError);
       // Fallback
-      summary = `Based on ${reviews.length} reviews, this landlord has an average rating of ${(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)}/5.`;
+      summary = `Based on ${reviews.length} reviews, this landlord has an average rating of ${(reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length).toFixed(1)}/5.`;
     }
 
     return NextResponse.json({ summary });
