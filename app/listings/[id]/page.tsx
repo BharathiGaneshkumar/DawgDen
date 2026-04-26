@@ -84,14 +84,14 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   }
 
   if (loading) return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950">
+    <div className="flex min-h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
-        <p className="text-gray-400">Loading listing…</p>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <p className="text-primary/60">Loading listing…</p>
       </div>
     </div>
   );
-  if (!listing) return <div className="flex min-h-screen items-center justify-center bg-slate-950"><p className="text-gray-400">Listing not found.</p></div>;
+  if (!listing) return <div className="flex min-h-screen items-center justify-center"><p className="text-primary/60">Listing not found.</p></div>;
 
   const avgRating = localReviews.length ? localReviews.reduce((s, r) => s + r.rating, 0) / localReviews.length : 0;
   const photos = listing.images;
@@ -114,7 +114,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   return (
     <div className="min-h-screen relative z-10 text-primary">
       <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
-        <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+        <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-primary/60 hover:text-primary transition-colors">
           <ChevronLeft size={16} /> Back to Listings
         </Link>
 
@@ -251,59 +251,59 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         </div>
 
         {/* Landlord Trust Score */}
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-white">🏅 Landlord Trust Score</h2>
+        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
+          <h2 className="text-lg font-semibold text-primary">🏅 Landlord Trust Score</h2>
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-700 text-xl font-bold text-white shadow-lg shadow-violet-500/20">{listing.landlordTrustScore.toFixed(1)}</div>
-            <div className="space-y-1"><Stars n={listing.landlordTrustScore} size={18} /><p className="text-xs text-gray-400">Based on verified student reviews</p></div>
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-pink-400 to-purple-500 text-xl font-bold text-white shadow-lg shadow-primary/20">{listing.landlordTrustScore.toFixed(1)}</div>
+            <div className="space-y-1"><Stars n={listing.landlordTrustScore} size={18} /><p className="text-xs text-primary/60">Based on verified student reviews</p></div>
             <div className="ml-auto text-right">
-              <p className="text-2xl font-bold text-emerald-400">{listing.depositReturnRate}%</p>
-              <p className="text-xs text-gray-500">Deposit Return Rate</p>
+              <p className="text-2xl font-bold text-emerald-500">{listing.depositReturnRate}%</p>
+              <p className="text-xs text-primary/50">Deposit Return Rate</p>
             </div>
           </div>
-          <p className="text-sm text-gray-400 rounded-xl bg-white/5 px-4 py-3">AI pattern summary: This landlord has a history of timely responses and fair deposit returns. Minor issues reported around maintenance request delays.</p>
-          <Link href={`/landlords/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
+          <p className="text-sm text-primary/70 rounded-xl bg-primary/5 border border-primary/10 px-4 py-3">AI pattern summary: This landlord has a history of timely responses and fair deposit returns. Minor issues reported around maintenance request delays.</p>
+          <Link href={`/landlords/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 font-medium transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
         </div>
 
         {/* Reviews */}
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 space-y-6">
+        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-white">Reviews</h2>
-              {localReviews.length > 0 && <div className="flex items-center gap-2 mt-1"><Stars n={avgRating} /><span className="text-sm text-gray-400">{avgRating.toFixed(1)} · {localReviews.length} review{localReviews.length !== 1 ? "s" : ""}</span></div>}
+              <h2 className="text-lg font-semibold text-primary">⭐ Reviews</h2>
+              {localReviews.length > 0 && <div className="flex items-center gap-2 mt-1"><Stars n={avgRating} /><span className="text-sm text-primary/60">{avgRating.toFixed(1)} · {localReviews.length} review{localReviews.length !== 1 ? "s" : ""}</span></div>}
             </div>
-            <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 hover:bg-violet-500/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
+            <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
           </div>
           {showForm && (
-            <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-3">
-              <div className="flex items-center gap-1">{[1,2,3,4,5].map(i => <button key={i} onClick={() => setNewRating(i)}><Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"} /></button>)}</div>
-              <textarea value={newText} onChange={e => setNewText(e.target.value)} placeholder="Share your experience…" rows={3} className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none resize-none" />
-              <button onClick={submitReview} className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 transition">Submit Review</button>
+            <div className="rounded-xl border border-primary/10 bg-primary/5 p-4 space-y-3">
+              <div className="flex items-center gap-1">{[1,2,3,4,5].map(i => <button key={i} onClick={() => setNewRating(i)}><Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-primary/20"} /></button>)}</div>
+              <textarea value={newText} onChange={e => setNewText(e.target.value)} placeholder="Share your experience…" rows={3} className="w-full rounded-xl border border-primary/10 bg-white/80 px-4 py-2.5 text-sm text-primary placeholder:text-primary/40 focus:border-primary/40 focus:outline-none resize-none" />
+              <button onClick={submitReview} className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">Submit Review</button>
             </div>
           )}
           {localReviews.length === 0 ? (
-            <p className="text-sm text-gray-500 text-center py-6">No reviews yet — be the first!</p>
+            <p className="text-sm text-primary/50 text-center py-6">No reviews yet — be the first!</p>
           ) : (
             <div className="space-y-5">
               {localReviews.map(review => (
                 <div key={review.id} className="space-y-2">
-                  <div className="rounded-xl border border-white/8 bg-white/3 p-4 space-y-2">
+                  <div className="rounded-xl border border-primary/10 bg-white/80 p-4 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-white text-sm">@{review.username}</span>
+                      <span className="font-medium text-primary text-sm">@{review.username}</span>
                       {review.isVerified && <VerifiedBadge />}
                       <Stars n={review.rating} size={13} />
-                      <span className="ml-auto text-xs text-gray-500">{review.date}</span>
+                      <span className="ml-auto text-xs text-primary/50">{review.date}</span>
                     </div>
-                    <p className="text-sm text-gray-300">{review.text}</p>
+                    <p className="text-sm text-primary/70">{review.text}</p>
                   </div>
                   {review.comments.map((c, ci) => (
-                    <div key={ci} className="ml-6 rounded-lg border border-white/5 bg-white/2 px-4 py-2.5 text-sm">
-                      <span className="font-medium text-gray-300">@{c.username}</span><span className="mx-2 text-gray-600">·</span><span className="text-gray-400">{c.text}</span><span className="ml-2 text-xs text-gray-600">{c.date}</span>
+                    <div key={ci} className="ml-6 rounded-lg border border-primary/10 bg-white/60 px-4 py-2.5 text-sm">
+                      <span className="font-medium text-primary">@{c.username}</span><span className="mx-2 text-primary/30">·</span><span className="text-primary/70">{c.text}</span><span className="ml-2 text-xs text-primary/40">{c.date}</span>
                     </div>
                   ))}
                   <div className="ml-6 flex gap-2">
-                    <input value={commentInputs[review.id] ?? ""} onChange={e => setCommentInputs(p => ({ ...p, [review.id]: e.target.value }))} onKeyDown={e => e.key === "Enter" && submitComment(review.id)} placeholder="Add a comment…" className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none" />
-                    <button onClick={() => submitComment(review.id)} className="rounded-lg bg-violet-600/80 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 transition">Post</button>
+                    <input value={commentInputs[review.id] ?? ""} onChange={e => setCommentInputs(p => ({ ...p, [review.id]: e.target.value }))} onKeyDown={e => e.key === "Enter" && submitComment(review.id)} placeholder="Add a comment…" className="flex-1 rounded-lg border border-primary/10 bg-white/80 px-3 py-1.5 text-xs text-primary placeholder:text-primary/40 focus:border-primary/40 focus:outline-none" />
+                    <button onClick={() => submitComment(review.id)} className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition">Post</button>
                   </div>
                 </div>
               ))}
