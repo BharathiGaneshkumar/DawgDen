@@ -1,0 +1,161 @@
+import { NextResponse } from "next/server";
+
+const UWB = { lat: 47.7576, lng: -122.1917, address: "18115 Campus Way NE, Bothell, WA 98011" };
+
+const MOCK_LISTINGS: Record<string, object> = {
+  "1": {
+    id: "1",
+    title: "Cozy Studio near UWB",
+    rent: 1200,
+    bedrooms: 1,
+    bathrooms: 1,
+    address: "18402 96th Ave NE, Bothell, WA 98011",
+    lat: 47.7623,
+    lng: -122.1983,
+    uwb: UWB,
+    images: [],
+    postedBy: { username: "taylor_uw", isVerified: true },
+    amenities: { wifi: true, parking: true, laundry: true, ac: false, petFriendly: false, furnished: true },
+    utilities: { electricity: true, water: false, internet: true, gas: false },
+    utilityCosts: { electricity: 55, water: 42, sewage: 28, gas: 0, trash: 18, total: 143 },
+    leaseLength: "12 months",
+    securityDeposit: 1200,
+    availableFrom: "2025-06-01",
+    landlordId: "L01",
+    landlordTrustScore: 4.2,
+    depositReturnRate: 88,
+    commute: {
+      driving: { time: "5 min", distance: "1.2 mi", trafficTime: "8 min in traffic" },
+      walking: { time: "22 min", distance: "1.1 mi" },
+      transit: { time: "12 min", route: "Route 522 → Campus Loop", stops: 3 },
+    },
+    busRoutes: [
+      { route: "522", name: "Bothell–Lake Forest Park", frequency: "Every 15 min", firstBus: "5:42 AM", lastBus: "11:58 PM" },
+      { route: "372", name: "UWB–Kenmore–Lake City", frequency: "Every 30 min", firstBus: "6:10 AM", lastBus: "10:45 PM" },
+    ],
+    isps: [
+      { name: "Xfinity", type: "Cable", speed: "1.2 Gbps", price: 55, rating: 3.7, available: true },
+      { name: "Quantum Fiber", type: "Fiber", speed: "1 Gbps", price: 65, rating: 4.6, available: true, recommended: true },
+      { name: "T-Mobile Home Internet", type: "5G", speed: "245 Mbps avg", price: 50, rating: 4.1, available: true },
+    ],
+  },
+  "2": {
+    id: "2",
+    title: "2BR Apartment — Shared",
+    rent: 1800,
+    bedrooms: 2,
+    bathrooms: 1,
+    address: "7232 NE 181st St, Kenmore, WA 98028",
+    lat: 47.7568,
+    lng: -122.2433,
+    uwb: UWB,
+    images: [],
+    postedBy: { username: "jordan_b", isVerified: false },
+    amenities: { wifi: false, parking: true, laundry: false, ac: true, petFriendly: true, furnished: false },
+    utilities: { electricity: true, water: true, internet: false, gas: true },
+    utilityCosts: { electricity: 72, water: 48, sewage: 32, gas: 45, trash: 20, total: 217 },
+    leaseLength: "6 months",
+    securityDeposit: 2000,
+    availableFrom: "2025-07-15",
+    landlordId: "L02",
+    landlordTrustScore: 3.5,
+    depositReturnRate: 72,
+    commute: {
+      driving: { time: "11 min", distance: "3.8 mi", trafficTime: "16 min in traffic" },
+      walking: { time: "58 min", distance: "2.9 mi" },
+      transit: { time: "20 min", route: "Route 372 → UWB", stops: 6 },
+    },
+    busRoutes: [
+      { route: "372", name: "UWB–Kenmore–Lake City", frequency: "Every 30 min", firstBus: "6:10 AM", lastBus: "10:45 PM" },
+      { route: "235", name: "Bothell–Kirkland", frequency: "Every 30 min", firstBus: "6:30 AM", lastBus: "9:55 PM" },
+    ],
+    isps: [
+      { name: "Xfinity", type: "Cable", speed: "1.2 Gbps", price: 55, rating: 3.7, available: true },
+      { name: "T-Mobile Home Internet", type: "5G", speed: "220 Mbps avg", price: 50, rating: 4.0, available: true, recommended: true },
+      { name: "Verizon Home Internet", type: "5G", speed: "180 Mbps avg", price: 60, rating: 3.9, available: false },
+    ],
+  },
+  "3": {
+    id: "3",
+    title: "Modern 1BR Mill Creek",
+    rent: 2200,
+    bedrooms: 1,
+    bathrooms: 1,
+    address: "15612 36th Ave SE, Mill Creek, WA 98012",
+    lat: 47.8594,
+    lng: -122.2027,
+    uwb: UWB,
+    images: [],
+    postedBy: { username: "alex_mcs", isVerified: true },
+    amenities: { wifi: true, parking: true, laundry: true, ac: true, petFriendly: false, furnished: false },
+    utilities: { electricity: false, water: false, internet: true, gas: false },
+    utilityCosts: { electricity: 68, water: 50, sewage: 35, gas: 38, trash: 22, total: 213 },
+    leaseLength: "12 months",
+    securityDeposit: 2200,
+    availableFrom: "2025-08-01",
+    landlordId: "L03",
+    landlordTrustScore: 4.8,
+    depositReturnRate: 95,
+    commute: {
+      driving: { time: "22 min", distance: "8.4 mi", trafficTime: "30 min in traffic" },
+      walking: { time: "N/A", distance: "Too far" },
+      transit: { time: "42 min", route: "Route 236 → 522 → UWB", stops: 11 },
+    },
+    busRoutes: [
+      { route: "236", name: "Bothell–Kenmore–Kirkland", frequency: "Every 30 min", firstBus: "6:15 AM", lastBus: "9:30 PM" },
+      { route: "522", name: "Bothell Express", frequency: "Every 15 min", firstBus: "5:42 AM", lastBus: "11:58 PM" },
+    ],
+    isps: [
+      { name: "Xfinity", type: "Cable", speed: "1.2 Gbps", price: 60, rating: 3.8, available: true, recommended: true },
+      { name: "Quantum Fiber", type: "Fiber", speed: "1 Gbps", price: 65, rating: 4.6, available: false },
+      { name: "T-Mobile Home Internet", type: "5G", speed: "195 Mbps avg", price: 50, rating: 4.0, available: true },
+    ],
+  },
+  "4": {
+    id: "4",
+    title: "3BR House — Split 3 ways",
+    rent: 2700,
+    bedrooms: 3,
+    bathrooms: 2,
+    address: "19901 Lakeview Dr NE, Bothell, WA 98021",
+    lat: 47.7712,
+    lng: -122.2011,
+    uwb: UWB,
+    images: [],
+    postedBy: { username: "sam_uwb", isVerified: true },
+    amenities: { wifi: true, parking: true, laundry: true, ac: false, petFriendly: true, furnished: false },
+    utilities: { electricity: false, water: true, internet: true, gas: true },
+    utilityCosts: { electricity: 95, water: 60, sewage: 42, gas: 55, trash: 25, total: 277 },
+    leaseLength: "12 months",
+    securityDeposit: 2700,
+    availableFrom: "2025-05-15",
+    landlordId: "L04",
+    landlordTrustScore: 4.0,
+    depositReturnRate: 80,
+    commute: {
+      driving: { time: "8 min", distance: "2.5 mi", trafficTime: "13 min in traffic" },
+      walking: { time: "35 min", distance: "1.8 mi" },
+      transit: { time: "15 min", route: "Route 522 → Campus Loop", stops: 5 },
+    },
+    busRoutes: [
+      { route: "522", name: "Bothell–Lake Forest Park", frequency: "Every 15 min", firstBus: "5:42 AM", lastBus: "11:58 PM" },
+      { route: "372", name: "UWB–Kenmore–Lake City", frequency: "Every 30 min", firstBus: "6:10 AM", lastBus: "10:45 PM" },
+      { route: "235", name: "Bothell–Kirkland", frequency: "Every 30 min", firstBus: "6:30 AM", lastBus: "9:55 PM" },
+    ],
+    isps: [
+      { name: "Xfinity", type: "Cable", speed: "1.2 Gbps", price: 55, rating: 3.7, available: true },
+      { name: "Quantum Fiber", type: "Fiber", speed: "1 Gbps", price: 65, rating: 4.6, available: true, recommended: true },
+      { name: "T-Mobile Home Internet", type: "5G", speed: "260 Mbps avg", price: 50, rating: 4.2, available: true },
+    ],
+  },
+};
+
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const listing = MOCK_LISTINGS[id];
+  if (!listing) return NextResponse.json({ error: "Listing not found" }, { status: 404 });
+  return NextResponse.json(listing);
+}

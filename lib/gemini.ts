@@ -1,11 +1,17 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-if (!process.env.GOOGLE_AI_API_KEY) {
-  throw new Error("Missing GOOGLE_AI_API_KEY environment variable");
+let _genAI: GoogleGenerativeAI | null = null;
+
+function getGenAI(): GoogleGenerativeAI {
+  if (!_genAI) {
+    if (!process.env.GOOGLE_AI_API_KEY) {
+      throw new Error("Missing GOOGLE_AI_API_KEY environment variable");
+    }
+    _genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
+  }
+  return _genAI;
 }
 
-export const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
-
-export function getGeminiModel(modelName = "gemini-1.5-pro") {
-  return genAI.getGenerativeModel({ model: modelName });
+export function getGeminiModel(modelName = "gemma-3-27b-it") {
+  return getGenAI().getGenerativeModel({ model: modelName });
 }
