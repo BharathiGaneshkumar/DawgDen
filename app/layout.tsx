@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Auth0Provider } from "@auth0/nextjs-auth0/client";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",

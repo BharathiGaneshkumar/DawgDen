@@ -7,20 +7,43 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  LANDLORD
 }
 
 model User {
   id               String            @id @default(cuid())
+  auth0Id          String?           @unique
   email            String            @unique
   name             String?
+  role             UserRole          @default(STUDENT)
   isVerified       Boolean           @default(false)
+  bio              String?
+  avatarUrl        String?
+  program          String?
+  gradYear         Int?
+  karma            Int               @default(0)
+  responseRate     Float?
   createdAt        DateTime          @default(now())
   listings         Listing[]
   reviews          Review[]
   posts            Post[]
   comments         Comment[]
   marketplaceItems MarketplaceItem[]
+  savedListings    SavedListing[]
+}
+
+model SavedListing {
+  id        String   @id @default(cuid())
+  userId    String
+  listingId String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
 }
 
 model Listing {
@@ -40,9 +63,9 @@ model Review {
   id                String   @id @default(cuid())
   landlordName      String
   landlordAddress   String
-  rating            Int      // 1-5
+  rating            Int
   depositReturned   Boolean
-  maintenanceRating Int      // 1-5
+  maintenanceRating Int
   reviewText        String
   leaseProofUrl     String?
   solanaHash        String?

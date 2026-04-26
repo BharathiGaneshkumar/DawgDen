@@ -5,15 +5,15 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/listings", label: "Listings" },
-  { href: "/lease", label: "Lease Checker" },
   { href: "/landlords", label: "Landlords" },
-  { href: "/calculator", label: "Calculator" },
+  { href: "/lease", label: "Lease Checker" },
   { href: "/community", label: "Community" },
   { href: "/marketplace", label: "Marketplace" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-gradient-to-b from-background via-background/90 to-transparent pb-8 pt-2">
@@ -33,10 +33,11 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Nav Links */}
+        {/* Desktop Nav Links */}
         <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+            const isActive =
+              pathname === link.href || pathname.startsWith(link.href + "/");
             return (
                <Link
                 key={link.href}
@@ -56,7 +57,7 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* CTA */}
+        {/* Right side: Post + Auth */}
         <div className="flex items-center gap-3">
           <Link
             href="/listings/new"
@@ -64,8 +65,47 @@ export default function Navbar() {
           >
             List a Place
           </Link>
+          <AuthButton />
+          {/* Mobile menu toggle */}
+          <button
+            className="rounded-lg p-2 text-gray-400 hover:bg-white/10 hover:text-white md:hidden"
+            onClick={() => setMobileOpen((p) => !p)}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="border-t border-white/10 bg-gray-950/95 px-4 py-3 md:hidden">
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href || pathname.startsWith(link.href + "/");
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition ${
+                  isActive
+                    ? "bg-white/10 text-white"
+                    : "text-gray-400 hover:bg-white/5 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <Link
+            href="/listings/new"
+            onClick={() => setMobileOpen(false)}
+            className="mt-2 block rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2.5 text-center text-sm font-semibold text-white"
+          >
+            List a Place
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }
