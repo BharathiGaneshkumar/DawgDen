@@ -90,9 +90,7 @@ Full authentication via `@auth0/nextjs-auth0` v4 with two distinct roles: `STUDE
 
 - **Best Use of Gemma 4** — AI lease red-flag detection + landlord trust summaries
 - **Best Use of ElevenLabs** — hands-free voice assistant for platform navigation
-- **Best Use of Solana** — review schema with `solanaHash` field, architected for on-chain tamper-proof review records
 - **Best Use of Auth0 for AI Agents** — role-enriched sessions gating AI features by user type
-- **Best Use of DigitalOcean** — cloud infrastructure and database hosting
 
 ---
 
@@ -108,7 +106,6 @@ Full authentication via `@auth0/nextjs-auth0` v4 with two distinct roles: `STUDE
 | ORM | Prisma v7 with `@prisma/adapter-pg` |
 | AI — Lease + Reviews | Google Gemini API / Gemma 4 (`gemma-3-27b-it`) |
 | AI — Voice | ElevenLabs React SDK (`@elevenlabs/react`) |
-| Blockchain | Solana web3.js (`@solana/web3.js`, devnet) |
 | PDF Parsing | `pdf-parse` (dynamic CJS import) |
 | Maps | Google Maps Embed API (`@react-google-maps/api`) |
 | Deployment | Vercel |
