@@ -8,10 +8,9 @@ import AuthButton from "./AuthButton";
 
 const navLinks = [
   { href: "/listings", label: "Listings" },
-  { href: "/landlords", label: "Landlords" },
-  { href: "/lease", label: "Lease Checker" },
   { href: "/community", label: "Community" },
   { href: "/marketplace", label: "Marketplace" },
+  { href: "/lease", label: "Lease" },
 ];
 
 export default function Navbar() {

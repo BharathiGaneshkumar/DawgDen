@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine, Zap, Droplets, Flame, Globe, Star, ChevronLeft, ChevronRight, Phone, Heart, ExternalLink, Users } from "lucide-react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { CommuteSection, UtilitiesSection } from "./sections";
 
 interface Listing {
@@ -30,6 +31,8 @@ function VerifiedBadge() {
 }
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { user } = useUser();
+  const canReview = !!(user && (user as { isVerified?: boolean; role?: string }).isVerified && (user as { role?: string }).role === "STUDENT");
   const [id, setId] = useState("");
   const [listing, setListing] = useState<Listing | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -262,7 +265,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             </div>
           </div>
           <p className="text-sm text-gray-400 rounded-xl bg-white/5 px-4 py-3">AI pattern summary: This landlord has a history of timely responses and fair deposit returns. Minor issues reported around maintenance request delays.</p>
-          <Link href={`/landlords/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
+          <Link href={`/profile/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
         </div>
 
         {/* Reviews */}
@@ -272,7 +275,11 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               <h2 className="text-lg font-semibold text-white">Reviews</h2>
               {localReviews.length > 0 && <div className="flex items-center gap-2 mt-1"><Stars n={avgRating} /><span className="text-sm text-gray-400">{avgRating.toFixed(1)} · {localReviews.length} review{localReviews.length !== 1 ? "s" : ""}</span></div>}
             </div>
-            <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 hover:bg-violet-500/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
+            {canReview ? (
+              <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 hover:bg-violet-500/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
+            ) : !user ? (
+              <Link href="/auth/login" className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition">Sign in to review</Link>
+            ) : null}
           </div>
           {showForm && (
             <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-3">
