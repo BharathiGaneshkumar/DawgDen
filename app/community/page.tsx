@@ -22,7 +22,7 @@ const communityPosts = [
 ];
 
 const categoryColors: Record<string, string> = {
-  "Roommate Needed": "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  "Roommate Needed": "bg-emerald-100 border border-emerald-300 text-emerald-800 border-emerald-500/30",
   "Housing Question": "bg-purple-500/20 text-purple-400 border-purple-500/30",
   "General": "bg-blue-500/20 text-blue-400 border-blue-500/30",
 };
@@ -31,22 +31,22 @@ export default function CommunityPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 min-h-screen">
       {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="mb-8 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white">💬 Community Hub</h1>
-          <p className="mt-2 text-pink-100/60">Connect, ask questions, and find roommates</p>
+          <h1 className="text-4xl font-bold text-primary">💬 Community Hub</h1>
+          <p className="mt-2 text-primary/70">Connect, ask questions, and find roommates</p>
         </div>
         
         <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4">
           <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-pink-300/50" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/90/50" />
             <input 
               type="text" 
               placeholder="Search posts..." 
-              className="w-full rounded-xl border border-pink-300/20 bg-pink-500/10 py-3 pl-10 pr-4 text-sm text-pink-100 placeholder:text-pink-300/40 focus:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-400 transition-colors"
+              className="w-full rounded-xl border border-primary/20 bg-white/80 border-primary/10 py-3 pl-10 pr-4 text-sm text-primary placeholder:text-primary/90/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
             />
           </div>
-          <button className="w-full sm:w-auto shrink-0 rounded-xl bg-gradient-to-r from-pink-500 to-purple-700 px-6 py-3 font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:-translate-y-0.5 hover:shadow-pink-500/40">
+          <button className="w-full sm:w-auto shrink-0 rounded-xl bg-primary text-[#c5b4e3] px-6 py-3 font-semibold text-[#c5b4e3] shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-primary/40">
             + New Post
           </button>
         </div>
@@ -57,7 +57,7 @@ export default function CommunityPage() {
         {["Top Posts", "New", "Roommate Needed", "Housing Question", "General"].map((category) => (
           <button
             key={category}
-            className="rounded-full border border-pink-300/20 bg-pink-500/10 px-5 py-2 text-sm font-medium text-pink-200 transition hover:bg-pink-500/20 hover:text-white"
+            className="rounded-full border border-primary/20 bg-white/80 border-primary/10 px-5 py-2 text-sm font-medium text-primary/80 transition hover:bg-primary/10 hover:text-primary"
           >
             {category}
           </button>
@@ -69,15 +69,15 @@ export default function CommunityPage() {
         {communityPosts.map((post) => (
           <div 
             key={post.id}
-            className="group flex overflow-hidden rounded-2xl border border-pink-300/10 bg-pink-500/5 backdrop-blur-sm transition-all duration-300 hover:border-pink-300/30 hover:bg-pink-500/10 cursor-pointer"
+            className="group flex overflow-hidden rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md backdrop-blur-sm transition-all duration-300 hover:border-pink-300/30 hover:bg-white/80 border-primary/10 cursor-pointer"
           >
             {/* Upvote Column */}
             <div className="flex w-16 flex-col items-center justify-start bg-pink-900/10 py-4 border-r border-pink-300/5 group-hover:bg-pink-900/20 transition-colors">
-              <button className="text-pink-300/40 hover:text-pink-400 transition-colors">
+              <button className="text-primary/90/40 hover:text-pink-400 transition-colors">
                 <ArrowBigUp className="h-6 w-6" />
               </button>
-              <span className="my-1 text-sm font-bold text-pink-100">{post.upvotes}</span>
-              <button className="text-pink-300/40 hover:text-purple-400 transition-colors">
+              <span className="my-1 text-sm font-bold text-primary">{post.upvotes}</span>
+              <button className="text-primary/90/40 hover:text-purple-400 transition-colors">
                 <ArrowBigDown className="h-6 w-6" />
               </button>
             </div>
@@ -89,34 +89,34 @@ export default function CommunityPage() {
                 <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-semibold ${categoryColors[post.category]}`}>
                   {post.category}
                 </span>
-                <span className="text-pink-100/40 flex items-center gap-1.5">
+                <span className="text-primary/70 flex items-center gap-1.5">
                   <img src={post.avatar} alt={post.poster} className="h-4 w-4 rounded-full object-cover" />
                   u/{post.poster}
                 </span>
-                <span className="text-pink-100/40 flex items-center gap-1">
+                <span className="text-primary/70 flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {post.timePosted}
                 </span>
               </div>
 
               {/* Title & Preview */}
-              <h2 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors mb-2">
+              <h2 className="text-xl font-bold text-primary group-hover:text-primary/90 transition-colors mb-2">
                 {post.title}
               </h2>
-              <p className="text-sm text-pink-100/60 line-clamp-3 leading-relaxed mb-4">
+              <p className="text-sm text-primary/70 line-clamp-3 leading-relaxed mb-4">
                 {post.preview}
               </p>
 
               {/* Action Footer */}
               <div className="mt-auto flex items-center gap-4">
-                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-pink-100/50 hover:bg-pink-500/10 hover:text-pink-300 transition-colors">
+                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-primary/70 hover:bg-white/80 border-primary/10 hover:text-primary/90 transition-colors">
                   <MessageSquare className="h-4 w-4" />
                   {post.replies} Replies
                 </button>
-                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-pink-100/50 hover:bg-pink-500/10 hover:text-pink-300 transition-colors">
+                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-primary/70 hover:bg-white/80 border-primary/10 hover:text-primary/90 transition-colors">
                   Share
                 </button>
-                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-pink-100/50 hover:bg-pink-500/10 hover:text-pink-300 transition-colors">
+                <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-primary/70 hover:bg-white/80 border-primary/10 hover:text-primary/90 transition-colors">
                   Save
                 </button>
               </div>

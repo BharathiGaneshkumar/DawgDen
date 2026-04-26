@@ -7,14 +7,14 @@ const features = [
     title: "Verified Listings",
     description: "Browse student-verified housing listings with real photos, honest reviews, and transparent pricing.",
     color: "from-pink-400 to-rose-400",
-    shadow: "shadow-pink-500/20",
+    shadow: "shadow-primary/20",
   },
   {
     icon: FileText,
     title: "AI Lease Checker",
     description: "Upload your lease and our AI highlights red flags, hidden fees, and unfair clauses before you sign.",
     color: "from-fuchsia-400 to-purple-500",
-    shadow: "shadow-purple-500/20",
+    shadow: "shadow-primary/20",
   },
   {
     icon: Star,
@@ -43,7 +43,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center overflow-hidden px-4 py-24 text-center">
+      <section className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4 text-center">
         {/* Gradient orbs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full bg-pink-300/30 blur-[120px]" />
@@ -69,7 +69,7 @@ export default function HomePage() {
           </div>
 
           {/* Headline */}
-          <h1 className="mb-6 max-w-4xl text-6xl font-extrabold leading-[1.1] tracking-tight text-primary sm:text-7xl lg:text-8xl">
+          <h1 className="mb-6 max-w-4xl text-4xl font-extrabold leading-[1.1] tracking-tight text-primary sm:text-5xl lg:text-6xl">
             Find housing that{" "}
             <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
               actually protects you
@@ -85,7 +85,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <Link
               href="/listings"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-purple-500/20 transition-all duration-300 hover:from-purple-400 hover:to-pink-400 hover:shadow-purple-500/40 hover:-translate-y-0.5"
+              className="group inline-flex items-center gap-2 rounded-xl bg-primary text-[#c5b4e3] px-8 py-4 text-lg font-bold text-[#c5b4e3] shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:shadow-primary/40 hover:-translate-y-0.5"
             >
               Browse Listings
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -116,7 +116,7 @@ export default function HomePage() {
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-4xl font-bold tracking-tight text-primary">
               Everything you need to rent{" "}
-              <span className="text-pink-500">confidently</span>
+              <span className="text-white drop-shadow-sm">confidently</span>
             </h2>
             <p className="mx-auto max-w-2xl text-lg font-medium text-primary/80">
               We built the tools we wish we had when we were looking for student housing.
@@ -134,7 +134,7 @@ export default function HomePage() {
                   <div
                     className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} shadow-lg ${feature.shadow}`}
                   >
-                    <Icon className="h-6 w-6 text-white" />
+                    <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-primary">{feature.title}</h3>
                   <p className="text-base font-medium leading-relaxed text-primary/80">{feature.description}</p>
@@ -157,7 +157,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/listings"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-purple-500/20 transition-all duration-300 hover:from-purple-400 hover:to-pink-400 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary text-[#c5b4e3] px-8 py-4 text-lg font-bold text-[#c5b4e3] shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5"
             >
               Browse Listings
               <ArrowRight className="h-4 w-4" />

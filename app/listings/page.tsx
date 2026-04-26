@@ -12,12 +12,12 @@ export default function ListingsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
-      <div className="mb-10 flex items-center justify-between">
+      <div className="mb-10 flex flex-col items-center justify-center text-center gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-white">🏘️ Listings</h1>
-          <p className="mt-2 text-pink-100/60">Student-verified housing near UW Bothell</p>
+          <h1 className="text-4xl font-bold text-primary">🏘️ Listings</h1>
+          <p className="mt-2 text-primary/70">Student-verified housing near UW Bothell</p>
         </div>
-        <a href="/listings/new" className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-700 px-6 py-3 font-semibold text-white">
+        <a href="/listings/new" className="rounded-xl bg-primary text-[#c5b4e3] px-6 py-3 font-semibold text-[#c5b4e3]">
           + Post a Listing
         </a>
       </div>
@@ -27,7 +27,7 @@ export default function ListingsPage() {
           <Button
             key={filter}
             variant="outline"
-            className="rounded-full border-pink-300/20 bg-pink-500/10 px-4 py-1.5 text-sm text-pink-200 transition hover:bg-pink-500/20 hover:text-pink-100"
+            className="rounded-full border-primary/20 bg-white/80 border-primary/10 px-4 py-1.5 text-sm text-primary/80 transition hover:bg-primary/10 hover:text-pink-100"
           >
             {filter}
           </Button>
@@ -37,21 +37,21 @@ export default function ListingsPage() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {listings.map((listing) => (
           <a key={listing.id} href={`/listings/${listing.id}`}
-            className="group rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 transition-all hover:-translate-y-1 hover:border-pink-300/20">
-            <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-pink-800/40 text-5xl overflow-hidden">
+            className="group rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:border-primary/20">
+            <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-pink-200/40 text-5xl overflow-hidden">
               <img src={listing.image} alt={listing.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
             </div>
-            <span className={`rounded-full px-3 py-1 text-xs font-medium ${listing.affordability === "green" ? "bg-emerald-500/20 text-emerald-400" :
-              listing.affordability === "yellow" ? "bg-yellow-500/20 text-yellow-400" :
-                "bg-red-500/20 text-red-400"
+            <span className={`rounded-full px-3 py-1 text-xs font-medium ${listing.affordability === "green" ? "bg-emerald-100 border border-emerald-300 text-emerald-800" :
+              listing.affordability === "yellow" ? "bg-yellow-100 border border-yellow-300 text-yellow-800" :
+                "bg-red-100 border border-red-300 text-red-800"
               }`}>
               {listing.affordability === "green" ? "✅ Affordable" : listing.affordability === "yellow" ? "⚠️ Moderate" : "❌ Expensive"}
             </span>
-            <h2 className="mt-3 text-lg font-bold text-white">{listing.title}</h2>
-            <p className="mt-1 text-sm text-pink-100/50">📍 {listing.address}</p>
+            <h2 className="mt-3 text-lg font-bold text-primary">{listing.title}</h2>
+            <p className="mt-1 text-sm text-primary/70">📍 {listing.address}</p>
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-2xl font-bold text-white">${listing.rent.toLocaleString()}<span className="text-sm font-normal text-pink-100/50">/mo</span></span>
-              <span className="text-sm text-pink-100/50">🛏 {listing.bedrooms} bed</span>
+              <span className="text-2xl font-bold text-primary">${listing.rent.toLocaleString()}<span className="text-sm font-normal text-primary/70">/mo</span></span>
+              <span className="text-sm text-primary/70">🛏 {listing.bedrooms} bed</span>
             </div>
           </a>
         ))}

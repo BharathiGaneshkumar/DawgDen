@@ -25,22 +25,22 @@ export default function LandlordsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 min-h-screen">
       {/* Header */}
-      <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="mb-10 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white">⭐ Landlord Reviews</h1>
-          <p className="mt-2 text-pink-100/60">Real reviews from UW Bothell students</p>
+          <h1 className="text-4xl font-bold text-primary">⭐ Landlord Reviews</h1>
+          <p className="mt-2 text-primary/70">Real reviews from UW Bothell students</p>
         </div>
         
-        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4">
+        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4 justify-center">
           <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-pink-300/50" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/90/50" />
             <input 
               type="text" 
               placeholder="Search landlords or addresses..." 
-              className="w-full rounded-xl border border-pink-300/20 bg-pink-500/10 py-3 pl-10 pr-4 text-sm text-pink-100 placeholder:text-pink-300/40 focus:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-400 transition-colors"
+              className="w-full rounded-xl border border-primary/20 bg-white/80 border-primary/10 py-3 pl-10 pr-4 text-sm text-pink-100 placeholder:text-primary/90/40 focus:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-400 transition-colors"
             />
           </div>
-          <button className="w-full sm:w-auto shrink-0 rounded-xl bg-gradient-to-r from-pink-500 to-purple-700 px-6 py-3 font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:-translate-y-0.5 hover:shadow-pink-500/40">
+          <button className="w-full sm:w-auto shrink-0 rounded-xl bg-primary text-[#c5b4e3] px-6 py-3 font-semibold text-[#c5b4e3] shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-primary/40">
             + Write a Review
           </button>
         </div>
@@ -51,40 +51,40 @@ export default function LandlordsPage() {
         {landlords.map((landlord) => (
           <div 
             key={landlord.id}
-            className="group flex flex-col rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-pink-300/20 hover:bg-pink-500/10"
+            className="group flex flex-col rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white/80 border-primary/10"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <img src={landlord.avatar} alt={landlord.name} className="h-12 w-12 rounded-full object-cover border-2 border-pink-500/20 shadow-lg" />
+                <img src={landlord.avatar} alt={landlord.name} className="h-12 w-12 rounded-full object-cover border-2 border-primary/20 shadow-lg" />
                 <div>
-                  <h2 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors">
+                  <h2 className="text-xl font-bold text-primary group-hover:text-primary/90 transition-colors">
                     {landlord.name}
                   </h2>
-                  <p className="mt-1 text-sm text-pink-100/50">📍 {landlord.address}</p>
+                  <p className="mt-1 text-sm text-primary/70">📍 {landlord.address}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 rounded-lg bg-pink-500/10 px-2.5 py-1 text-pink-300 font-semibold text-lg border border-pink-500/20">
+              <div className="flex items-center gap-1 rounded-lg bg-white/80 border-primary/10 px-2.5 py-1 text-primary/90 font-semibold text-lg border border-primary/20">
                 <span>{landlord.rating}</span>
                 <Star className="h-4 w-4 fill-pink-400 text-pink-400" />
               </div>
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-4">
-              <div className="rounded-xl bg-gray-950/40 p-3 border border-pink-300/5">
-                <p className="text-xs text-pink-100/50 mb-1">Deposit Returned</p>
+              <div className="rounded-xl bg-white/80/40 p-3 border border-pink-300/5">
+                <p className="text-xs text-primary/70 mb-1">Deposit Returned</p>
                 <div className="flex items-center gap-1.5">
                   <span className={`inline-flex h-2 w-2 rounded-full ${landlord.depositReturned ? 'bg-emerald-400' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`}></span>
-                  <span className={`font-medium ${landlord.depositReturned ? 'text-emerald-400' : 'text-red-400'}`}>
+                  <span className={`font-medium ${landlord.depositReturned ? 'text-emerald-800' : 'text-red-800'}`}>
                     {landlord.depositReturned ? 'Yes' : 'No'}
                   </span>
                 </div>
               </div>
-              <div className="rounded-xl bg-gray-950/40 p-3 border border-pink-300/5">
-                <p className="text-xs text-pink-100/50 mb-1">Maintenance</p>
+              <div className="rounded-xl bg-white/80/40 p-3 border border-pink-300/5">
+                <p className="text-xs text-primary/70 mb-1">Maintenance</p>
                 <p className={`font-medium ${
-                  landlord.maintenanceRating === 'Excellent' ? 'text-emerald-400' :
+                  landlord.maintenanceRating === 'Excellent' ? 'text-emerald-800' :
                   landlord.maintenanceRating === 'Good' ? 'text-blue-400' :
-                  landlord.maintenanceRating === 'Average' ? 'text-yellow-400' : 'text-red-400'
+                  landlord.maintenanceRating === 'Average' ? 'text-yellow-800' : 'text-red-800'
                 }`}>
                   {landlord.maintenanceRating}
                 </p>

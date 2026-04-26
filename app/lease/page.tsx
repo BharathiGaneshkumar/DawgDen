@@ -25,8 +25,8 @@ const analysisResults = [
 ];
 
 const severityColors: Record<string, string> = {
-  High: "bg-red-500/20 text-red-400 border-red-500/30",
-  Medium: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  High: "bg-red-100 border border-red-300 text-red-800 border-red-500/30",
+  Medium: "bg-yellow-100 border border-yellow-300 text-yellow-800 border-yellow-500/30",
   Low: "bg-blue-500/20 text-blue-400 border-blue-500/30",
 };
 
@@ -35,24 +35,24 @@ export default function LeaseCheckerPage() {
     <div className="mx-auto max-w-4xl px-4 py-16 min-h-screen">
       {/* Header */}
       <div className="mb-12 text-center">
-        <h1 className="text-5xl font-extrabold text-white tracking-tight mb-4">
+        <h1 className="text-5xl font-extrabold text-primary tracking-tight mb-4">
           AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Lease Checker</span>
         </h1>
-        <p className="text-lg text-pink-100/60 max-w-2xl mx-auto">
+        <p className="text-lg text-primary/70 max-w-2xl mx-auto">
           Don't get trapped in a bad lease. Upload your PDF and our AI will instantly scan it for red flags, hidden fees, and unfair clauses.
         </p>
       </div>
 
       {/* Upload Section */}
       <div className="mb-10 rounded-3xl bg-gradient-to-br from-pink-500/10 to-purple-800/10 p-1">
-        <div className="flex flex-col items-center justify-center rounded-[23px] border-2 border-dashed border-pink-400/30 bg-gray-950/50 backdrop-blur-sm p-12 text-center transition-all hover:bg-pink-900/10 hover:border-pink-400/50 group cursor-pointer">
-          <div className="mb-6 rounded-full bg-pink-500/10 p-5 group-hover:scale-110 transition-transform duration-300">
+        <div className="flex flex-col items-center justify-center rounded-[23px] border-2 border-dashed border-pink-400/30 bg-white/80/50 backdrop-blur-sm p-12 text-center transition-all hover:bg-pink-900/10 hover:border-pink-400/50 group cursor-pointer">
+          <div className="mb-6 rounded-full bg-white/80 border-primary/10 p-5 group-hover:scale-110 transition-transform duration-300">
             <UploadCloud className="h-12 w-12 text-pink-400" />
           </div>
-          <h3 className="mb-2 text-2xl font-bold text-white">Drag & drop your lease PDF</h3>
-          <p className="mb-8 text-pink-100/50">or click to browse from your computer (Max 10MB)</p>
+          <h3 className="mb-2 text-2xl font-bold text-primary">Drag & drop your lease PDF</h3>
+          <p className="mb-8 text-primary/70">or click to browse from your computer (Max 10MB)</p>
           
-          <button className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-700 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-pink-500/20 transition-all hover:-translate-y-1 hover:shadow-pink-500/40 w-full sm:w-auto">
+          <button className="rounded-xl bg-primary text-[#c5b4e3] px-8 py-4 text-lg font-bold text-[#c5b4e3] shadow-xl shadow-primary/20 transition-all hover:-translate-y-1 hover:shadow-primary/40 w-full sm:w-auto">
             Analyze My Lease
           </button>
         </div>
@@ -61,11 +61,11 @@ export default function LeaseCheckerPage() {
       {/* Fake Analysis Results */}
       <div className="mt-16">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
             <FileText className="h-6 w-6 text-pink-400" />
             Sample Analysis Results
           </h2>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 border border-emerald-300 px-3 py-1 text-sm font-medium text-emerald-800 border border-emerald-500/20">
             <CheckCircle2 className="h-4 w-4" />
             Scan Complete
           </span>
@@ -77,7 +77,7 @@ export default function LeaseCheckerPage() {
             return (
               <div 
                 key={result.id}
-                className="group relative overflow-hidden rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 backdrop-blur-sm transition-all hover:border-pink-400/30 hover:bg-pink-500/10"
+                className="group relative overflow-hidden rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 backdrop-blur-sm transition-all hover:border-pink-400/30 hover:bg-white/80 border-primary/10"
               >
                 <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 
@@ -87,7 +87,7 @@ export default function LeaseCheckerPage() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-2">{result.issue}</h3>
+                      <h3 className="text-lg font-bold text-primary mb-2">{result.issue}</h3>
                       <p className="text-pink-100/70 text-sm leading-relaxed max-w-2xl">
                         {result.description}
                       </p>

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import FallingBlossoms from "@/components/FallingBlossoms";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
   subsets: ["latin"],
 });
 
@@ -23,9 +23,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${nunito.variable} h-full antialiased font-nunito`}
+      className={`${quicksand.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col relative bg-background text-foreground overflow-x-hidden">
+      <body 
+        className="min-h-full flex flex-col relative bg-background text-foreground overflow-x-hidden"
+        style={{ fontFamily: 'var(--font-quicksand), sans-serif' }}
+      >
         <FallingBlossoms />
         <img 
           src="/cherry-branch-left.png" 
