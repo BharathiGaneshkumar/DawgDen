@@ -2,41 +2,23 @@ import { Search, Star, MessageSquare } from "lucide-react";
 
 const landlords = [
   {
-    id: 1,
-    name: "John Smith",
-    address: "18204 104th Ave NE, Bothell, WA",
-    rating: 4.5,
-    depositReturned: true,
-    maintenanceRating: "Excellent",
-    reviewSnippet: "Super responsive. Fixed the dishwasher the same day we called. Really fair with the deposit when moving out.",
+    id: 1, name: "John Smith", address: "18204 104th Ave NE, Bothell, WA", rating: 4.5, depositReturned: true, maintenanceRating: "Excellent", reviewSnippet: "Super responsive. Fixed the dishwasher the same day we called. Really fair with the deposit when moving out.", avatar: "https://i.pravatar.cc/150?img=1"
   },
   {
-    id: 2,
-    name: "Apex Properties Management",
-    address: "Multiple locations near UWB",
-    rating: 2.1,
-    depositReturned: false,
-    maintenanceRating: "Poor",
-    reviewSnippet: "Took 3 weeks to fix the heating during winter. Charged $300 from deposit for 'cleaning' even though we deep cleaned.",
+    id: 2, name: "Apex Properties Management", address: "Multiple locations near UWB", rating: 2.1, depositReturned: false, maintenanceRating: "Poor", reviewSnippet: "Took 3 weeks to fix the heating during winter. Charged $300 from deposit for 'cleaning' even though we deep cleaned.", avatar: "https://i.pravatar.cc/150?img=2"
   },
   {
-    id: 3,
-    name: "Sarah Jenkins",
-    address: "19315 110th Ave NE, Bothell, WA",
-    rating: 4.8,
-    depositReturned: true,
-    maintenanceRating: "Good",
-    reviewSnippet: "Sarah is a great landlord! She genuinely cares about her tenants and brought us cookies during finals week.",
+    id: 3, name: "Sarah Jenkins", address: "19315 110th Ave NE, Bothell, WA", rating: 4.8, depositReturned: true, maintenanceRating: "Good", reviewSnippet: "Sarah is a great landlord! She genuinely cares about her tenants and brought us cookies during finals week.", avatar: "https://i.pravatar.cc/150?img=3"
   },
   {
-    id: 4,
-    name: "Campus Edge Living",
-    address: "18500 112th Ave NE, Bothell, WA",
-    rating: 3.5,
-    depositReturned: true,
-    maintenanceRating: "Average",
-    reviewSnippet: "Decent place, but the maintenance portal is buggy. They did return the full deposit minus a standard carpet cleaning fee.",
+    id: 4, name: "Campus Edge Living", address: "18500 112th Ave NE, Bothell, WA", rating: 3.5, depositReturned: true, maintenanceRating: "Average", reviewSnippet: "Decent place, but the maintenance portal is buggy. They did return the full deposit minus a standard carpet cleaning fee.", avatar: "https://i.pravatar.cc/150?img=4"
   },
+  {
+    id: 5, name: "Michael Chang", address: "17200 115th Ave NE, Bothell, WA", rating: 4.2, depositReturned: true, maintenanceRating: "Good", reviewSnippet: "Michael was very straightforward and left us alone most of the year. Quick to approve our lease transfer.", avatar: "https://i.pravatar.cc/150?img=5"
+  },
+  {
+    id: 6, name: "Vista Apartments", address: "Mill Creek, WA", rating: 2.8, depositReturned: false, maintenanceRating: "Average", reviewSnippet: "Nice pool, but management is a rotating door. Getting an answer on lease renewals took forever.", avatar: "https://i.pravatar.cc/150?img=6"
+  }
 ];
 
 export default function LandlordsPage() {
@@ -72,11 +54,14 @@ export default function LandlordsPage() {
             className="group flex flex-col rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-pink-300/20 hover:bg-pink-500/10"
           >
             <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors">
-                  {landlord.name}
-                </h2>
-                <p className="mt-1 text-sm text-pink-100/50">📍 {landlord.address}</p>
+              <div className="flex items-center gap-3">
+                <img src={landlord.avatar} alt={landlord.name} className="h-12 w-12 rounded-full object-cover border-2 border-pink-500/20 shadow-lg" />
+                <div>
+                  <h2 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors">
+                    {landlord.name}
+                  </h2>
+                  <p className="mt-1 text-sm text-pink-100/50">📍 {landlord.address}</p>
+                </div>
               </div>
               <div className="flex items-center gap-1 rounded-lg bg-pink-500/10 px-2.5 py-1 text-pink-300 font-semibold text-lg border border-pink-500/20">
                 <span>{landlord.rating}</span>

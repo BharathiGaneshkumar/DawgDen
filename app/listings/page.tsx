@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 
 export default function ListingsPage() {
   const listings = [
-    { id: 1, title: "Cozy Studio near UWB", rent: 1200, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green" },
-    { id: 2, title: "2BR Apartment - Shared", rent: 1800, bedrooms: 2, address: "Kenmore, WA 98028", affordability: "yellow" },
-    { id: 3, title: "Modern 1BR Mill Creek", rent: 2200, bedrooms: 1, address: "Mill Creek, WA 98012", affordability: "red" },
-    { id: 4, title: "3BR House - Split 3 ways", rent: 2700, bedrooms: 3, address: "Bothell, WA 98021", affordability: "green" },
+    { id: 1, title: "Cozy Studio near UWB", rent: 1200, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400" },
+    { id: 2, title: "2BR Apartment - Shared", rent: 1800, bedrooms: 2, address: "Kenmore, WA 98028", affordability: "yellow", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400" },
+    { id: 3, title: "Modern 1BR Mill Creek", rent: 2200, bedrooms: 1, address: "Mill Creek, WA 98012", affordability: "red", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400" },
+    { id: 4, title: "3BR House - Split 3 ways", rent: 2700, bedrooms: 3, address: "Bothell, WA 98021", affordability: "green", image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400" },
+    { id: 5, title: "Luxury 2BR Townhouse", rent: 2500, bedrooms: 2, address: "Woodinville, WA 98072", affordability: "yellow", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400" },
+    { id: 6, title: "Shared Room for Student", rent: 750, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green", image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400" },
   ];
 
   return (
@@ -36,8 +38,8 @@ export default function ListingsPage() {
         {listings.map((listing) => (
           <a key={listing.id} href={`/listings/${listing.id}`}
             className="group rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 transition-all hover:-translate-y-1 hover:border-pink-300/20">
-            <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-pink-800/40 text-5xl">
-              🏠
+            <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-pink-800/40 text-5xl overflow-hidden">
+              <img src={listing.image} alt={listing.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
             </div>
             <span className={`rounded-full px-3 py-1 text-xs font-medium ${listing.affordability === "green" ? "bg-emerald-500/20 text-emerald-400" :
               listing.affordability === "yellow" ? "bg-yellow-500/20 text-yellow-400" :

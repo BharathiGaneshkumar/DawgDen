@@ -2,44 +2,22 @@ import { Search, ArrowBigUp, ArrowBigDown, MessageSquare, Clock, User } from "lu
 
 const communityPosts = [
   {
-    id: 1,
-    title: "Looking for a 3rd roommate in Beardslee Blvd apartment! 🐾 Pet friendly",
-    category: "Roommate Needed",
-    upvotes: 45,
-    replies: 12,
-    poster: "UWBDawg24",
-    timePosted: "2 hours ago",
-    preview: "Hey everyone! My current roommate and I (both junior CS majors) are looking for a third person to join our lease at the Beardslee Blvd apartments starting this Fall. Rent would be around $850/mo. We have a very friendly golden retriever named Max. DM if interested!"
+    id: 1, title: "Looking for a 3rd roommate in Beardslee Blvd apartment! 🐾 Pet friendly", category: "Roommate Needed", upvotes: 45, replies: 12, poster: "UWBDawg24", timePosted: "2 hours ago", preview: "Hey everyone! My current roommate and I (both junior CS majors) are looking for a third person to join our lease at the Beardslee Blvd apartments starting this Fall. Rent would be around $850/mo. We have a very friendly golden retriever named Max. DM if interested!", avatar: "https://i.pravatar.cc/150?img=5"
   },
   {
-    id: 2,
-    title: "Is anyone else having issues getting their deposit back from Apex Management?",
-    category: "Housing Question",
-    upvotes: 128,
-    replies: 34,
-    poster: "throwaway_tenant",
-    timePosted: "5 hours ago",
-    preview: "Moved out a month ago and left the place spotless. Now they're saying there's a $400 'mandatory cleaning fee' that wasn't in the lease. Has anyone dealt with this before? Thinking about taking them to small claims court."
+    id: 2, title: "Is anyone else having issues getting their deposit back from Apex Management?", category: "Housing Question", upvotes: 128, replies: 34, poster: "throwaway_tenant", timePosted: "5 hours ago", preview: "Moved out a month ago and left the place spotless. Now they're saying there's a $400 'mandatory cleaning fee' that wasn't in the lease. Has anyone dealt with this before? Thinking about taking them to small claims court.", avatar: "https://i.pravatar.cc/150?img=6"
   },
   {
-    id: 3,
-    title: "Free couch on 104th Ave NE if anyone wants it!",
-    category: "General",
-    upvotes: 89,
-    replies: 7,
-    poster: "SarahG",
-    timePosted: "1 day ago",
-    preview: "We're moving out today and couldn't fit our IKEA couch in the U-Haul. It's in decent condition, dark grey. Left it on the curb at the corner of 104th and Beardslee. First come first serve!"
+    id: 3, title: "Free couch on 104th Ave NE if anyone wants it!", category: "General", upvotes: 89, replies: 7, poster: "SarahG", timePosted: "1 day ago", preview: "We're moving out today and couldn't fit our IKEA couch in the U-Haul. It's in decent condition, dark grey. Left it on the curb at the corner of 104th and Beardslee. First come first serve!", avatar: "https://i.pravatar.cc/150?img=7"
   },
   {
-    id: 4,
-    title: "Best internet provider for the Mill Creek area?",
-    category: "Housing Question",
-    upvotes: 22,
-    replies: 15,
-    poster: "TransferStudent23",
-    timePosted: "1 day ago",
-    preview: "Just signed a lease for a place in Mill Creek. Xfinity and Ziply are both available. We'll have 4 people streaming and gaming pretty regularly. What do you guys recommend?"
+    id: 4, title: "Best internet provider for the Mill Creek area?", category: "Housing Question", upvotes: 22, replies: 15, poster: "TransferStudent23", timePosted: "1 day ago", preview: "Just signed a lease for a place in Mill Creek. Xfinity and Ziply are both available. We'll have 4 people streaming and gaming pretty regularly. What do you guys recommend?", avatar: "https://i.pravatar.cc/150?img=8"
+  },
+  {
+    id: 5, title: "Beware of Facebook Marketplace housing scams", category: "General", upvotes: 215, replies: 42, poster: "HousingHero", timePosted: "2 days ago", preview: "Just a heads up! There's a scam going around with a 'landlord' asking for a $50 application fee via Zelle before even showing the unit. DO NOT send money before viewing!", avatar: "https://i.pravatar.cc/150?img=9"
+  },
+  {
+    id: 6, title: "Subleasing my room at The Villas for Spring Quarter", category: "Roommate Needed", upvotes: 14, replies: 3, poster: "BioMajor_Alex", timePosted: "2 days ago", preview: "I'm studying abroad next quarter and need someone to take over my lease from April to June. Rent is $950/mo, all utilities included. You get your own private bathroom.", avatar: "https://i.pravatar.cc/150?img=10"
   }
 ];
 
@@ -111,8 +89,8 @@ export default function CommunityPage() {
                 <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-semibold ${categoryColors[post.category]}`}>
                   {post.category}
                 </span>
-                <span className="text-pink-100/40 flex items-center gap-1">
-                  <User className="h-3 w-3" />
+                <span className="text-pink-100/40 flex items-center gap-1.5">
+                  <img src={post.avatar} alt={post.poster} className="h-4 w-4 rounded-full object-cover" />
                   u/{post.poster}
                 </span>
                 <span className="text-pink-100/40 flex items-center gap-1">

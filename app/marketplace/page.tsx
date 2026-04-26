@@ -1,54 +1,12 @@
 import { Search, Tag, MessageCircle } from "lucide-react";
 
 const marketplaceItems = [
-  { 
-    id: 1, 
-    title: "IKEA MICKE Desk", 
-    price: 45, 
-    category: "Furniture", 
-    seller: "Alex Chen", 
-    condition: "New" 
-  },
-  { 
-    id: 2, 
-    title: "Calc 124/125 Textbook", 
-    price: 20, 
-    category: "Books", 
-    seller: "Sarah J.", 
-    condition: "Good" 
-  },
-  { 
-    id: 3, 
-    title: "Dorm Mini Fridge", 
-    price: 65, 
-    category: "Kitchen", 
-    seller: "Mike T.", 
-    condition: "Fair" 
-  },
-  { 
-    id: 4, 
-    title: "27-inch LG Monitor 144Hz", 
-    price: 110, 
-    category: "Electronics", 
-    seller: "Kevin W.", 
-    condition: "Good" 
-  },
-  { 
-    id: 5, 
-    title: "Keurig Coffee Maker", 
-    price: 15, 
-    category: "Kitchen", 
-    seller: "Emily R.", 
-    condition: "New" 
-  },
-  { 
-    id: 6, 
-    title: "Ergonomic Office Chair", 
-    price: 30, 
-    category: "Furniture", 
-    seller: "David L.", 
-    condition: "Fair" 
-  }
+  { id: 1, title: "IKEA MICKE Desk", price: 45, category: "Furniture", seller: "Alex Chen", condition: "New", image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6ea?w=400" },
+  { id: 2, title: "Calc 124/125 Textbook", price: 20, category: "Books", seller: "Sarah J.", condition: "Good", image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" },
+  { id: 3, title: "Dorm Mini Fridge", price: 65, category: "Kitchen", seller: "Mike T.", condition: "Fair", image: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400" },
+  { id: 4, title: "27-inch LG Monitor 144Hz", price: 110, category: "Electronics", seller: "Kevin W.", condition: "Good", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400" },
+  { id: 5, title: "Keurig Coffee Maker", price: 15, category: "Kitchen", seller: "Emily R.", condition: "New", image: "https://images.unsplash.com/photo-1495474472207-464a4d96a792?w=400" },
+  { id: 6, title: "Ergonomic Office Chair", price: 30, category: "Furniture", seller: "David L.", condition: "Fair", image: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=400" }
 ];
 
 const categoryColors: Record<string, string> = {
@@ -109,8 +67,8 @@ export default function MarketplacePage() {
             className="group flex flex-col overflow-hidden rounded-2xl border border-pink-300/10 bg-pink-500/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-pink-300/20 hover:bg-pink-500/10 hover:shadow-xl hover:shadow-pink-500/10"
           >
             {/* Image Placeholder */}
-            <div className="relative h-48 w-full bg-gradient-to-br from-purple-800/40 to-pink-800/40 flex items-center justify-center border-b border-pink-300/10">
-              <Tag className="h-12 w-12 text-pink-300/30 group-hover:scale-110 transition-transform duration-300" />
+            <div className="relative h-48 w-full bg-gradient-to-br from-purple-800/40 to-pink-800/40 flex items-center justify-center border-b border-pink-300/10 overflow-hidden">
+              <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
               <div className="absolute top-3 left-3">
                 <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold backdrop-blur-md ${categoryColors[item.category]}`}>
                   {item.category}
