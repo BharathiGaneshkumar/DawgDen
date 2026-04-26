@@ -63,7 +63,7 @@ export default async function ProfilePage({
 
   const trustScore =
     user.reviews.length > 0
-      ? user.reviews.reduce((s, r) => s + r.rating, 0) / user.reviews.length
+      ? user.reviews.reduce((s: number, r: any) => s + r.rating, 0) / user.reviews.length
       : null;
 
   return (

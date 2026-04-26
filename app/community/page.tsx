@@ -63,13 +63,13 @@ export default function CommunityPage() {
     }
 
     // Optimistic update
-    setPosts(posts.map(p => p.id === id ? { ...p, upvotes: p.upvotes + 1 } : p));
+    setPosts(posts.map((p: any) => p.id === id ? { ...p, upvotes: p.upvotes + 1 } : p));
 
     try {
       await fetch(`/api/community/${id}/upvote`, { method: "POST" });
     } catch (e) {
       // Revert if failed
-      setPosts(posts.map(p => p.id === id ? { ...p, upvotes: p.upvotes - 1 } : p));
+      setPosts(posts.map((p: any) => p.id === id ? { ...p, upvotes: p.upvotes - 1 } : p));
     }
   };
 
