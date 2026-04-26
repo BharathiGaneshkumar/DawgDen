@@ -27,6 +27,11 @@ interface VoiceFilter {
 }
 
 export default function ListingsPage() {
+  const { user } = useUser();
+
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [bedroomFilter, setBedroomFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState<"none" | "lowToHigh" | "highToLow">("none");
   const [voiceFilter, setVoiceFilter] = useState<VoiceFilter>({});
   const [activeVoiceDesc, setActiveVoiceDesc] = useState<string | null>(null);
@@ -68,16 +73,40 @@ export default function ListingsPage() {
   }, [voiceFilter, sortOrder]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      {/* Header */}
-      <div className="mb-10 flex flex-col items-center justify-center text-center gap-4">
+    <div className="mx-auto max-w-7xl px-4 py-12 min-h-[calc(100vh-64px)]">
+      <div className="mb-10 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-primary">🏘️ Listings</h1>
-          <p className="mt-2 text-primary/70">Student-verified housing near UW Bothell</p>
+          <h1 className="text-4xl font-bold text-white">🏘️ Listings</h1>
+          <p className="mt-2 text-gray-400">Student-verified housing near UW Bothell</p>
         </div>
-        <a href="/listings/new" className="rounded-xl bg-primary text-[#c5b4e3] px-6 py-3 font-semibold shadow-md transition-transform hover:-translate-y-0.5">
-          + Post a Listing
-        </a>
+
+        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4 justify-center">
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search listings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+            />
+          </div>
+          {user ? (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full sm:w-auto shrink-0 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:-translate-y-0.5 hover:shadow-violet-500/40"
+            >
+              + Post a Listing
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="w-full sm:w-auto shrink-0 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-gray-300 transition hover:bg-white/10 text-center"
+            >
+              Sign in to list
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Voice filter active banner */}
@@ -105,7 +134,7 @@ export default function ListingsPage() {
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Category chips */}
         <div className="flex flex-wrap gap-2">
-          {["All", "1 BR", "2 BR", "3+ BR", "Under $1500", "Pet Friendly"].map((filter) => (
+          {BEDROOM_FILTERS.map((f) => (
             <button
               key={filter}
               onClick={() => {
@@ -117,20 +146,19 @@ export default function ListingsPage() {
               }}
               className="rounded-full border border-primary/20 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary/80 transition hover:bg-primary/10 hover:text-primary"
             >
-              {filter}
+              {f}
             </button>
           ))}
         </div>
 
-        {/* Sort Dropdown */}
         <div className="shrink-0 flex items-center gap-2">
           <span className="text-sm font-bold text-primary/70">Sort by:</span>
           <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as any)}
-            className="rounded-xl border border-primary/20 bg-white/80 px-3 py-2 text-sm font-bold text-primary outline-none focus:border-primary/50 cursor-pointer shadow-sm"
+            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white outline-none focus:border-violet-500 cursor-pointer [&>option]:bg-gray-900"
           >
-            <option value="none">Recommended</option>
+            <option value="none">Newest</option>
             <option value="lowToHigh">Price: Low to High</option>
             <option value="highToLow">Price: High to Low</option>
           </select>

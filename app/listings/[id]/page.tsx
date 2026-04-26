@@ -1,86 +1,138 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine, Zap, Droplets, Flame, Globe, Star, ChevronLeft, ChevronRight, Phone, Heart, ExternalLink, Users } from "lucide-react";
-import { CommuteSection, UtilitiesSection } from "./sections";
-
-interface Listing {
-  id: string; title: string; rent: number; bedrooms: number; bathrooms: number;
-  address: string; lat: number; lng: number;
-  uwb: { lat: number; lng: number; address: string };
-  images: string[];
-  postedBy: { username: string; isVerified: boolean };
-  amenities: { wifi: boolean; parking: boolean; laundry: boolean; ac: boolean; petFriendly: boolean; furnished: boolean };
-  utilities: { electricity: boolean; water: boolean; internet: boolean; gas: boolean };
-  utilityCosts: { electricity: number; water: number; sewage: number; gas: number; trash: number; total: number };
-  leaseLength: string; securityDeposit: number; availableFrom: string;
-  landlordId: string; landlordTrustScore: number; depositReturnRate: number;
-  commute: { driving: { time: string; distance: string; trafficTime: string }; walking: { time: string; distance: string }; transit: { time: string; route: string; stops: number } };
-  busRoutes: { route: string; name: string; frequency: string; firstBus: string; lastBus: string }[];
-  isps: { name: string; type: string; speed: string; price: number; rating: number; available: boolean; recommended?: boolean }[];
-}
-interface Comment { username: string; text: string; date: string; }
-interface Review { id: string; username: string; isVerified: boolean; rating: number; text: string; date: string; comments: Comment[]; }
+import {
+  MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine,
+  Star, ChevronLeft, Heart, ExternalLink, Users, Loader2, Send,
+} from "lucide-react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 function Stars({ n, size = 14 }: { n: number; size?: number }) {
-  return <span className="flex items-center gap-0.5">{[1,2,3,4,5].map(i => <Star key={i} size={size} className={i <= Math.round(n) ? "text-yellow-400 fill-yellow-400" : "text-gray-600"} />)}</span>;
-}
-function VerifiedBadge() {
-  return <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-medium text-emerald-400">✓ Verified UW Student</span>;
+  return (
+    <span className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Star key={i} size={size} className={i <= Math.round(n) ? "text-yellow-400 fill-yellow-400" : "text-gray-600"} />
+      ))}
+    </span>
+  );
 }
 
+function VerifiedBadge() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-medium text-emerald-400">
+      ✓ Verified UW Student
+    </span>
+  );
+}
+
+const AMENITY_ICONS: Record<string, any> = {
+  wifi: Wifi, parking: Car, laundry: WashingMachine, ac: Wind, petFriendly: PawPrint, furnished: Sofa,
+};
+
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { user } = useUser();
+  const canReview = !!(
+    user &&
+    (user as { isVerified?: boolean }).isVerified &&
+    (user as { role?: string }).role === "STUDENT"
+  );
+
   const [id, setId] = useState("");
-  const [listing, setListing] = useState<Listing | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [listing, setListing] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [imgIdx, setImgIdx] = useState(0);
   const [saved, setSaved] = useState(false);
+
   // Calculator
   const [numPeople, setNumPeople] = useState("1");
-  const [calcResult, setCalcResult] = useState<{ perPerson: number; perPersonRent: number; perPersonUtilities: number; tip: string; total: number } | null>(null);
+  const [calcResult, setCalcResult] = useState<any>(null);
   const [calcLoading, setCalcLoading] = useState(false);
-  // Reviews
+
+  // Review form
   const [showForm, setShowForm] = useState(false);
   const [newRating, setNewRating] = useState(5);
+  const [newMaintenance, setNewMaintenance] = useState(3);
+  const [newDepositReturned, setNewDepositReturned] = useState(true);
   const [newText, setNewText] = useState("");
-  const [localReviews, setLocalReviews] = useState<Review[]>([]);
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+
+  // Review comments
   const [commentInputs, setCommentInputs] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    params.then(p => {
+    params.then((p) => {
       setId(p.id);
       Promise.all([
-        fetch(`/api/listings/${p.id}`).then(r => r.json()),
-        fetch(`/api/reviews?listingId=${p.id}`).then(r => r.json()),
-      ]).then(([l, rv]) => { setListing(l); setLocalReviews(rv); setReviews(rv); setLoading(false); });
+        fetch(`/api/listings/${p.id}`).then((r) => r.json()),
+        fetch(`/api/reviews?listingId=${p.id}`).then((r) => r.json()),
+      ]).then(([l, rv]) => {
+        setListing(l);
+        setReviews(Array.isArray(rv) ? rv : []);
+        setLoading(false);
+      }).catch(() => setLoading(false));
     });
   }, [params]);
 
   async function handleCalc() {
     if (!listing) return;
     setCalcLoading(true);
-    const res = await fetch("/api/affordability", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rent: listing.rent, numPeople: Number(numPeople), utilitiesTotal: listing.utilityCosts.total }),
-    });
-    setCalcResult(await res.json());
-    setCalcLoading(false);
+    try {
+      const res = await fetch("/api/affordability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rent: listing.rent, numPeople: Number(numPeople), utilitiesTotal: 0 }),
+      });
+      setCalcResult(await res.json());
+    } finally {
+      setCalcLoading(false);
+    }
   }
 
-  function submitReview() {
-    if (!newText.trim()) return;
-    const r: Review = { id: `local-${Date.now()}`, username: "you", isVerified: true, rating: newRating, text: newText, date: new Date().toISOString().split("T")[0], comments: [] };
-    setLocalReviews(p => [r, ...p]);
-    setNewText(""); setShowForm(false);
+  async function submitReview() {
+    if (!newText.trim() || !listing) return;
+    setReviewLoading(true);
+    setReviewError("");
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          landlordName: listing.user?.name || listing.user?.email || "Unknown",
+          landlordAddress: listing.address,
+          rating: newRating,
+          depositReturned: newDepositReturned,
+          maintenanceRating: newMaintenance,
+          reviewText: newText.trim(),
+          listingId: id,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to submit review");
+      }
+      const created = await res.json();
+      setReviews((prev) => [{ ...created, user: { name: (user as any)?.name, avatarUrl: (user as any)?.picture } }, ...prev]);
+      setNewText("");
+      setShowForm(false);
+    } catch (err: any) {
+      setReviewError(err.message);
+    } finally {
+      setReviewLoading(false);
+    }
   }
 
   function submitComment(rid: string) {
     const text = commentInputs[rid]?.trim();
     if (!text) return;
-    setLocalReviews(p => p.map(r => r.id === rid ? { ...r, comments: [...r.comments, { username: "you", text, date: new Date().toISOString().split("T")[0] }] } : r));
-    setCommentInputs(p => ({ ...p, [rid]: "" }));
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.id === rid
+          ? { ...r, comments: [...(r.comments || []), { id: `c-${Date.now()}`, content: text, user: { name: (user as any)?.name } }] }
+          : r
+      )
+    );
+    setCommentInputs((p) => ({ ...p, [rid]: "" }));
   }
 
   if (loading) return (
@@ -93,23 +145,15 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   );
   if (!listing) return <div className="flex min-h-screen items-center justify-center"><p className="text-primary/60">Listing not found.</p></div>;
 
-  const avgRating = localReviews.length ? localReviews.reduce((s, r) => s + r.rating, 0) / localReviews.length : 0;
-  const photos = listing.images;
+  const amenityList = Object.keys(AMENITY_ICONS).map((key) => ({
+    label: key === "petFriendly" ? "Pet Friendly" : key.charAt(0).toUpperCase() + key.slice(1),
+    icon: AMENITY_ICONS[key],
+    on: Array.isArray(listing.amenities) && listing.amenities.includes(key),
+  }));
 
-  const amenities = [
-    { label: "WiFi", icon: Wifi, on: listing.amenities.wifi },
-    { label: "Parking", icon: Car, on: listing.amenities.parking },
-    { label: "Laundry", icon: WashingMachine, on: listing.amenities.laundry },
-    { label: "AC", icon: Wind, on: listing.amenities.ac },
-    { label: "Pet Friendly", icon: PawPrint, on: listing.amenities.petFriendly },
-    { label: "Furnished", icon: Sofa, on: listing.amenities.furnished },
-  ];
-  const utilityBadges = [
-    { label: "Electricity", icon: Zap, on: listing.utilities.electricity },
-    { label: "Water", icon: Droplets, on: listing.utilities.water },
-    { label: "Internet", icon: Globe, on: listing.utilities.internet },
-    { label: "Gas", icon: Flame, on: listing.utilities.gas },
-  ];
+  const avgRating = reviews.length
+    ? reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length
+    : 0;
 
   return (
     <div className="min-h-screen relative z-10 text-primary">
@@ -156,6 +200,14 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">
                 <Phone size={14} /> Contact Landlord
               </button>
+              {listing.user?.email && (
+                <a
+                  href={`mailto:${listing.user.email}`}
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20"
+                >
+                  Contact Landlord
+                </a>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-sm text-primary/70"><MapPin size={13} className="text-primary" />{listing.address}</div>
@@ -260,6 +312,12 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               <p className="text-2xl font-bold text-emerald-500">{listing.depositReturnRate}%</p>
               <p className="text-xs text-primary/50">Deposit Return Rate</p>
             </div>
+            <Link
+              href={`/landlords/${listing.userId}`}
+              className="ml-auto inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition"
+            >
+              View profile <ExternalLink size={13} />
+            </Link>
           </div>
           <p className="text-sm text-primary/70 rounded-xl bg-primary/5 border border-primary/10 px-4 py-3">AI pattern summary: This landlord has a history of timely responses and fair deposit returns. Minor issues reported around maintenance request delays.</p>
           <Link href={`/landlords/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 font-medium transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
@@ -274,6 +332,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             </div>
             <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
           </div>
+
           {showForm && (
             <div className="rounded-xl border border-primary/10 bg-primary/5 p-4 space-y-3">
               <div className="flex items-center gap-1">{[1,2,3,4,5].map(i => <button key={i} onClick={() => setNewRating(i)}><Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-primary/20"} /></button>)}</div>
@@ -285,7 +344,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             <p className="text-sm text-primary/50 text-center py-6">No reviews yet — be the first!</p>
           ) : (
             <div className="space-y-5">
-              {localReviews.map(review => (
+              {reviews.map((review: any) => (
                 <div key={review.id} className="space-y-2">
                   <div className="rounded-xl border border-primary/10 bg-white/80 p-4 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">

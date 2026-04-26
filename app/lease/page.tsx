@@ -4,9 +4,15 @@ import { UploadCloud, FileWarning, AlertTriangle, ShieldAlert, CheckCircle2, Fil
 import { useState, useRef } from "react";
 
 const severityColors: Record<string, string> = {
-  High: "bg-red-100 border border-red-300 text-red-800 border-red-500/30",
-  Medium: "bg-yellow-100 border border-yellow-300 text-yellow-800 border-yellow-500/30",
-  Low: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  High: "bg-red-500/10 border border-red-500/30 text-red-400",
+  Medium: "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400",
+  Low: "bg-blue-500/10 border border-blue-500/30 text-blue-400",
+};
+
+const severityIcons: Record<string, any> = {
+  High: ShieldAlert,
+  Medium: AlertTriangle,
+  Low: FileWarning,
 };
 
 export default function LeaseCheckerPage() {
@@ -46,11 +52,11 @@ export default function LeaseCheckerPage() {
     <div className="mx-auto max-w-4xl px-4 py-16 min-h-screen">
       {/* Header */}
       <div className="mb-12 text-center">
-        <h1 className="text-5xl font-extrabold text-primary tracking-tight mb-4">
-          AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Lease Checker</span>
+        <h1 className="text-5xl font-extrabold text-white tracking-tight mb-4">
+          AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-violet-500">Lease Checker</span>
         </h1>
-        <p className="text-lg text-primary/70 max-w-2xl mx-auto">
-          Don't get trapped in a bad lease. Upload your PDF and our AI will instantly scan it for red flags, hidden fees, and unfair clauses.
+        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          Don't get trapped in a bad lease. Upload your PDF or paste your lease text and our AI will scan it for red flags, hidden fees, and unfair clauses.
         </p>
       </div>
 
@@ -88,7 +94,6 @@ export default function LeaseCheckerPage() {
             {loading ? "Analyzing Document..." : "Analyze My Lease"}
           </button>
         </div>
-      </div>
 
       {/* Error Message */}
       {error && (
