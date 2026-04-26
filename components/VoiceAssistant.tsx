@@ -1,6 +1,6 @@
 "use client";
 
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { Mic, MicOff, X, Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
 
@@ -16,7 +16,8 @@ interface VoiceAssistantProps {
   onClear: () => void;
 }
 
-export default function VoiceAssistant({ onFilter, onClear }: VoiceAssistantProps) {
+// Inner component that uses the hook — must be inside ConversationProvider
+function VoiceAssistantInner({ onFilter, onClear }: VoiceAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [lastAction, setLastAction] = useState<string | null>(null);
 
@@ -126,5 +127,14 @@ export default function VoiceAssistant({ onFilter, onClear }: VoiceAssistantProp
         )}
       </button>
     </div>
+  );
+}
+
+// Outer wrapper — provides the required context for useConversation
+export default function VoiceAssistant(props: VoiceAssistantProps) {
+  return (
+    <ConversationProvider>
+      <VoiceAssistantInner {...props} />
+    </ConversationProvider>
   );
 }

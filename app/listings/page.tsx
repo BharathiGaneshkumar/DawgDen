@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 
 // Dynamically import to avoid SSR issues with microphone APIs
-const VoiceAssistant = dynamic(() => import("@/components/VoiceAssistant"), { ssr: false });
+const VoiceAssistant = dynamic(
+  () => import("@/components/VoiceAssistant"),
+  { ssr: false }
+);
 
 const INITIAL_LISTINGS = [
   { id: 1, title: "Cozy Studio near UWB", rent: 1200, bedrooms: 1, address: "Bothell, WA 98011", affordability: "green", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400" },
