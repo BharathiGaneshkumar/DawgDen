@@ -6,10 +6,10 @@ import { ArrowBigUp, MessageSquare, Clock, ChevronLeft, Send, Loader2, CornerDow
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 const categoryColors: Record<string, string> = {
-  ROOMMATE: "bg-emerald-100 border border-emerald-300 text-emerald-800",
-  HOUSING: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  GENERAL: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  SELLING: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  ROOMMATE: "bg-emerald-500/15 border-emerald-500/30 text-emerald-600",
+  HOUSING: "bg-purple-500/15 border-purple-500/30 text-purple-600",
+  GENERAL: "bg-blue-500/15 border-blue-500/30 text-blue-600",
+  SELLING: "bg-yellow-500/15 border-yellow-500/30 text-yellow-700",
 };
 
 function CommentThread({
@@ -51,46 +51,44 @@ function CommentThread({
 
   return (
     <div className={depth > 0 ? "ml-6 border-l border-white/10 pl-4" : ""}>
-      <div className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 mb-2">
-        <img
-          src={comment.user?.avatarUrl || `https://i.pravatar.cc/150?u=${comment.userId}`}
-          alt={comment.user?.name}
-          className="h-8 w-8 rounded-full object-cover shrink-0 mt-0.5"
-        />
+      <div className="flex gap-4 rounded-3xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 mb-4 shadow-sm">
+        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-xs font-black text-primary shrink-0 mt-0.5">
+          {(comment.user?.name || "U")[0].toUpperCase()}
+        </div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 mb-1 text-xs text-gray-500">
-            <span className="font-semibold text-gray-300">u/{comment.user?.name || comment.user?.email || "anonymous"}</span>
+          <div className="flex items-center gap-2 mb-2 text-[10px] font-bold uppercase tracking-widest text-primary/30">
+            <span className="text-primary/60">u/{comment.user?.name || comment.user?.email || "anonymous"}</span>
             <span>·</span>
             <span className="flex items-center gap-1">
               <Clock size={10} />
               {new Date(comment.createdAt).toLocaleDateString()}
             </span>
           </div>
-          <p className="text-sm text-gray-300 leading-relaxed">{comment.content}</p>
+          <p className="text-base text-primary/70 font-medium leading-relaxed">{comment.content}</p>
           {user && depth < 3 && (
             <button
               onClick={() => setReplying((r) => !r)}
-              className="mt-2 flex items-center gap-1 text-xs text-gray-500 hover:text-violet-400 transition"
+              className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary/40 hover:text-primary transition-colors"
             >
               <CornerDownRight size={12} />
-              {replying ? "Cancel" : "Reply"}
+              {replying ? "Cancel Reply" : "Reply"}
             </button>
           )}
           {replying && (
-            <div className="mt-2 flex gap-2">
+            <div className="mt-4 flex gap-2">
               <input
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && submitReply()}
                 placeholder={`Reply to ${comment.user?.name || "comment"}…`}
-                className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none"
+                className="flex-1 rounded-xl border border-primary/10 bg-white/60 px-4 py-2 text-sm text-primary placeholder:text-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium"
               />
               <button
                 onClick={submitReply}
                 disabled={!replyText.trim() || replyLoading}
-                className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs text-white hover:bg-violet-500 disabled:opacity-40 transition"
+                className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary text-white disabled:opacity-40 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95"
               >
-                {replyLoading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+                {replyLoading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
               </button>
             </div>
           )}
@@ -220,53 +218,55 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   const totalComments = countComments(comments);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 min-h-screen">
-      <Link href="/community" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition mb-6">
+    <div className="mx-auto max-w-3xl px-4 py-12 min-h-screen relative z-10">
+      <Link href="/community" className="inline-flex items-center gap-1.5 text-sm font-bold text-primary/60 hover:text-primary transition-colors mb-8">
         <ChevronLeft size={16} /> Back to Community
       </Link>
 
       {/* Post Card */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden mb-6">
+      <div className="rounded-[40px] border border-primary/10 bg-white/60 backdrop-blur-md overflow-hidden mb-10 shadow-sm">
         <div className="flex">
           {/* Vote column */}
-          <div className="flex w-14 flex-col items-center pt-5 gap-1 bg-white/5 border-r border-white/5 shrink-0">
+          <div className="flex w-16 flex-col items-center pt-8 gap-2 bg-primary/5 border-r border-primary/5 shrink-0">
             <button
               onClick={handleUpvote}
               disabled={!user}
-              className={`transition ${voted ? "text-violet-400" : "text-gray-500 hover:text-violet-400"} disabled:opacity-40 disabled:cursor-default`}
+              className={`transition-all active:scale-125 ${voted ? "text-primary" : "text-primary/20 hover:text-primary/60"} disabled:opacity-40 disabled:cursor-default`}
               title={user ? "Toggle upvote" : "Sign in to vote"}
             >
-              <ArrowBigUp className={`h-6 w-6 ${voted ? "fill-violet-400" : ""}`} />
+              <ArrowBigUp size={28} className={voted ? "fill-primary" : ""} />
             </button>
-            <span className={`text-sm font-bold ${voted ? "text-violet-400" : "text-white"}`}>{post.upvotes}</span>
+            <span className={`text-base font-black ${voted ? "text-primary" : "text-primary/40"}`}>{post.upvotes}</span>
           </div>
 
-          <div className="flex-1 p-5 sm:p-6">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-3 text-xs">
-              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ${categoryColors[post.category] || categoryColors.GENERAL}`}>
+          <div className="flex-1 p-8 sm:p-10">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6 text-[10px] font-bold uppercase tracking-widest">
+              <span className={`rounded-full border px-3 py-1 ${categoryColors[post.category] || "border-primary/10 bg-primary/5 text-primary/60"}`}>
                 {post.category}
               </span>
-              <span className="text-gray-400 flex items-center gap-1.5">
-                <img src={post.user?.avatarUrl || "https://i.pravatar.cc/150"} alt={post.user?.name} className="h-4 w-4 rounded-full object-cover" />
+              <span className="text-primary/40 flex items-center gap-2">
+                <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-[8px] text-primary">
+                  {(post.user?.name || "U")[0].toUpperCase()}
+                </div>
                 u/{post.user?.name || post.user?.email}
               </span>
-              <span className="text-gray-500 flex items-center gap-1">
+              <span className="text-primary/30 flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {new Date(post.createdAt).toLocaleDateString()}
               </span>
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">{post.title}</h1>
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed whitespace-pre-wrap">{post.content}</p>
+            <h1 className="text-3xl font-black text-primary mb-6 leading-tight">{post.title}</h1>
+            <p className="text-lg text-primary/70 font-medium leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
-            <div className="mt-4 flex items-center gap-3 text-xs text-gray-500">
-              <span className="flex items-center gap-1">
-                <MessageSquare className="h-3.5 w-3.5" />
+            <div className="mt-10 pt-6 border-t border-primary/5 flex items-center gap-6 text-xs font-bold text-primary/40">
+              <span className="flex items-center gap-2">
+                <MessageSquare size={16} className="text-primary/20" />
                 {totalComments} comment{totalComments !== 1 ? "s" : ""}
               </span>
               {!user && (
-                <Link href="/auth/login" className="text-gray-400 hover:text-white transition">
-                  Sign in to vote or comment
+                <Link href="/auth/login" className="text-primary/40 hover:text-primary transition underline decoration-dotted underline-offset-4">
+                  Sign in to participate
                 </Link>
               )}
             </div>
@@ -276,43 +276,43 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Add top-level comment */}
       {user ? (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 flex gap-3 mb-6">
-          <img
-            src={(user.picture as string) || `https://i.pravatar.cc/150?u=${user.sub}`}
-            alt="you"
-            className="h-8 w-8 rounded-full object-cover shrink-0 mt-0.5"
-          />
-          <div className="flex-1 flex gap-2">
+        <div className="rounded-3xl border border-primary/10 bg-white/60 p-6 flex gap-4 mb-10 shadow-sm focus-within:ring-4 focus-within:ring-primary/5 transition-all">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-xs font-black text-primary shrink-0">
+            {(user.name?.[0] || "U").toUpperCase()}
+          </div>
+          <div className="flex-1 flex gap-3">
             <input
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && submitComment()}
-              placeholder="Add a comment…"
-              className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none transition"
+              placeholder="What are your thoughts?..."
+              className="flex-1 rounded-2xl border-none bg-transparent px-0 text-primary placeholder:text-primary/20 focus:ring-0 font-medium text-lg"
             />
             <button
               onClick={submitComment}
               disabled={!commentText.trim() || submitting}
-              className="flex items-center gap-1.5 rounded-xl bg-violet-600 text-white px-4 py-2 text-sm font-semibold disabled:opacity-40 transition hover:bg-violet-500"
+              className="flex items-center justify-center h-12 w-12 rounded-2xl bg-primary text-white disabled:opacity-40 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95"
             >
-              {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+              {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
             </button>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center text-sm text-gray-500 mb-6">
-          <Link href="/auth/login" className="text-white font-medium hover:underline">Sign in</Link> to join the conversation
+        <div className="rounded-[40px] border border-dashed border-primary/10 bg-white/20 p-8 text-center text-primary/40 font-bold mb-10">
+          <Link href="/auth/login" className="text-primary hover:underline underline-offset-4">Sign in</Link> to join the conversation
         </div>
       )}
 
       {/* Comments */}
-      <div className="space-y-2">
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide px-1 mb-3">
-          Comments ({totalComments})
+      <div className="space-y-6">
+        <h2 className="text-xs font-black text-primary/30 uppercase tracking-[0.2em] px-2">
+          Discussion ({totalComments})
         </h2>
 
         {comments.length === 0 && (
-          <p className="text-sm text-gray-500 py-4 text-center">No comments yet — be the first!</p>
+          <div className="py-12 text-center rounded-[40px] border border-primary/5 bg-white/10">
+            <p className="text-primary/30 font-bold">No comments yet — be the first to speak up!</p>
+          </div>
         )}
 
         {comments.map((c) => (

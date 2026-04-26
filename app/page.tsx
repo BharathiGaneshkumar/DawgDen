@@ -87,7 +87,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <Link
               href="/listings"
-              className="group inline-flex items-center gap-2 rounded-xl bg-primary text-[#c5b4e3] px-8 py-4 text-lg font-bold text-[#c5b4e3] shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:shadow-primary/40 hover:-translate-y-0.5"
+              className="group inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:shadow-primary/40 hover:-translate-y-0.5"
             >
               Browse Listings
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -159,7 +159,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/listings"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary text-[#c5b4e3] px-8 py-4 text-lg font-bold text-[#c5b4e3] shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5"
             >
               Browse Listings
               <ArrowRight className="h-4 w-4" />

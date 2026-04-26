@@ -56,32 +56,32 @@ export default function ListingsPage() {
     <div className="mx-auto max-w-7xl px-4 py-12 min-h-[calc(100vh-64px)]">
       <div className="mb-10 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white">🏘️ Listings</h1>
-          <p className="mt-2 text-gray-400">Student-verified housing near UW Bothell</p>
+          <h1 className="text-4xl font-extrabold text-primary">🏘️ Listings</h1>
+          <p className="mt-2 text-primary/70 font-medium">Student-verified housing near UW Bothell</p>
         </div>
 
         <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4 justify-center">
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          <div className="relative w-full sm:w-80 group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/40 group-focus-within:text-primary transition-colors" />
             <input
               type="text"
               placeholder="Search listings..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+              className="w-full rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-primary/40 focus:border-primary/30 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
             />
           </div>
           {user ? (
             <Link
               href="/listings/new"
-              className="w-full sm:w-auto shrink-0 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:-translate-y-0.5 hover:shadow-violet-500/40 text-center"
+              className="w-full sm:w-auto shrink-0 rounded-2xl bg-primary px-8 py-3.5 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-primary/40 text-center"
             >
               + Post a Listing
             </Link>
           ) : (
             <Link
               href="/auth/login"
-              className="w-full sm:w-auto shrink-0 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-gray-300 transition hover:bg-white/10 text-center"
+              className="w-full sm:w-auto shrink-0 rounded-2xl border border-primary/20 bg-white/40 backdrop-blur-md px-8 py-3.5 font-bold text-primary transition-all hover:bg-white/60 text-center"
             >
               Sign in to list
             </Link>
@@ -95,10 +95,10 @@ export default function ListingsPage() {
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+              className={`rounded-full border px-5 py-2 text-sm font-bold transition-all ${
                 activeFilter === f
-                  ? "border-violet-500 bg-violet-500/10 text-violet-400"
-                  : "border-white/10 bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300"
+                  ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
+                  : "border-primary/10 bg-white/40 text-primary/60 hover:border-primary/30 hover:bg-white/60"
               }`}
             >
               {f}
@@ -106,51 +106,76 @@ export default function ListingsPage() {
           ))}
         </div>
 
-        <div className="shrink-0 flex items-center gap-2">
-          <span className="text-sm font-bold text-gray-400">Sort by:</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-primary/40">Sort by</span>
           <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white outline-none focus:border-violet-500 cursor-pointer [&>option]:bg-gray-900"
+            onChange={(e) => setSortOrder(e.target.value as any)}
+            className="rounded-xl border border-primary/10 bg-white/40 px-3 py-2 text-sm font-bold text-primary focus:outline-none cursor-pointer"
           >
             <option value="none">Newest</option>
-            <option value="lowToHigh">Price: Low to High</option>
-            <option value="highToLow">Price: High to Low</option>
+            <option value="lowToHigh">Rent: Low to High</option>
+            <option value="highToLow">Rent: High to Low</option>
           </select>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-gray-500">Loading...</div>
+        <div className="flex items-center justify-center py-20">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
       ) : sortedListings.length === 0 ? (
-        <div className="py-20 text-center text-gray-500">No listings match your search.</div>
+        <div className="rounded-3xl border border-dashed border-primary/20 bg-white/20 py-20 text-center">
+          <p className="text-primary/40 font-medium text-lg">No listings found matching your search.</p>
+        </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {sortedListings.map((listing) => (
             <Link
               key={listing.id}
               href={`/listings/${listing.id}`}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-white/10 hover:shadow-xl hover:shadow-violet-500/10 h-full"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-primary/10 bg-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/20 hover:bg-white/60 hover:shadow-xl hover:shadow-primary/5"
             >
-              <div className="relative h-48 w-full bg-gray-800 flex items-center justify-center border-b border-white/10 overflow-hidden shrink-0">
+              <div className="aspect-[4/3] w-full overflow-hidden bg-primary/5 relative">
                 {listing.imageUrl ? (
-                  <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <img
+                    src={listing.imageUrl}
+                    alt={listing.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
                 ) : (
-                  <div className="text-gray-600 text-5xl">🏠</div>
+                  <div className="flex h-full w-full items-center justify-center text-4xl text-primary/20 opacity-50">
+                    🏠
+                  </div>
                 )}
+                <div className="absolute top-4 left-4">
+                  <div className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-lg">
+                    ${listing.rent}/mo
+                  </div>
+                </div>
               </div>
-
-              <div className="flex flex-col flex-1 p-5">
-                <h2 className="text-xl font-bold text-white group-hover:text-violet-300 transition-colors line-clamp-2">{listing.title}</h2>
-                <p className="mt-1 text-sm text-gray-400 flex items-center gap-1">📍 {listing.address}</p>
-
-                <div className="mt-auto pt-4 flex items-center justify-between border-t border-white/10">
-                  <span className="text-2xl font-bold text-white">
-                    ${listing.rent.toLocaleString()}<span className="text-sm font-normal text-gray-400">/mo</span>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  <span className="rounded-full bg-primary/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary/60">
+                    {listing.bedrooms} Bedroom
                   </span>
-                  <span className="text-sm font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-md border border-white/10">
-                    🛏 {listing.bedrooms} bed
-                  </span>
+                  {listing.isVerified && (
+                    <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
+                <h2 className="line-clamp-1 text-xl font-bold text-primary group-hover:text-primary transition-colors">
+                  {listing.title}
+                </h2>
+                <p className="mt-1 line-clamp-1 text-sm text-primary/50 font-medium">
+                  📍 {listing.address}
+                </p>
+                <div className="mt-4 flex items-center justify-between pt-4 border-t border-primary/5">
+                  <span className="text-xs font-bold text-primary/40 uppercase tracking-widest">View Details</span>
+                  <div className="h-8 w-8 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                    →
+                  </div>
                 </div>
               </div>
             </Link>

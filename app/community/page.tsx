@@ -7,10 +7,10 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import NewPostModal from "@/components/modals/NewPostModal";
 
 const categoryColors: Record<string, string> = {
-  "ROOMMATE": "bg-emerald-100 border border-emerald-300 text-emerald-800",
-  "HOUSING": "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  "GENERAL": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "SELLING": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  "ROOMMATE": "bg-emerald-500/15 border-emerald-500/30 text-emerald-600",
+  "HOUSING": "bg-purple-500/15 border-purple-500/30 text-purple-600",
+  "GENERAL": "bg-blue-500/15 border-blue-500/30 text-blue-600",
+  "SELLING": "bg-yellow-500/15 border-yellow-500/30 text-yellow-700",
 };
 
 const FILTERS = ["All Posts", "Top Posts", "ROOMMATE", "HOUSING", "GENERAL", "SELLING"];
@@ -75,34 +75,34 @@ export default function CommunityPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 min-h-[calc(100vh-64px)]">
-      <div className="mb-8 flex flex-col items-center justify-center text-center gap-6">
+      <div className="mb-10 flex flex-col items-center justify-center text-center gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white">💬 Community Hub</h1>
-          <p className="mt-2 text-gray-400">Connect, ask questions, and find roommates</p>
+          <h1 className="text-4xl font-extrabold text-primary">💬 Community Hub</h1>
+          <p className="mt-2 text-primary/70 font-medium">Connect, ask questions, and find roommates</p>
         </div>
 
-        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4">
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+        <div className="flex w-full flex-col sm:flex-row md:w-auto items-center gap-4 justify-center">
+          <div className="relative w-full sm:w-80 group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/40 group-focus-within:text-primary transition-colors" />
             <input
               type="text"
               placeholder="Search posts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+              className="w-full rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-primary/40 focus:border-primary/30 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
             />
           </div>
           {isStudent ? (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full sm:w-auto shrink-0 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:-translate-y-0.5 hover:shadow-violet-500/40 text-center"
+              className="w-full sm:w-auto shrink-0 rounded-2xl bg-primary px-8 py-3.5 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-primary/40 text-center"
             >
               + New Post
             </button>
           ) : user ? null : (
             <Link
-              href="/login"
-              className="w-full sm:w-auto shrink-0 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-gray-300 transition hover:bg-white/10 text-center"
+              href="/auth/login"
+              className="w-full sm:w-auto shrink-0 rounded-2xl border border-primary/20 bg-white/40 backdrop-blur-md px-8 py-3.5 font-bold text-primary transition-all hover:bg-white/60 text-center"
             >
               Sign in to post
             </Link>
@@ -110,15 +110,15 @@ export default function CommunityPage() {
         </div>
       </div>
 
-      <div className="mb-10 flex flex-wrap gap-3">
+      <div className="mb-10 flex flex-wrap gap-2 justify-center">
         {FILTERS.map((f) => (
           <button
             key={f}
             onClick={() => setActiveFilter(f)}
-            className={`rounded-full border px-5 py-2 text-sm font-medium transition ${
+            className={`rounded-full border px-5 py-2 text-sm font-bold transition-all ${
               activeFilter === f
-                ? "border-violet-500 bg-violet-500/10 text-violet-400"
-                : "border-white/10 bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300"
+                ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
+                : "border-primary/10 bg-white/40 text-primary/60 hover:border-primary/30 hover:bg-white/60"
             }`}
           >
             {f === "ROOMMATE" ? "Roommate Needed" : f === "HOUSING" ? "Housing Question" : f}
@@ -127,51 +127,57 @@ export default function CommunityPage() {
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-gray-500">Loading...</div>
+        <div className="flex items-center justify-center py-20">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
       ) : posts.length === 0 ? (
-        <div className="py-20 text-center text-gray-500">No posts match your search.</div>
+        <div className="rounded-3xl border border-dashed border-primary/20 bg-white/20 py-20 text-center">
+          <p className="text-primary/40 font-medium text-lg">No posts found matching your search.</p>
+        </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           {posts.map((post) => (
             <Link
               key={post.id}
               href={`/community/${post.id}`}
-              className="group flex overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:border-violet-500/30 hover:bg-white/10 cursor-pointer"
+              className="group flex overflow-hidden rounded-3xl border border-primary/10 bg-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white/60 hover:shadow-xl hover:shadow-primary/5"
             >
               {/* Upvote Column */}
               <button 
                 onClick={(e) => handleUpvote(e, post.id)}
-                className="flex w-14 flex-col items-center justify-start bg-white/5 py-4 border-r border-white/5 hover:bg-violet-500/10 transition-colors shrink-0"
+                className="flex w-16 flex-col items-center justify-start bg-primary/5 py-6 border-r border-primary/5 hover:bg-primary/10 transition-colors shrink-0"
               >
-                <ArrowBigUp className="h-5 w-5 text-gray-500 group-hover:text-violet-400 transition-colors" />
-                <span className="my-1 text-sm font-bold text-white">{post.upvotes}</span>
+                <ArrowBigUp className="h-6 w-6 text-primary/40 group-hover:text-primary transition-colors" />
+                <span className="my-1.5 text-base font-black text-primary">{post.upvotes}</span>
               </button>
 
-              <div className="flex flex-col flex-1 p-4 sm:p-5 min-w-0">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2 text-xs">
-                  <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-semibold ${categoryColors[post.category]}`}>
+              <div className="flex flex-col flex-1 p-6 min-w-0">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3 text-[10px] font-bold uppercase tracking-widest">
+                  <span className={`rounded-full border px-2.5 py-1 ${categoryColors[post.category] || "border-primary/10 bg-primary/5 text-primary/60"}`}>
                     {post.category}
                   </span>
-                  <span className="text-gray-400 flex items-center gap-1.5">
-                    <img src={post.user?.avatarUrl || "https://i.pravatar.cc/150"} alt={post.user?.name} className="h-4 w-4 rounded-full object-cover" />
+                  <span className="text-primary/40 flex items-center gap-2">
+                    <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] text-primary">
+                      {(post.user?.name || "U")[0].toUpperCase()}
+                    </div>
                     u/{post.user?.name || post.user?.email || "unknown"}
                   </span>
-                  <span className="text-gray-500 flex items-center gap-1">
+                  <span className="text-primary/30 flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {new Date(post.createdAt).toLocaleDateString()}
                   </span>
                 </div>
 
-                <h2 className="text-base sm:text-lg font-bold text-white group-hover:text-violet-300 transition-colors mb-1.5 line-clamp-2">
+                <h2 className="text-xl font-bold text-primary group-hover:text-primary transition-colors mb-2 line-clamp-2">
                   {post.title}
                 </h2>
-                <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed mb-3">
+                <p className="text-base text-primary/80 font-bold line-clamp-2 leading-relaxed mb-4">
                   {post.content}
                 </p>
 
-                <div className="mt-auto flex items-center gap-3 text-xs text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <MessageSquare className="h-3.5 w-3.5" />
+                <div className="mt-auto flex items-center gap-4 text-xs font-bold text-primary/40">
+                  <span className="flex items-center gap-1.5">
+                    <MessageSquare size={14} className="text-primary/20" />
                     {post._count?.comments || 0} replies
                   </span>
                 </div>

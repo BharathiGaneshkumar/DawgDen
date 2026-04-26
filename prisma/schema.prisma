@@ -9,7 +9,7 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
+enum UserRole {
   STUDENT
   LANDLORD
 }
@@ -20,7 +20,7 @@ model User {
   email            String            @unique
   name             String?
   avatarUrl        String?
-  role             Role              @default(STUDENT)
+  role             UserRole          @default(STUDENT)
   isVerified       Boolean           @default(false)
   bio              String?
   program          String?

@@ -38,12 +38,12 @@ export function StudentProfileTabs({
   listings,
   reviews,
   posts,
-  marketplaceItems,
+  marketItems,
 }: {
   listings: Listing[];
   reviews: Review[];
   posts: Post[];
-  marketplaceItems: MarketplaceItem[];
+  marketItems: MarketplaceItem[];
 }) {
   return (
     <Tabs defaultValue="listings">
@@ -62,7 +62,7 @@ export function StudentProfileTabs({
         </TabsTrigger>
         <TabsTrigger value="marketplace">
           <ShoppingBag className="h-3.5 w-3.5" />
-          Marketplace ({marketplaceItems.length})
+          Marketplace ({marketItems.length})
         </TabsTrigger>
       </TabsList>
 
@@ -152,11 +152,11 @@ export function StudentProfileTabs({
       </TabsContent>
 
       <TabsContent value="marketplace">
-        {marketplaceItems.length === 0 ? (
+        {marketItems.length === 0 ? (
           <EmptyState text="No marketplace items listed." />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {marketplaceItems.map((item) => (
+            {marketItems.map((item) => (
               <div
                 key={item.id}
                 className="rounded-2xl border border-primary/20 bg-background/50 p-5 shadow-sm"
