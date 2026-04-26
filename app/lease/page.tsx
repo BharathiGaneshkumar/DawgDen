@@ -1,7 +1,110 @@
+import { UploadCloud, FileWarning, AlertTriangle, ShieldAlert, CheckCircle2, FileText } from "lucide-react";
+
+const analysisResults = [
+  {
+    id: 1,
+    issue: "No early termination clause",
+    description: "The lease does not specify how you can break it early. You may be held liable for rent until the end of the term even if you move out.",
+    severity: "High",
+    icon: ShieldAlert,
+  },
+  {
+    id: 2,
+    issue: "Landlord can enter without notice",
+    description: "Clause 14 states the landlord or maintenance can enter the premises at any time without prior 24-hour written notice. This violates standard tenant privacy laws.",
+    severity: "High",
+    icon: AlertTriangle,
+  },
+  {
+    id: 3,
+    issue: "Automatic rent increase of 10%",
+    description: "If the lease transitions to month-to-month after the initial term, rent automatically increases by 10% without a new agreement.",
+    severity: "Medium",
+    icon: FileWarning,
+  }
+];
+
+const severityColors: Record<string, string> = {
+  High: "bg-red-500/20 text-red-400 border-red-500/30",
+  Medium: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  Low: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+};
+
 export default function LeaseCheckerPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="text-3xl font-bold text-white">Lease Checker</h1>
+    <div className="mx-auto max-w-4xl px-4 py-16 min-h-screen">
+      {/* Header */}
+      <div className="mb-12 text-center">
+        <h1 className="text-5xl font-extrabold text-white tracking-tight mb-4">
+          AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Lease Checker</span>
+        </h1>
+        <p className="text-lg text-pink-100/60 max-w-2xl mx-auto">
+          Don't get trapped in a bad lease. Upload your PDF and our AI will instantly scan it for red flags, hidden fees, and unfair clauses.
+        </p>
+      </div>
+
+      {/* Upload Section */}
+      <div className="mb-10 rounded-3xl bg-gradient-to-br from-pink-500/10 to-purple-800/10 p-1">
+        <div className="flex flex-col items-center justify-center rounded-[23px] border-2 border-dashed border-pink-400/30 bg-gray-950/50 backdrop-blur-sm p-12 text-center transition-all hover:bg-pink-900/10 hover:border-pink-400/50 group cursor-pointer">
+          <div className="mb-6 rounded-full bg-pink-500/10 p-5 group-hover:scale-110 transition-transform duration-300">
+            <UploadCloud className="h-12 w-12 text-pink-400" />
+          </div>
+          <h3 className="mb-2 text-2xl font-bold text-white">Drag & drop your lease PDF</h3>
+          <p className="mb-8 text-pink-100/50">or click to browse from your computer (Max 10MB)</p>
+          
+          <button className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-700 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-pink-500/20 transition-all hover:-translate-y-1 hover:shadow-pink-500/40 w-full sm:w-auto">
+            Analyze My Lease
+          </button>
+        </div>
+      </div>
+
+      {/* Fake Analysis Results */}
+      <div className="mt-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <FileText className="h-6 w-6 text-pink-400" />
+            Sample Analysis Results
+          </h2>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400 border border-emerald-500/20">
+            <CheckCircle2 className="h-4 w-4" />
+            Scan Complete
+          </span>
+        </div>
+
+        <div className="space-y-4">
+          {analysisResults.map((result) => {
+            const Icon = result.icon;
+            return (
+              <div 
+                key={result.id}
+                className="group relative overflow-hidden rounded-2xl border border-pink-300/10 bg-pink-500/5 p-6 backdrop-blur-sm transition-all hover:border-pink-400/30 hover:bg-pink-500/10"
+              >
+                <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div className={`mt-1 rounded-xl p-3 ${severityColors[result.severity]}`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-2">{result.issue}</h3>
+                      <p className="text-pink-100/70 text-sm leading-relaxed max-w-2xl">
+                        {result.description}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="shrink-0 sm:self-center ml-12 sm:ml-0">
+                    <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${severityColors[result.severity]}`}>
+                      {result.severity} Risk
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
