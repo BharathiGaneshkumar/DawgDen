@@ -89,16 +89,16 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Profile Settings</h1>
-        <p className="mt-1 text-gray-400">Update your public profile information.</p>
+        <h1 className="text-3xl font-bold text-foreground">Profile Settings</h1>
+        <p className="mt-1 text-foreground/70">Update your public profile information.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Edit Form */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-5">
+        <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-5 shadow-sm">
           <div className="flex items-center gap-2 mb-1">
-            <User className="h-4 w-4 text-violet-400" />
-            <h2 className="font-semibold text-white">Personal Info</h2>
+            <User className="h-4 w-4 text-primary" />
+            <h2 className="font-semibold text-foreground">Personal Info</h2>
           </div>
 
           {/* Avatar preview */}
@@ -107,16 +107,16 @@ export default function SettingsPage() {
               <img
                 src={avatarUrl}
                 alt="avatar"
-                className="h-16 w-16 rounded-xl object-cover ring-2 ring-white/10"
+                className="h-16 w-16 rounded-xl object-cover ring-2 ring-primary/20 shadow-sm"
                 onError={() => setAvatarUrl("")}
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-violet-600 text-xl font-bold text-white ring-2 ring-white/10">
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary text-xl font-bold text-white ring-2 ring-primary/20 shadow-sm">
                 {(name || user?.email || "?")[0].toUpperCase()}
               </div>
             )}
             <div className="flex-1">
-              <label className="block text-xs font-medium text-gray-400 mb-1">
+              <label className="block text-xs font-medium text-foreground/70 mb-1">
                 Avatar URL
               </label>
               <input
@@ -124,7 +124,7 @@ export default function SettingsPage() {
                 value={avatarUrl}
                 onChange={(e) => setAvatarUrl(e.target.value)}
                 placeholder="https://example.com/avatar.jpg"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+                className="w-full rounded-xl border border-primary/20 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
               />
             </div>
           </div>
@@ -137,13 +137,13 @@ export default function SettingsPage() {
           />
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Bio</label>
+            <label className="block text-xs font-medium text-foreground/70 mb-1">Bio</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
               placeholder="Tell the community about yourself…"
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none resize-none"
+              className="w-full rounded-xl border border-primary/20 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none resize-none"
             />
           </div>
 
@@ -169,7 +169,7 @@ export default function SettingsPage() {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-md shadow-primary/20 transition hover:bg-primary/90 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
           {saving ? "Saving…" : saved ? "Saved!" : "Save Changes"}
@@ -180,8 +180,8 @@ export default function SettingsPage() {
       {profile && profile.savedListings.length > 0 && (
         <div className="mt-10">
           <div className="mb-4 flex items-center gap-2">
-            <BookMarked className="h-4 w-4 text-pink-400" />
-            <h2 className="font-semibold text-white">
+            <BookMarked className="h-4 w-4 text-primary" />
+            <h2 className="font-semibold text-foreground">
               Saved Listings ({profile.savedListings.length})
             </h2>
           </div>
@@ -190,10 +190,10 @@ export default function SettingsPage() {
               <Link
                 key={sl.id}
                 href={`/listings/${sl.listingId}`}
-                className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:border-white/20 hover:bg-white/10"
+                className="flex items-center justify-between rounded-xl border border-primary/20 bg-background/50 px-4 py-3 text-sm transition hover:border-primary hover:bg-background shadow-sm"
               >
-                <span className="text-gray-300">Listing #{sl.listingId}</span>
-                <span className="text-xs text-gray-600">
+                <span className="text-foreground font-medium">Listing #{sl.listingId}</span>
+                <span className="text-xs text-foreground/60">
                   {new Date(sl.createdAt).toLocaleDateString()}
                 </span>
               </Link>
@@ -220,13 +220,13 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-400 mb-1">{label}</label>
+      <label className="block text-xs font-medium text-foreground/70 mb-1">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-600 focus:border-violet-500 focus:outline-none"
+        className="w-full rounded-xl border border-primary/20 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
       />
     </div>
   );

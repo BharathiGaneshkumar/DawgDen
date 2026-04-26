@@ -69,7 +69,7 @@ export default async function ProfilePage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 min-h-screen">
       {/* Profile Header */}
-      <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-6">
+      <div className="mb-8 rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 shadow-sm">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           {/* Avatar */}
           <div className="relative shrink-0">
@@ -77,10 +77,10 @@ export default async function ProfilePage({
               <img
                 src={user.avatarUrl}
                 alt={user.name ?? "avatar"}
-                className="h-20 w-20 rounded-2xl object-cover ring-2 ring-white/10"
+                className="h-20 w-20 rounded-2xl object-cover ring-2 ring-primary/20 shadow-sm"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-3xl font-bold text-white ring-2 ring-white/10">
+              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary text-3xl font-bold text-white ring-2 ring-primary/20 shadow-sm">
                 {(user.name ?? user.email ?? "?")[0].toUpperCase()}
               </div>
             )}
@@ -89,7 +89,7 @@ export default async function ProfilePage({
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-foreground">
                 {user.name ?? user.email}
               </h1>
               {isStudent && user.isVerified && (
@@ -106,7 +106,7 @@ export default async function ProfilePage({
             </div>
 
             {isStudent && (
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-foreground/70">
                 {user.program && <span>{user.program}</span>}
                 {user.program && user.gradYear && <span> · </span>}
                 {user.gradYear && <span>Class of {user.gradYear}</span>}
@@ -114,10 +114,10 @@ export default async function ProfilePage({
             )}
 
             {user.bio && (
-              <p className="mt-2 max-w-xl text-sm text-gray-300">{user.bio}</p>
+              <p className="mt-2 max-w-xl text-sm text-foreground/80">{user.bio}</p>
             )}
 
-            <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500">
+            <div className="mt-3 flex items-center gap-1.5 text-xs text-foreground/60">
               <Calendar className="h-3.5 w-3.5" />
               Joined {joinedDate}
             </div>
@@ -125,27 +125,27 @@ export default async function ProfilePage({
 
           {/* Karma (students) or Trust Score (landlords) */}
           {isStudent ? (
-            <div className="flex flex-col items-center rounded-xl border border-violet-500/20 bg-violet-500/10 px-6 py-4 text-center">
-              <Zap className="mb-1 h-5 w-5 text-yellow-400" />
-              <p className="text-2xl font-bold text-white">{karma}</p>
-              <p className="text-xs text-gray-400">Karma</p>
+            <div className="flex flex-col items-center rounded-xl border border-primary/20 bg-primary/5 px-6 py-4 text-center">
+              <Zap className="mb-1 h-5 w-5 text-yellow-500" />
+              <p className="text-2xl font-bold text-foreground">{karma}</p>
+              <p className="text-xs text-foreground/70">Karma</p>
             </div>
           ) : (
             trustScore !== null && (
-              <div className="flex flex-col items-center rounded-xl border border-blue-500/20 bg-blue-500/10 px-6 py-4 text-center">
-                <Star className="mb-1 h-5 w-5 fill-yellow-400 text-yellow-400" />
+              <div className="flex flex-col items-center rounded-xl border border-blue-500/20 bg-blue-500/5 px-6 py-4 text-center">
+                <Star className="mb-1 h-5 w-5 fill-yellow-400 text-yellow-500" />
                 <p
                   className={`text-2xl font-bold ${
                     trustScore >= 7
-                      ? "text-emerald-400"
+                      ? "text-emerald-500"
                       : trustScore >= 5
-                      ? "text-yellow-400"
-                      : "text-red-400"
+                      ? "text-yellow-500"
+                      : "text-red-500"
                   }`}
                 >
                   {trustScore.toFixed(1)}
                 </p>
-                <p className="text-xs text-gray-400">Trust Score</p>
+                <p className="text-xs text-foreground/70">Trust Score</p>
               </div>
             )
           )}
@@ -175,10 +175,10 @@ export default async function ProfilePage({
       {/* Landlord: AI Summary */}
       {!isStudent && aiSummary && (
         <div className="mb-8 rounded-2xl border border-blue-500/20 bg-blue-500/5 p-5">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-400">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-500">
             ✨ AI Pattern Summary
           </p>
-          <p className="text-sm leading-relaxed text-gray-300">{aiSummary}</p>
+          <p className="text-sm leading-relaxed text-foreground/80">{aiSummary}</p>
         </div>
       )}
 
@@ -220,18 +220,18 @@ export default async function ProfilePage({
           {/* Landlord Active Listings */}
           {user.listings.length > 0 && (
             <section className="mb-8">
-              <h2 className="mb-4 text-lg font-semibold text-white">Active Listings</h2>
+              <h2 className="mb-4 text-lg font-semibold text-foreground">Active Listings</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 {user.listings.map((l) => (
                   <Link
                     key={l.id}
                     href={`/listings/${l.id}`}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-0.5 hover:border-white/20"
+                    className="rounded-2xl border border-primary/20 bg-background/50 p-5 transition hover:-translate-y-0.5 hover:border-primary shadow-sm"
                   >
-                    <h3 className="font-semibold text-white">{l.title}</h3>
-                    <p className="mt-1 text-sm text-gray-400">{l.address}</p>
-                    <p className="mt-2 text-xl font-bold text-violet-400">
-                      ${l.rent.toLocaleString()}<span className="text-sm font-normal text-gray-500">/mo</span>
+                    <h3 className="font-semibold text-foreground">{l.title}</h3>
+                    <p className="mt-1 text-sm text-foreground/70">{l.address}</p>
+                    <p className="mt-2 text-xl font-bold text-primary">
+                      ${l.rent.toLocaleString()}<span className="text-sm font-normal text-foreground/60">/mo</span>
                     </p>
                   </Link>
                 ))}
@@ -241,7 +241,7 @@ export default async function ProfilePage({
 
           {/* Landlord Verified Reviews */}
           <section>
-            <h2 className="mb-4 text-lg font-semibold text-white">Verified Reviews</h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">Verified Reviews</h2>
             <LandlordReviewsList
               reviews={user.reviews.map((r) => ({
                 id: r.id,
@@ -269,12 +269,12 @@ function StatCard({
   value: number | string;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-      <div className="mx-auto mb-1 flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
+    <div className="rounded-xl border border-primary/20 bg-background/50 backdrop-blur-sm p-4 text-center shadow-sm">
+      <div className="mx-auto mb-1 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
         {icon}
       </div>
-      <p className="text-xl font-bold text-white">{value}</p>
-      <p className="text-xs text-gray-500">{label}</p>
+      <p className="text-xl font-bold text-foreground">{value}</p>
+      <p className="text-xs text-foreground/60">{label}</p>
     </div>
   );
 }

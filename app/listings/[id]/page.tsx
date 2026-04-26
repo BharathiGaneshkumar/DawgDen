@@ -119,16 +119,16 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         </Link>
 
         {/* Photo Gallery */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-violet-900/40 to-slate-900">
+        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-violet-200/40 to-pink-100/40 shadow-sm">
           {photos.length > 0 ? (
             <>
               <img src={photos[imgIdx]} alt="listing" className="h-96 w-full object-cover" />
               {photos.length > 1 && (
                 <>
-                  <button onClick={() => setImgIdx(i => (i - 1 + photos.length) % photos.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 hover:bg-black/80 transition"><ChevronLeft size={20} /></button>
-                  <button onClick={() => setImgIdx(i => (i + 1) % photos.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 hover:bg-black/80 transition"><ChevronRight size={20} /></button>
+                  <button onClick={() => setImgIdx(i => (i - 1 + photos.length) % photos.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-primary/20 p-2 hover:bg-primary/40 transition"><ChevronLeft size={20} className="text-white" /></button>
+                  <button onClick={() => setImgIdx(i => (i + 1) % photos.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-primary/20 p-2 hover:bg-primary/40 transition"><ChevronRight size={20} className="text-white" /></button>
                   <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                    {photos.map((_, i) => <button key={i} onClick={() => setImgIdx(i)} className={`h-1.5 rounded-full transition-all ${i === imgIdx ? "w-6 bg-white" : "w-1.5 bg-white/40"}`} />)}
+                    {photos.map((_, i) => <button key={i} onClick={() => setImgIdx(i)} className={`h-1.5 rounded-full transition-all ${i === imgIdx ? "w-6 bg-white" : "w-1.5 bg-white/60"}`} />)}
                   </div>
                 </>
               )}
@@ -136,67 +136,67 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           ) : (
             <div className="flex h-72 items-center justify-center flex-col gap-2">
               <div className="text-7xl">🏠</div>
-              <p className="text-gray-500 text-sm">No photos yet</p>
+              <p className="text-foreground/50 text-sm">No photos yet</p>
             </div>
           )}
         </div>
 
         {/* Header */}
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 space-y-4">
+        <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-4 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-white">{listing.title}</h1>
-              <p className="mt-1 text-4xl font-extrabold text-violet-400">${listing.rent.toLocaleString()}<span className="text-base font-normal text-gray-400">/mo</span></p>
-              <p className="mt-1 text-sm text-gray-400">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
+              <h1 className="text-3xl font-bold text-foreground">{listing.title}</h1>
+              <p className="mt-1 text-4xl font-extrabold text-primary">${listing.rent.toLocaleString()}<span className="text-base font-normal text-foreground/60">/mo</span></p>
+              <p className="mt-1 text-sm text-foreground/70">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
             </div>
             <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${saved ? "border-pink-500 bg-pink-500/20 text-pink-300" : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"}`}>
+              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${saved ? "border-pink-500 bg-pink-500/20 text-pink-500" : "border-primary/20 bg-background text-foreground/70 hover:border-primary/40"}`}>
                 <Heart size={15} className={saved ? "fill-pink-400 text-pink-400" : ""} />{saved ? "Saved" : "Save"}
               </button>
-              <button className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20">
+              <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">
                 <Phone size={14} /> Contact Landlord
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-gray-400"><MapPin size={13} className="text-violet-400" />{listing.address}</div>
+          <div className="flex items-center gap-1.5 text-sm text-foreground/70"><MapPin size={13} className="text-primary" />{listing.address}</div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-400">Posted by</span>
-            <span className="font-medium text-white">@{listing.postedBy.username}</span>
+            <span className="text-foreground/70">Posted by</span>
+            <span className="font-medium text-foreground">@{listing.postedBy.username}</span>
             {listing.postedBy.isVerified && <VerifiedBadge />}
           </div>
         </div>
 
         {/* Details Grid */}
         <div className="grid gap-5 sm:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-            <h2 className="mb-3 font-semibold text-white">Amenities</h2>
+          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 shadow-sm">
+            <h2 className="mb-3 font-semibold text-foreground">Amenities</h2>
             <div className="flex flex-wrap gap-2">
               {amenities.map(({ label, icon: Icon, on }) => (
-                <span key={label} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/5 bg-white/3 text-gray-600 line-through"}`}>
+                <span key={label} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary/40 bg-primary/10 text-primary" : "border-primary/10 bg-background/50 text-foreground/40 line-through"}`}>
                   <Icon size={11} />{label}
                 </span>
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-            <h2 className="mb-3 font-semibold text-white">Utilities Included</h2>
+          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 shadow-sm">
+            <h2 className="mb-3 font-semibold text-foreground">Utilities Included</h2>
             <div className="space-y-2">
               {utilityBadges.map(({ label, icon: Icon, on }) => (
                 <div key={label} className="flex items-center gap-2 text-sm">
-                  <Icon size={13} className={on ? "text-emerald-400" : "text-gray-600"} />
-                  <span className={on ? "text-gray-200" : "text-gray-600 line-through"}>{label}</span>
-                  {on && <span className="ml-auto text-xs text-emerald-400 font-medium">Included</span>}
+                  <Icon size={13} className={on ? "text-emerald-500" : "text-foreground/40"} />
+                  <span className={on ? "text-foreground" : "text-foreground/40 line-through"}>{label}</span>
+                  {on && <span className="ml-auto text-xs text-emerald-500 font-medium">Included</span>}
                 </div>
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5 sm:col-span-2">
-            <h2 className="mb-3 font-semibold text-white">Lease Details</h2>
+          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 sm:col-span-2 shadow-sm">
+            <h2 className="mb-3 font-semibold text-foreground">Lease Details</h2>
             <div className="grid grid-cols-3 gap-3 text-center text-sm">
               {[{ label: "Lease", value: listing.leaseLength }, { label: "Deposit", value: `$${listing.securityDeposit.toLocaleString()}` }, { label: "Available", value: new Date(listing.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }].map(({ label, value }) => (
-                <div key={label} className="rounded-xl bg-white/5 p-3">
-                  <p className="text-xs text-gray-500 mb-1">{label}</p>
-                  <p className="font-semibold text-white">{value}</p>
+                <div key={label} className="rounded-xl bg-background/50 border border-primary/10 p-3">
+                  <p className="text-xs text-foreground/60 mb-1">{label}</p>
+                  <p className="font-semibold text-foreground">{value}</p>
                 </div>
               ))}
             </div>
@@ -210,41 +210,41 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         <UtilitiesSection utilityCosts={listing.utilityCosts} included={listing.utilities} isps={listing.isps} />
 
         {/* Roommate Split Calculator */}
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-white">🏠 Roommate Cost Split</h2>
-          <p className="text-xs text-gray-500">Total monthly: rent ${listing.rent} + est. utilities ~${listing.utilityCosts.total} = <span className="text-white font-medium">${listing.rent + listing.utilityCosts.total}</span></p>
+        <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-4 shadow-sm">
+          <h2 className="text-lg font-semibold text-foreground">🏠 Roommate Cost Split</h2>
+          <p className="text-xs text-foreground/60">Total monthly: rent ${listing.rent} + est. utilities ~${listing.utilityCosts.total} = <span className="text-foreground font-medium">${listing.rent + listing.utilityCosts.total}</span></p>
           <div className="flex gap-3 items-center flex-wrap">
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
-              <Users size={15} className="text-violet-400" />
+            <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-background px-4 py-2.5">
+              <Users size={15} className="text-primary" />
               <input type="number" min={1} max={10} value={numPeople} onChange={e => setNumPeople(e.target.value)}
-                className="w-16 bg-transparent text-white text-sm font-medium focus:outline-none"
+                className="w-16 bg-transparent text-foreground text-sm font-medium focus:outline-none"
                 placeholder="People" />
-              <span className="text-xs text-gray-500">people sharing</span>
+              <span className="text-xs text-foreground/60">people sharing</span>
             </div>
             <button onClick={handleCalc} disabled={calcLoading}
-              className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 transition">
+              className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50 transition shadow-md shadow-primary/20">
               {calcLoading ? "Calculating…" : "Calculate Split"}
             </button>
           </div>
           {calcResult && (
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-3 text-center text-sm">
-                <div className="rounded-xl bg-white/5 p-3">
-                  <p className="text-[11px] text-gray-500 mb-1">Rent / person</p>
-                  <p className="text-xl font-bold text-violet-400">${calcResult.perPersonRent}<span className="text-xs text-gray-500">/mo</span></p>
+                <div className="rounded-xl bg-background/50 border border-primary/10 p-3">
+                  <p className="text-[11px] text-foreground/60 mb-1">Rent / person</p>
+                  <p className="text-xl font-bold text-primary">${calcResult.perPersonRent}<span className="text-xs text-foreground/50">/mo</span></p>
                 </div>
-                <div className="rounded-xl bg-white/5 p-3">
-                  <p className="text-[11px] text-gray-500 mb-1">Utilities / person</p>
-                  <p className="text-xl font-bold text-blue-400">${calcResult.perPersonUtilities}<span className="text-xs text-gray-500">/mo</span></p>
+                <div className="rounded-xl bg-background/50 border border-primary/10 p-3">
+                  <p className="text-[11px] text-foreground/60 mb-1">Utilities / person</p>
+                  <p className="text-xl font-bold text-blue-500">${calcResult.perPersonUtilities}<span className="text-xs text-foreground/50">/mo</span></p>
                 </div>
-                <div className="rounded-xl bg-violet-500/10 border border-violet-500/30 p-3">
-                  <p className="text-[11px] text-violet-300 mb-1">Total / person</p>
-                  <p className="text-xl font-bold text-white">${calcResult.perPerson}<span className="text-xs text-gray-400">/mo</span></p>
+                <div className="rounded-xl bg-primary/10 border border-primary/30 p-3">
+                  <p className="text-[11px] text-primary mb-1">Total / person</p>
+                  <p className="text-xl font-bold text-foreground">${calcResult.perPerson}<span className="text-xs text-foreground/60">/mo</span></p>
                 </div>
               </div>
-              <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 px-4 py-3 text-sm">
-                <p className="text-xs text-violet-400 font-medium mb-1">✨ AI Tip</p>
-                <p className="text-gray-300">{calcResult.tip}</p>
+              <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+                <p className="text-xs text-primary font-medium mb-1">✨ AI Tip</p>
+                <p className="text-foreground/80">{calcResult.tip}</p>
               </div>
             </div>
           )}
