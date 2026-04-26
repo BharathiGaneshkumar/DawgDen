@@ -112,7 +112,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen relative z-10 text-foreground">
       <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
         <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
           <ChevronLeft size={16} /> Back to Listings
