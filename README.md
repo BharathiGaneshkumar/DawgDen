@@ -78,9 +78,6 @@ Model: `gemma-3-27b-it` via `@google/generative-ai`
 ### ElevenLabs
 Conversational voice assistant via `@elevenlabs/react`. Students interact with the platform by voice — asking about listings, getting lease clause explanations, or navigating features without touching a menu.
 
-### Solana
-The DB schema stores a `solanaHash` field on every review, designed for Solana devnet integration via `@solana/web3.js`. The architecture is in place — the prize track opportunity is the live implementation of hashing each review onto chain at submission time.
-
 ### Auth0
 Full authentication via `@auth0/nextjs-auth0` v4 with two distinct roles: `STUDENT` and `LANDLORD`. The `beforeSessionSaved` hook upserts users to Postgres on every login and enriches the session with `role`, `isVerified`, and the internal DB user ID. Protected routes (`/listings/new`, `/community/new`, `/marketplace/new`, `/lease`, `/profile/settings`) require an active Auth0 session.
 
