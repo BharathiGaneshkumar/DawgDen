@@ -94,6 +94,7 @@ export default function LeaseCheckerPage() {
             {loading ? "Analyzing Document..." : "Analyze My Lease"}
           </button>
         </div>
+      </div>
 
       {/* Error Message */}
       {error && (

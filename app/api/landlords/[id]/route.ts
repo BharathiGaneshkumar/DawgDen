@@ -8,13 +8,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     
     // Fetch landlord user
     const landlord = await prisma.user.findUnique({
-      where: { id, role: "LANDLORD" },
+      where: { id },
       include: {
         listings: true,
       },
     });
 
-    if (!landlord) return NextResponse.json({ error: "Landlord not found" }, { status: 404 });
+    if (!landlord || landlord.role !== "LANDLORD") return NextResponse.json({ error: "Landlord not found" }, { status: 404 });
 
     // Fetch reviews by matching landlordName or something, since we don't have a direct relation.
     // For a robust system, Review should have a `landlordId` instead of `landlordName`, 

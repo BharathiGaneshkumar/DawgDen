@@ -35,6 +35,7 @@ model User {
   postVotes        PostVote[]
   marketItems      MarketplaceItem[]
   savedListings    SavedListing[]
+  reviewComments   ReviewComment[]
 }
 
 model Listing {
@@ -82,6 +83,7 @@ model ReviewComment {
   reviewId  String
   review    Review   @relation(fields: [reviewId], references: [id])
   userId    String
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
 

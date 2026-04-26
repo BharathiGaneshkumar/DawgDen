@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import pdf from "pdf-parse";
 
 // Allow long execution times since Gemini might take a few seconds
 export const maxDuration = 60; 
@@ -30,7 +29,8 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Extract text from the PDF
-    const pdfData = await pdf(buffer);
+    const pdfParse = (await import("pdf-parse")) as any;
+    const pdfData = await (pdfParse.default ?? pdfParse)(buffer);
     const text = pdfData.text;
 
     if (!text || text.trim().length === 0) {

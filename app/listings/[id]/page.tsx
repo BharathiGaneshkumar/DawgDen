@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   MapPin, Wifi, Car, Wind, PawPrint, Sofa, WashingMachine,
-  Star, ChevronLeft, Heart, ExternalLink, Users, Loader2, Send,
+  Star, ChevronLeft, Heart, ExternalLink, Users, Loader2,
+  Dumbbell, BatteryCharging, Mail,
 } from "lucide-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
@@ -26,7 +27,13 @@ function VerifiedBadge() {
 }
 
 const AMENITY_ICONS: Record<string, any> = {
-  wifi: Wifi, parking: Car, laundry: WashingMachine, ac: Wind, petFriendly: PawPrint, furnished: Sofa,
+  wifi: Wifi, parking: Car, laundry: WashingMachine, ac: Wind,
+  petFriendly: PawPrint, furnished: Sofa, gym: Dumbbell, evCharging: BatteryCharging,
+};
+
+const AMENITY_LABELS: Record<string, string> = {
+  wifi: "WiFi", parking: "Parking", laundry: "In-Unit Laundry", ac: "AC",
+  petFriendly: "Pet Friendly", furnished: "Furnished", gym: "Gym", evCharging: "EV Charging",
 };
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -43,12 +50,10 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
 
-  // Calculator
   const [numPeople, setNumPeople] = useState("1");
   const [calcResult, setCalcResult] = useState<any>(null);
   const [calcLoading, setCalcLoading] = useState(false);
 
-  // Review form
   const [showForm, setShowForm] = useState(false);
   const [newRating, setNewRating] = useState(5);
   const [newMaintenance, setNewMaintenance] = useState(3);
@@ -57,7 +62,6 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError] = useState("");
 
-  // Review comments
   const [commentInputs, setCommentInputs] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -137,16 +141,20 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
 
   if (loading) return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        <p className="text-primary/60">Loading listing…</p>
+      <Loader2 className="animate-spin text-violet-500" size={32} />
+    </div>
+  );
+  if (!listing || listing.error) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="text-center">
+        <p className="text-gray-400 mb-4">Listing not found.</p>
+        <Link href="/listings" className="text-sm text-violet-400 hover:underline">← Back to Listings</Link>
       </div>
     </div>
   );
-  if (!listing) return <div className="flex min-h-screen items-center justify-center"><p className="text-primary/60">Listing not found.</p></div>;
 
   const amenityList = Object.keys(AMENITY_ICONS).map((key) => ({
-    label: key === "petFriendly" ? "Pet Friendly" : key.charAt(0).toUpperCase() + key.slice(1),
+    label: AMENITY_LABELS[key] || key,
     icon: AMENITY_ICONS[key],
     on: Array.isArray(listing.amenities) && listing.amenities.includes(key),
   }));
@@ -155,220 +163,326 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
     ? reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length
     : 0;
 
-  return (
-    <div className="min-h-screen relative z-10 text-primary">
-      <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
-        <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-primary/60 hover:text-primary transition-colors">
-          <ChevronLeft size={16} /> Back to Listings
-        </Link>
+  const encodedAddress = encodeURIComponent(listing.address);
 
-        {/* Photo Gallery */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-violet-200/40 to-pink-100/40 shadow-sm">
-          {photos.length > 0 ? (
-            <>
-              <img src={photos[imgIdx]} alt="listing" className="h-96 w-full object-cover" />
-              {photos.length > 1 && (
-                <>
-                  <button onClick={() => setImgIdx(i => (i - 1 + photos.length) % photos.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-primary/20 p-2 hover:bg-primary/40 transition"><ChevronLeft size={20} className="text-white" /></button>
-                  <button onClick={() => setImgIdx(i => (i + 1) % photos.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-primary/20 p-2 hover:bg-primary/40 transition"><ChevronRight size={20} className="text-white" /></button>
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                    {photos.map((_, i) => <button key={i} onClick={() => setImgIdx(i)} className={`h-1.5 rounded-full transition-all ${i === imgIdx ? "w-6 bg-white" : "w-1.5 bg-white/60"}`} />)}
-                  </div>
-                </>
-              )}
-            </>
-          ) : (
-            <div className="flex h-72 items-center justify-center flex-col gap-2">
-              <div className="text-7xl">🏠</div>
-              <p className="text-primary/50 text-sm">No photos yet</p>
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-8 min-h-screen space-y-8">
+      <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+        <ChevronLeft size={16} /> Back to Listings
+      </Link>
+
+      {/* Photo */}
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-gray-900 h-80 flex items-center justify-center">
+        {listing.imageUrl ? (
+          <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover" />
+        ) : (
+          <div className="flex flex-col items-center gap-2 text-gray-600">
+            <div className="text-7xl">🏠</div>
+            <p className="text-sm">No photos yet</p>
+          </div>
+        )}
+      </div>
+
+      {/* Header */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-white">{listing.title}</h1>
+            <p className="mt-1 text-4xl font-extrabold text-white">
+              ${listing.rent.toLocaleString()}<span className="text-base font-normal text-gray-400">/mo</span>
+            </p>
+            <p className="mt-1 text-sm text-gray-400">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            <button
+              onClick={() => setSaved((s) => !s)}
+              className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                saved ? "border-pink-500 bg-pink-500/20 text-pink-400" : "border-white/10 bg-white/5 text-gray-400 hover:border-white/30"
+              }`}
+            >
+              <Heart size={15} className={saved ? "fill-pink-400 text-pink-400" : ""} />
+              {saved ? "Saved" : "Save"}
+            </button>
+            {listing.user?.email && (
+              <a
+                href={`mailto:${listing.user.email}`}
+                className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white hover:bg-violet-500 transition shadow-lg shadow-violet-500/20"
+              >
+                <Mail size={14} /> Contact Landlord
+              </a>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 text-sm text-gray-400">
+          <MapPin size={13} className="text-violet-400" />
+          {listing.address}
+        </div>
+        {listing.user && (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-gray-500">Posted by</span>
+            <span className="font-medium text-gray-200">{listing.user.name || listing.user.email}</span>
+            {listing.user.isVerified && <VerifiedBadge />}
+          </div>
+        )}
+      </div>
+
+      {/* Details Grid */}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {/* Amenities */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
+          <h2 className="mb-3 font-semibold text-white">Amenities</h2>
+          <div className="flex flex-wrap gap-2">
+            {amenityList.map(({ label, icon: Icon, on }) => (
+              <span
+                key={label}
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${
+                  on
+                    ? "border-violet-500/40 bg-violet-500/10 text-violet-300"
+                    : "border-white/10 bg-white/3 text-gray-500 line-through"
+                }`}
+              >
+                <Icon size={11} />{label}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Lease Details */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
+          <h2 className="mb-3 font-semibold text-white">Lease Details</h2>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            {[
+              { label: "Lease", value: `${listing.leaseLength} months` },
+              { label: "Deposit", value: listing.deposit ? `$${listing.deposit.toLocaleString()}` : "None" },
+              {
+                label: "Available",
+                value: listing.availableFrom
+                  ? new Date(listing.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                  : "Now",
+              },
+              {
+                label: "Utilities",
+                value: listing.utilitiesIncluded ? "Included" : "Not included",
+              },
+            ].map(({ label, value }) => (
+              <div key={label} className="rounded-xl bg-white/5 border border-white/10 p-3">
+                <p className="text-xs text-gray-500 mb-1">{label}</p>
+                <p className="font-semibold text-white text-sm">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Description */}
+      {listing.description && (
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h2 className="font-semibold text-white mb-2">About this place</h2>
+          <p className="text-sm text-gray-300 leading-relaxed">{listing.description}</p>
+        </div>
+      )}
+
+      {/* Map */}
+      <div className="rounded-2xl border border-white/10 overflow-hidden">
+        <div className="px-5 py-3 bg-white/5 border-b border-white/10 flex items-center justify-between">
+          <h2 className="font-semibold text-white text-sm">📍 Location</h2>
+          <a
+            href={`https://www.google.com/maps/dir/University+of+Washington+Bothell,+Bothell+WA/${encodedAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition"
+          >
+            Directions from UWB <ExternalLink size={11} />
+          </a>
+        </div>
+        <iframe
+          title="Location map"
+          width="100%"
+          height="300"
+          loading="lazy"
+          src={`https://maps.google.com/maps?q=${encodedAddress}&output=embed`}
+          className="border-0"
+        />
+      </div>
+
+      {/* Roommate Calculator */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4">
+        <h2 className="text-lg font-semibold text-white">🏠 Roommate Cost Split</h2>
+        <div className="flex gap-3 items-center flex-wrap">
+          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
+            <Users size={15} className="text-gray-400" />
+            <input
+              type="number"
+              min={1}
+              max={10}
+              value={numPeople}
+              onChange={(e) => setNumPeople(e.target.value)}
+              className="w-16 bg-transparent text-white text-sm font-medium focus:outline-none"
+              placeholder="People"
+            />
+            <span className="text-xs text-gray-500">people sharing</span>
+          </div>
+          <button
+            onClick={handleCalc}
+            disabled={calcLoading}
+            className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50 transition shadow-md shadow-violet-500/20"
+          >
+            {calcLoading ? <Loader2 size={14} className="animate-spin inline" /> : "Calculate Split"}
+          </button>
+        </div>
+        {calcResult && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-sm">
+            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+              <p className="text-xs text-gray-500 mb-1">Rent / person</p>
+              <p className="text-xl font-bold text-white">${calcResult.perPersonRent}<span className="text-xs text-gray-500">/mo</span></p>
             </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+              <p className="text-xs text-gray-500 mb-1">Total / person</p>
+              <p className="text-xl font-bold text-violet-300">${calcResult.perPerson}<span className="text-xs text-gray-500">/mo</span></p>
+            </div>
+            {calcResult.tip && (
+              <div className="rounded-xl bg-violet-500/5 border border-violet-500/20 p-3 sm:col-span-1 col-span-2 text-left">
+                <p className="text-[10px] text-violet-400 font-medium mb-1">AI Tip</p>
+                <p className="text-xs text-gray-300">{calcResult.tip}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Reviews */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-white">⭐ Reviews</h2>
+            {reviews.length > 0 && (
+              <div className="flex items-center gap-2 mt-1">
+                <Stars n={avgRating} />
+                <span className="text-sm text-gray-400">{avgRating.toFixed(1)} · {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+              </div>
+            )}
+          </div>
+          {canReview && (
+            <button
+              onClick={() => setShowForm((f) => !f)}
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 transition"
+            >
+              {showForm ? "Cancel" : "Write a Review"}
+            </button>
+          )}
+          {user && !canReview && (
+            <span className="text-xs text-gray-500">Verified students only</span>
+          )}
+          {!user && (
+            <Link href="/auth/login" className="text-sm text-violet-400 hover:underline">Sign in to review</Link>
           )}
         </div>
 
-        {/* Header */}
-        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
-          <div className="flex flex-wrap items-start justify-between gap-4">
+        {showForm && (
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
             <div>
-              <h1 className="text-3xl font-bold text-primary">{listing.title}</h1>
-              <p className="mt-1 text-4xl font-extrabold text-primary">${listing.rent.toLocaleString()}<span className="text-base font-normal text-primary/60">/mo</span></p>
-              <p className="mt-1 text-sm text-primary/70">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
+              <p className="text-xs text-gray-400 mb-1.5">Overall rating</p>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <button key={i} onClick={() => setNewRating(i)}>
+                    <Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"} />
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${saved ? "border-pink-500 bg-pink-500/20 text-pink-500" : "border-primary/10 bg-white/80 text-primary/70 hover:border-primary/40"}`}>
-                <Heart size={15} className={saved ? "fill-pink-400 text-pink-400" : ""} />{saved ? "Saved" : "Save"}
-              </button>
-              <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">
-                <Phone size={14} /> Contact Landlord
-              </button>
-              {listing.user?.email && (
-                <a
-                  href={`mailto:${listing.user.email}`}
-                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20"
-                >
-                  Contact Landlord
-                </a>
-              )}
+            <div>
+              <p className="text-xs text-gray-400 mb-1.5">Maintenance rating</p>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <button key={i} onClick={() => setNewMaintenance(i)}>
+                    <Star size={18} className={i <= newMaintenance ? "text-blue-400 fill-blue-400" : "text-gray-600"} />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-1.5 text-sm text-primary/70"><MapPin size={13} className="text-primary" />{listing.address}</div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-primary/70">Posted by</span>
-            <span className="font-medium text-primary">@{listing.postedBy.username}</span>
-            {listing.postedBy.isVerified && <VerifiedBadge />}
-          </div>
-        </div>
-
-        {/* Details Grid */}
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 shadow-sm">
-            <h2 className="mb-3 font-semibold text-primary">Amenities</h2>
-            <div className="flex flex-wrap gap-2">
-              {amenities.map(({ label, icon: Icon, on }) => (
-                <span key={label} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary/40 bg-primary/10 text-primary" : "border-primary/10 bg-white/80 text-primary/40 line-through"}`}>
-                  <Icon size={11} />{label}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 shadow-sm">
-            <h2 className="mb-3 font-semibold text-primary">Utilities Included</h2>
-            <div className="space-y-2">
-              {utilityBadges.map(({ label, icon: Icon, on }) => (
-                <div key={label} className="flex items-center gap-2 text-sm">
-                  <Icon size={13} className={on ? "text-emerald-500" : "text-primary/40"} />
-                  <span className={on ? "text-primary" : "text-primary/40 line-through"}>{label}</span>
-                  {on && <span className="ml-auto text-xs text-emerald-500 font-medium">Included</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 sm:col-span-2 shadow-sm">
-            <h2 className="mb-3 font-semibold text-primary">Lease Details</h2>
-            <div className="grid grid-cols-3 gap-3 text-center text-sm">
-              {[{ label: "Lease", value: listing.leaseLength }, { label: "Deposit", value: `$${listing.securityDeposit.toLocaleString()}` }, { label: "Available", value: new Date(listing.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }].map(({ label, value }) => (
-                <div key={label} className="rounded-xl bg-white/80 border border-primary/10 p-3">
-                  <p className="text-xs text-primary/60 mb-1">{label}</p>
-                  <p className="font-semibold text-primary">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Commute Section */}
-        <CommuteSection commute={listing.commute} busRoutes={listing.busRoutes} address={listing.address} uwbAddress={listing.uwb.address} />
-
-        {/* Utilities + ISP Section */}
-        <UtilitiesSection utilityCosts={listing.utilityCosts} included={listing.utilities} isps={listing.isps} />
-
-        {/* Roommate Split Calculator */}
-        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-primary">🏠 Roommate Cost Split</h2>
-          <p className="text-xs text-primary/60">Total monthly: rent ${listing.rent} + est. utilities ~${listing.utilityCosts.total} = <span className="text-primary font-medium">${listing.rent + listing.utilityCosts.total}</span></p>
-          <div className="flex gap-3 items-center flex-wrap">
-            <div className="flex items-center gap-2 rounded-xl border border-primary/10 bg-white/80 px-4 py-2.5">
-              <Users size={15} className="text-primary" />
-              <input type="number" min={1} max={10} value={numPeople} onChange={e => setNumPeople(e.target.value)}
-                className="w-16 bg-transparent text-primary text-sm font-medium focus:outline-none"
-                placeholder="People" />
-              <span className="text-xs text-primary/60">people sharing</span>
-            </div>
-            <button onClick={handleCalc} disabled={calcLoading}
-              className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50 transition shadow-md shadow-primary/20">
-              {calcLoading ? "Calculating…" : "Calculate Split"}
+            <button
+              type="button"
+              onClick={() => setNewDepositReturned((v) => !v)}
+              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs transition ${
+                newDepositReturned ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-white/10 bg-white/5 text-gray-400"
+              }`}
+            >
+              {newDepositReturned ? "✓" : "✗"} Deposit returned
+            </button>
+            <textarea
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
+              placeholder="Share your experience with this landlord…"
+              rows={3}
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none resize-none"
+            />
+            {reviewError && <p className="text-xs text-red-400">{reviewError}</p>}
+            <button
+              onClick={submitReview}
+              disabled={!newText.trim() || reviewLoading}
+              className="flex items-center gap-1.5 rounded-xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-40 transition"
+            >
+              {reviewLoading ? <Loader2 size={14} className="animate-spin" /> : null}
+              Submit Review
             </button>
           </div>
-          {calcResult && (
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-3 text-center text-sm">
-                <div className="rounded-xl bg-white/80 border border-primary/10 p-3">
-                  <p className="text-[11px] text-primary/60 mb-1">Rent / person</p>
-                  <p className="text-xl font-bold text-primary">${calcResult.perPersonRent}<span className="text-xs text-primary/50">/mo</span></p>
-                </div>
-                <div className="rounded-xl bg-white/80 border border-primary/10 p-3">
-                  <p className="text-[11px] text-primary/60 mb-1">Utilities / person</p>
-                  <p className="text-xl font-bold text-blue-500">${calcResult.perPersonUtilities}<span className="text-xs text-primary/50">/mo</span></p>
-                </div>
-                <div className="rounded-xl bg-primary/10 border border-primary/20 p-3">
-                  <p className="text-[11px] text-primary mb-1">Total / person</p>
-                  <p className="text-xl font-bold text-primary">${calcResult.perPerson}<span className="text-xs text-primary/60">/mo</span></p>
-                </div>
-              </div>
-              <div className="rounded-xl border border-primary/10 bg-primary/5 px-4 py-3 text-sm">
-                <p className="text-xs text-primary font-medium mb-1">✨ AI Tip</p>
-                <p className="text-primary/80">{calcResult.tip}</p>
-              </div>
-            </div>
-          )}
-        </div>
+        )}
 
-        {/* Landlord Trust Score */}
-        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-primary">🏅 Landlord Trust Score</h2>
-          <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-pink-400 to-purple-500 text-xl font-bold text-white shadow-lg shadow-primary/20">{listing.landlordTrustScore.toFixed(1)}</div>
-            <div className="space-y-1"><Stars n={listing.landlordTrustScore} size={18} /><p className="text-xs text-primary/60">Based on verified student reviews</p></div>
-            <div className="ml-auto text-right">
-              <p className="text-2xl font-bold text-emerald-500">{listing.depositReturnRate}%</p>
-              <p className="text-xs text-primary/50">Deposit Return Rate</p>
-            </div>
-            <Link
-              href={`/landlords/${listing.userId}`}
-              className="ml-auto inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition"
-            >
-              View profile <ExternalLink size={13} />
-            </Link>
-          </div>
-          <p className="text-sm text-primary/70 rounded-xl bg-primary/5 border border-primary/10 px-4 py-3">AI pattern summary: This landlord has a history of timely responses and fair deposit returns. Minor issues reported around maintenance request delays.</p>
-          <Link href={`/landlords/${listing.landlordId}`} className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 font-medium transition">See Full Landlord Profile <ExternalLink size={13} /></Link>
-        </div>
-
-        {/* Reviews */}
-        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-primary">⭐ Reviews</h2>
-              {localReviews.length > 0 && <div className="flex items-center gap-2 mt-1"><Stars n={avgRating} /><span className="text-sm text-primary/60">{avgRating.toFixed(1)} · {localReviews.length} review{localReviews.length !== 1 ? "s" : ""}</span></div>}
-            </div>
-            <button onClick={() => setShowForm(f => !f)} className="rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20 transition">{showForm ? "Cancel" : "Write a Review"}</button>
-          </div>
-
-          {showForm && (
-            <div className="rounded-xl border border-primary/10 bg-primary/5 p-4 space-y-3">
-              <div className="flex items-center gap-1">{[1,2,3,4,5].map(i => <button key={i} onClick={() => setNewRating(i)}><Star size={22} className={i <= newRating ? "text-yellow-400 fill-yellow-400" : "text-primary/20"} /></button>)}</div>
-              <textarea value={newText} onChange={e => setNewText(e.target.value)} placeholder="Share your experience…" rows={3} className="w-full rounded-xl border border-primary/10 bg-white/80 px-4 py-2.5 text-sm text-primary placeholder:text-primary/40 focus:border-primary/40 focus:outline-none resize-none" />
-              <button onClick={submitReview} className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">Submit Review</button>
-            </div>
-          )}
-          {localReviews.length === 0 ? (
-            <p className="text-sm text-primary/50 text-center py-6">No reviews yet — be the first!</p>
-          ) : (
-            <div className="space-y-5">
-              {reviews.map((review: any) => (
-                <div key={review.id} className="space-y-2">
-                  <div className="rounded-xl border border-primary/10 bg-white/80 p-4 space-y-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-primary text-sm">@{review.username}</span>
-                      {review.isVerified && <VerifiedBadge />}
-                      <Stars n={review.rating} size={13} />
-                      <span className="ml-auto text-xs text-primary/50">{review.date}</span>
-                    </div>
-                    <p className="text-sm text-primary/70">{review.text}</p>
+        {reviews.length === 0 ? (
+          <p className="text-sm text-gray-500 text-center py-6">No reviews yet — be the first!</p>
+        ) : (
+          <div className="space-y-4">
+            {reviews.map((review: any) => (
+              <div key={review.id} className="space-y-2">
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium text-white text-sm">
+                      {review.user?.name || review.user?.email || "Anonymous"}
+                    </span>
+                    {review.user?.isVerified && <VerifiedBadge />}
+                    <Stars n={review.rating} size={13} />
+                    <span className="ml-auto text-xs text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  {review.comments.map((c, ci) => (
-                    <div key={ci} className="ml-6 rounded-lg border border-primary/10 bg-white/60 px-4 py-2.5 text-sm">
-                      <span className="font-medium text-primary">@{c.username}</span><span className="mx-2 text-primary/30">·</span><span className="text-primary/70">{c.text}</span><span className="ml-2 text-xs text-primary/40">{c.date}</span>
-                    </div>
-                  ))}
+                  <p className="text-sm text-gray-300">{review.reviewText}</p>
+                  <div className="flex gap-3 text-xs text-gray-500">
+                    <span>Maintenance: {review.maintenanceRating}/5</span>
+                    <span className={review.depositReturned ? "text-emerald-400" : "text-red-400"}>
+                      Deposit: {review.depositReturned ? "returned" : "not returned"}
+                    </span>
+                  </div>
+                </div>
+
+                {(review.comments || []).map((c: any, ci: number) => (
+                  <div key={ci} className="ml-6 rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm">
+                    <span className="font-medium text-gray-300">{c.user?.name || "Anonymous"}</span>
+                    <span className="mx-2 text-gray-600">·</span>
+                    <span className="text-gray-400">{c.content}</span>
+                  </div>
+                ))}
+
+                {user && (
                   <div className="ml-6 flex gap-2">
-                    <input value={commentInputs[review.id] ?? ""} onChange={e => setCommentInputs(p => ({ ...p, [review.id]: e.target.value }))} onKeyDown={e => e.key === "Enter" && submitComment(review.id)} placeholder="Add a comment…" className="flex-1 rounded-lg border border-primary/10 bg-white/80 px-3 py-1.5 text-xs text-primary placeholder:text-primary/40 focus:border-primary/40 focus:outline-none" />
-                    <button onClick={() => submitComment(review.id)} className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition">Post</button>
+                    <input
+                      value={commentInputs[review.id] ?? ""}
+                      onChange={(e) => setCommentInputs((p) => ({ ...p, [review.id]: e.target.value }))}
+                      onKeyDown={(e) => e.key === "Enter" && submitComment(review.id)}
+                      placeholder="Add a comment…"
+                      className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white placeholder:text-gray-500 focus:border-violet-500 focus:outline-none"
+                    />
+                    <button
+                      onClick={() => submitComment(review.id)}
+                      className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 transition"
+                    >
+                      Post
+                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
