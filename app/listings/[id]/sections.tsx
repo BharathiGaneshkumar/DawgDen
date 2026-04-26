@@ -19,9 +19,9 @@ export function CommuteSection({ commute, busRoutes, address, uwbAddress }: {
     { label: "Transit", icon: Bus, time: commute.transit.time, sub: commute.transit.route, dist: `${commute.transit.stops} stops`, color: "blue" },
   ];
   return (
-    <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-5 shadow-sm">
+    <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-5 shadow-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-lg font-semibold text-foreground">📍 Commute to UWB</h2>
+        <h2 className="text-lg font-semibold text-primary">📍 Commute to UWB</h2>
         <a href={mapsUrl} target="_blank" rel="noreferrer"
           className="flex items-center gap-1.5 rounded-lg border border-violet-500/30 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-300 hover:bg-violet-500/20 transition">
           <ExternalLink size={12} /> Open in Google Maps
@@ -29,7 +29,7 @@ export function CommuteSection({ commute, busRoutes, address, uwbAddress }: {
       </div>
 
       {/* Map iframe */}
-      <div className="overflow-hidden rounded-xl border border-primary/20 h-56 shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-primary/10 h-56 shadow-sm">
         <iframe title="location-map" width="100%" height="100%" loading="lazy"
           src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`}
           className="grayscale brightness-75" />
@@ -38,31 +38,31 @@ export function CommuteSection({ commute, busRoutes, address, uwbAddress }: {
       {/* Commute cards */}
       <div className="grid grid-cols-3 gap-3">
         {modes.map(({ label, icon: Icon, time, sub, dist, color }) => (
-          <div key={label} className={`rounded-xl border bg-background/50 p-3 text-center space-y-1 border-${color}-500/20 shadow-sm`}>
+          <div key={label} className={`rounded-xl border bg-white/80 p-3 text-center space-y-1 border-${color}-500/20 shadow-sm`}>
             <Icon size={18} className={`mx-auto text-${color}-400`} />
-            <p className="text-lg font-bold text-foreground">{time}</p>
-            <p className="text-xs text-foreground/70">{label}</p>
-            <p className="text-[10px] text-foreground/60">{sub}</p>
-            {dist && <p className="text-[10px] text-foreground/50">{dist}</p>}
+            <p className="text-lg font-bold text-primary">{time}</p>
+            <p className="text-xs text-primary/70">{label}</p>
+            <p className="text-[10px] text-primary/60">{sub}</p>
+            {dist && <p className="text-[10px] text-primary/50">{dist}</p>}
           </div>
         ))}
       </div>
 
       {/* Bus routes */}
       <div>
-        <h3 className="text-sm font-medium text-foreground/80 mb-3">🚌 Bus Routes (King County Metro)</h3>
+        <h3 className="text-sm font-medium text-primary/80 mb-3">🚌 Bus Routes (King County Metro)</h3>
         <div className="space-y-2">
           {busRoutes.map((r) => (
-            <div key={r.route} className="flex items-center gap-3 rounded-xl border border-primary/10 bg-background/50 px-4 py-3 text-sm shadow-sm">
+            <div key={r.route} className="flex items-center gap-3 rounded-xl border border-primary/10 bg-white/80 px-4 py-3 text-sm shadow-sm">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/20 text-yellow-600 font-bold text-sm shrink-0">{r.route}</span>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">{r.name}</p>
-                <p className="text-xs text-foreground/60">{r.frequency} · {r.firstBus} – {r.lastBus}</p>
+                <p className="font-medium text-primary truncate">{r.name}</p>
+                <p className="text-xs text-primary/60">{r.frequency} · {r.firstBus} – {r.lastBus}</p>
               </div>
             </div>
           ))}
         </div>
-        <p className="mt-2 text-[10px] text-foreground/50">Schedules based on King County Metro published timetables. Check metro.kingcounty.gov for real-time tracking.</p>
+        <p className="mt-2 text-[10px] text-primary/50">Schedules based on King County Metro published timetables. Check metro.kingcounty.gov for real-time tracking.</p>
       </div>
     </div>
   );
@@ -84,40 +84,40 @@ export function UtilitiesSection({ utilityCosts, included, isps }: {
     electricity: included.electricity, water: included.water, gas: included.gas,
   };
   return (
-    <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-foreground">💡 Estimated Utility Costs</h2>
+    <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-6 shadow-sm">
+      <h2 className="text-lg font-semibold text-primary">💡 Estimated Utility Costs</h2>
 
       {/* Utility breakdown */}
       <div className="space-y-2">
         {items.map(({ label, key, emoji }) => (
           <div key={key} className="flex items-center gap-3 text-sm">
             <span className="text-base w-5">{emoji}</span>
-            <span className="flex-1 text-foreground/80">{label}</span>
+            <span className="flex-1 text-primary/80">{label}</span>
             {includedKeys[key] ? (
               <span className="text-xs font-medium text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">Included</span>
             ) : (
-              <span className="font-semibold text-foreground">
+              <span className="font-semibold text-primary">
                 {utilityCosts[key] === 0 ? "N/A" : `~$${utilityCosts[key]}/mo`}
               </span>
             )}
           </div>
         ))}
-        <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
-          <span className="font-semibold text-foreground">Total Utilities</span>
+        <div className="mt-3 flex items-center justify-between border-t border-primary/10 pt-3">
+          <span className="font-semibold text-primary">Total Utilities</span>
           <span className="text-lg font-bold text-primary">~${utilityCosts.total}/mo</span>
         </div>
-        <p className="text-[11px] text-foreground/50">Estimates based on Puget Sound Energy & Seattle Public Utilities average rates for this area.</p>
+        <p className="text-[11px] text-primary/50">Estimates based on Puget Sound Energy & Seattle Public Utilities average rates for this area.</p>
       </div>
 
       {/* ISP section */}
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-3">📶 Available Internet Providers</h3>
+        <h3 className="text-sm font-semibold text-primary mb-3">📶 Available Internet Providers</h3>
         <div className="space-y-2">
           {isps.map((isp) => (
-            <div key={isp.name} className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${isp.available ? "border-primary/20 bg-background/50 shadow-sm" : "border-primary/10 bg-background/20 opacity-50"}`}>
+            <div key={isp.name} className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${isp.available ? "border-primary/10 bg-white/80 shadow-sm" : "border-primary/10 bg-white/40 opacity-50"}`}>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-foreground">{isp.name}</span>
+                  <span className="font-medium text-primary">{isp.name}</span>
                   {isp.recommended && isp.available && (
                     <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-500">Best Pick</span>
                   )}
@@ -125,15 +125,15 @@ export function UtilitiesSection({ utilityCosts, included, isps }: {
                     <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] text-red-500">Not Available</span>
                   )}
                 </div>
-                <p className="text-xs text-foreground/60">{isp.type} · {isp.speed}</p>
+                <p className="text-xs text-primary/60">{isp.type} · {isp.speed}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="font-bold text-foreground">${isp.price}<span className="text-xs font-normal text-foreground/60">/mo</span></p>
+                <p className="font-bold text-primary">${isp.price}<span className="text-xs font-normal text-primary/60">/mo</span></p>
                 <div className="flex items-center gap-0.5 justify-end mt-0.5">
                   {[1,2,3,4,5].map(i => (
-                    <span key={i} className={`text-[10px] ${i <= Math.round(isp.rating) ? "text-yellow-500" : "text-foreground/30"}`}>★</span>
+                    <span key={i} className={`text-[10px] ${i <= Math.round(isp.rating) ? "text-yellow-500" : "text-primary/30"}`}>★</span>
                   ))}
-                  <span className="text-[10px] text-foreground/50 ml-1">{isp.rating}</span>
+                  <span className="text-[10px] text-primary/50 ml-1">{isp.rating}</span>
                 </div>
               </div>
             </div>

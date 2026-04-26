@@ -112,14 +112,14 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   ];
 
   return (
-    <div className="min-h-screen relative z-10 text-foreground">
+    <div className="min-h-screen relative z-10 text-primary">
       <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
         <Link href="/listings" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
           <ChevronLeft size={16} /> Back to Listings
         </Link>
 
         {/* Photo Gallery */}
-        <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-violet-200/40 to-pink-100/40 shadow-sm">
+        <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-violet-200/40 to-pink-100/40 shadow-sm">
           {photos.length > 0 ? (
             <>
               <img src={photos[imgIdx]} alt="listing" className="h-96 w-full object-cover" />
@@ -136,21 +136,21 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           ) : (
             <div className="flex h-72 items-center justify-center flex-col gap-2">
               <div className="text-7xl">🏠</div>
-              <p className="text-foreground/50 text-sm">No photos yet</p>
+              <p className="text-primary/50 text-sm">No photos yet</p>
             </div>
           )}
         </div>
 
         {/* Header */}
-        <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-4 shadow-sm">
+        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">{listing.title}</h1>
-              <p className="mt-1 text-4xl font-extrabold text-primary">${listing.rent.toLocaleString()}<span className="text-base font-normal text-foreground/60">/mo</span></p>
-              <p className="mt-1 text-sm text-foreground/70">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
+              <h1 className="text-3xl font-bold text-primary">{listing.title}</h1>
+              <p className="mt-1 text-4xl font-extrabold text-primary">${listing.rent.toLocaleString()}<span className="text-base font-normal text-primary/60">/mo</span></p>
+              <p className="mt-1 text-sm text-primary/70">🛏 {listing.bedrooms} bed · 🚿 {listing.bathrooms} bath</p>
             </div>
             <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${saved ? "border-pink-500 bg-pink-500/20 text-pink-500" : "border-primary/20 bg-background text-foreground/70 hover:border-primary/40"}`}>
+              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition ${saved ? "border-pink-500 bg-pink-500/20 text-pink-500" : "border-primary/10 bg-white/80 text-primary/70 hover:border-primary/40"}`}>
                 <Heart size={15} className={saved ? "fill-pink-400 text-pink-400" : ""} />{saved ? "Saved" : "Save"}
               </button>
               <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">
@@ -158,45 +158,45 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-foreground/70"><MapPin size={13} className="text-primary" />{listing.address}</div>
+          <div className="flex items-center gap-1.5 text-sm text-primary/70"><MapPin size={13} className="text-primary" />{listing.address}</div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-foreground/70">Posted by</span>
-            <span className="font-medium text-foreground">@{listing.postedBy.username}</span>
+            <span className="text-primary/70">Posted by</span>
+            <span className="font-medium text-primary">@{listing.postedBy.username}</span>
             {listing.postedBy.isVerified && <VerifiedBadge />}
           </div>
         </div>
 
         {/* Details Grid */}
         <div className="grid gap-5 sm:grid-cols-2">
-          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 shadow-sm">
-            <h2 className="mb-3 font-semibold text-foreground">Amenities</h2>
+          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 shadow-sm">
+            <h2 className="mb-3 font-semibold text-primary">Amenities</h2>
             <div className="flex flex-wrap gap-2">
               {amenities.map(({ label, icon: Icon, on }) => (
-                <span key={label} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary/40 bg-primary/10 text-primary" : "border-primary/10 bg-background/50 text-foreground/40 line-through"}`}>
+                <span key={label} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary/40 bg-primary/10 text-primary" : "border-primary/10 bg-white/80 text-primary/40 line-through"}`}>
                   <Icon size={11} />{label}
                 </span>
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 shadow-sm">
-            <h2 className="mb-3 font-semibold text-foreground">Utilities Included</h2>
+          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 shadow-sm">
+            <h2 className="mb-3 font-semibold text-primary">Utilities Included</h2>
             <div className="space-y-2">
               {utilityBadges.map(({ label, icon: Icon, on }) => (
                 <div key={label} className="flex items-center gap-2 text-sm">
-                  <Icon size={13} className={on ? "text-emerald-500" : "text-foreground/40"} />
-                  <span className={on ? "text-foreground" : "text-foreground/40 line-through"}>{label}</span>
+                  <Icon size={13} className={on ? "text-emerald-500" : "text-primary/40"} />
+                  <span className={on ? "text-primary" : "text-primary/40 line-through"}>{label}</span>
                   {on && <span className="ml-auto text-xs text-emerald-500 font-medium">Included</span>}
                 </div>
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-5 sm:col-span-2 shadow-sm">
-            <h2 className="mb-3 font-semibold text-foreground">Lease Details</h2>
+          <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-5 sm:col-span-2 shadow-sm">
+            <h2 className="mb-3 font-semibold text-primary">Lease Details</h2>
             <div className="grid grid-cols-3 gap-3 text-center text-sm">
               {[{ label: "Lease", value: listing.leaseLength }, { label: "Deposit", value: `$${listing.securityDeposit.toLocaleString()}` }, { label: "Available", value: new Date(listing.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }].map(({ label, value }) => (
-                <div key={label} className="rounded-xl bg-background/50 border border-primary/10 p-3">
-                  <p className="text-xs text-foreground/60 mb-1">{label}</p>
-                  <p className="font-semibold text-foreground">{value}</p>
+                <div key={label} className="rounded-xl bg-white/80 border border-primary/10 p-3">
+                  <p className="text-xs text-primary/60 mb-1">{label}</p>
+                  <p className="font-semibold text-primary">{value}</p>
                 </div>
               ))}
             </div>
@@ -210,16 +210,16 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         <UtilitiesSection utilityCosts={listing.utilityCosts} included={listing.utilities} isps={listing.isps} />
 
         {/* Roommate Split Calculator */}
-        <div className="rounded-2xl border border-primary/20 bg-background/50 backdrop-blur-md p-6 space-y-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-foreground">🏠 Roommate Cost Split</h2>
-          <p className="text-xs text-foreground/60">Total monthly: rent ${listing.rent} + est. utilities ~${listing.utilityCosts.total} = <span className="text-foreground font-medium">${listing.rent + listing.utilityCosts.total}</span></p>
+        <div className="rounded-2xl border border-primary/10 bg-white/60 backdrop-blur-md p-6 space-y-4 shadow-sm">
+          <h2 className="text-lg font-semibold text-primary">🏠 Roommate Cost Split</h2>
+          <p className="text-xs text-primary/60">Total monthly: rent ${listing.rent} + est. utilities ~${listing.utilityCosts.total} = <span className="text-primary font-medium">${listing.rent + listing.utilityCosts.total}</span></p>
           <div className="flex gap-3 items-center flex-wrap">
-            <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-background px-4 py-2.5">
+            <div className="flex items-center gap-2 rounded-xl border border-primary/10 bg-white/80 px-4 py-2.5">
               <Users size={15} className="text-primary" />
               <input type="number" min={1} max={10} value={numPeople} onChange={e => setNumPeople(e.target.value)}
-                className="w-16 bg-transparent text-foreground text-sm font-medium focus:outline-none"
+                className="w-16 bg-transparent text-primary text-sm font-medium focus:outline-none"
                 placeholder="People" />
-              <span className="text-xs text-foreground/60">people sharing</span>
+              <span className="text-xs text-primary/60">people sharing</span>
             </div>
             <button onClick={handleCalc} disabled={calcLoading}
               className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50 transition shadow-md shadow-primary/20">
@@ -229,22 +229,22 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           {calcResult && (
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-3 text-center text-sm">
-                <div className="rounded-xl bg-background/50 border border-primary/10 p-3">
-                  <p className="text-[11px] text-foreground/60 mb-1">Rent / person</p>
-                  <p className="text-xl font-bold text-primary">${calcResult.perPersonRent}<span className="text-xs text-foreground/50">/mo</span></p>
+                <div className="rounded-xl bg-white/80 border border-primary/10 p-3">
+                  <p className="text-[11px] text-primary/60 mb-1">Rent / person</p>
+                  <p className="text-xl font-bold text-primary">${calcResult.perPersonRent}<span className="text-xs text-primary/50">/mo</span></p>
                 </div>
-                <div className="rounded-xl bg-background/50 border border-primary/10 p-3">
-                  <p className="text-[11px] text-foreground/60 mb-1">Utilities / person</p>
-                  <p className="text-xl font-bold text-blue-500">${calcResult.perPersonUtilities}<span className="text-xs text-foreground/50">/mo</span></p>
+                <div className="rounded-xl bg-white/80 border border-primary/10 p-3">
+                  <p className="text-[11px] text-primary/60 mb-1">Utilities / person</p>
+                  <p className="text-xl font-bold text-blue-500">${calcResult.perPersonUtilities}<span className="text-xs text-primary/50">/mo</span></p>
                 </div>
-                <div className="rounded-xl bg-primary/10 border border-primary/30 p-3">
+                <div className="rounded-xl bg-primary/10 border border-primary/20 p-3">
                   <p className="text-[11px] text-primary mb-1">Total / person</p>
-                  <p className="text-xl font-bold text-foreground">${calcResult.perPerson}<span className="text-xs text-foreground/60">/mo</span></p>
+                  <p className="text-xl font-bold text-primary">${calcResult.perPerson}<span className="text-xs text-primary/60">/mo</span></p>
                 </div>
               </div>
-              <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+              <div className="rounded-xl border border-primary/10 bg-primary/5 px-4 py-3 text-sm">
                 <p className="text-xs text-primary font-medium mb-1">✨ AI Tip</p>
-                <p className="text-foreground/80">{calcResult.tip}</p>
+                <p className="text-primary/80">{calcResult.tip}</p>
               </div>
             </div>
           )}
